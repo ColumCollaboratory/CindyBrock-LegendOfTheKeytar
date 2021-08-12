@@ -1,63 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}" SchemaVersion="97">
+<WwiseDocument Type="WorkUnit" ID="{0E15578A-B79F-487D-B73D-AD3B5CB10C23}" SchemaVersion="97">
 	<Conversions>
-		<WorkUnit Name="Default Work Unit" ID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}" PersistMode="Standalone">
+		<WorkUnit Name="Default Work Unit" ID="{0E15578A-B79F-487D-B73D-AD3B5CB10C23}" PersistMode="Standalone">
 			<ChildrenList>
 				<Conversion Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}">
 					<PropertyList>
 						<Property Name="Channels" Type="int32">
 							<ValueList>
-								<Value Platform="Linux">4</Value>
-								<Value Platform="Android">4</Value>
 								<Value Platform="Windows">4</Value>
-								<Value Platform="Mac">4</Value>
 							</ValueList>
 						</Property>
 						<Property Name="LRMix" Type="Real64">
 							<ValueList>
-								<Value Platform="Linux">0</Value>
-								<Value Platform="Android">0</Value>
 								<Value Platform="Windows">0</Value>
-								<Value Platform="Mac">0</Value>
 							</ValueList>
 						</Property>
 						<Property Name="MaxSampleRate" Type="int32">
 							<ValueList>
-								<Value Platform="Linux">0</Value>
-								<Value Platform="Android">0</Value>
 								<Value Platform="Windows">0</Value>
-								<Value Platform="Mac">0</Value>
 							</ValueList>
 						</Property>
 						<Property Name="MinSampleRate" Type="int32">
 							<ValueList>
-								<Value Platform="Linux">0</Value>
-								<Value Platform="Android">0</Value>
 								<Value Platform="Windows">0</Value>
-								<Value Platform="Mac">0</Value>
 							</ValueList>
 						</Property>
 						<Property Name="SampleRate" Type="int32">
 							<ValueList>
-								<Value Platform="Linux">0</Value>
-								<Value Platform="Android">0</Value>
 								<Value Platform="Windows">0</Value>
-								<Value Platform="Mac">0</Value>
 							</ValueList>
 						</Property>
 					</PropertyList>
 					<ConversionPluginInfoList>
-						<ConversionPluginInfo Platform="Linux">
-							<ConversionPlugin Name="" ID="{4228C5CE-C292-4CD1-BE23-16EDA115C6C7}" PluginName="PCM" CompanyID="0" PluginID="1"/>
-						</ConversionPluginInfo>
-						<ConversionPluginInfo Platform="Android">
-							<ConversionPlugin Name="" ID="{7101EE7B-2B3A-4E49-AEAC-E9305F9958F3}" PluginName="PCM" CompanyID="0" PluginID="1"/>
-						</ConversionPluginInfo>
 						<ConversionPluginInfo Platform="Windows">
-							<ConversionPlugin Name="" ID="{680E951F-9980-43DA-9493-0D25EE640182}" PluginName="PCM" CompanyID="0" PluginID="1"/>
-						</ConversionPluginInfo>
-						<ConversionPluginInfo Platform="Mac">
-							<ConversionPlugin Name="" ID="{0F47BE2A-6F04-4C65-BE61-30DA8CDAF432}" PluginName="PCM" CompanyID="0" PluginID="1"/>
+							<ConversionPlugin Name="" ID="{2BEC6490-F76D-4607-B142-047B3FDA72F2}" PluginName="PCM" CompanyID="0" PluginID="1"/>
 						</ConversionPluginInfo>
 					</ConversionPluginInfoList>
 				</Conversion>

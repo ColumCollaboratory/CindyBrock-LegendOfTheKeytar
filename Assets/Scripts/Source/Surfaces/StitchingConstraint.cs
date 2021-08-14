@@ -19,8 +19,10 @@ namespace BattleRoyalRhythm.Surfaces
         {
             Right,
             Left,
-            DoorwayEntrance,
-            DoorwayExit
+            EntranceLeftFacing,
+            EntranceRightFacing,
+            ExitRight,
+            ExitLeft
         }
         /// <summary>
         /// The ways which the link can be traversed.

@@ -63,7 +63,8 @@ namespace BattleRoyalRhythm.Collections
             // Mark scene dirty to ensure that serialized changes
             // are to be saved. Otherwise the designer might mistakenly
             // close the scene without being prompted to save.
-            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            if (!Application.isPlaying)
+                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
         #endregion
     }

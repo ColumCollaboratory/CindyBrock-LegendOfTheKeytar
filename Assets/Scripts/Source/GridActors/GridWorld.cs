@@ -16,10 +16,344 @@ namespace BattleRoyalRhythm.GridActors
         [SerializeField] private Surface rootSurface = null;
         #endregion
 
+        #region Compiled Surface Data Structures
+        // These classes stores information for a
+        // graphlike structure that is assembled
+        // from the designer specified constraints.
+        private sealed class Seam
+        {
+            public Seam(float x, float yMin, float yMax, Surface toSurface, Vector2 offset)
+            {
+                X = x;
+                YMin = yMin;
+                YMax = yMax;
+                ToSurface = toSurface;
+                Offset = offset;
+            }
+            public float X { get; }
+            public float YMin { get; }
+            public float YMax { get; }
+            public Surface ToSurface { get; }
+            public Vector2 Offset { get; }
+        }
+        private sealed class SurfaceSeams
+        {
+            public SurfaceSeams(Seam[] leftSeams, Seam[] rightSeams, Seam[] doorSeams)
+            {
+                LeftSeams = leftSeams;
+                RightSeams = rightSeams;
+                DoorSeams = doorSeams;
+            }
+            public Seam[] LeftSeams { get; }
+            public Seam[] RightSeams { get; }
+            public Seam[] DoorSeams { get; }
+        }
+        #endregion
+
+        private Dictionary<Surface, SurfaceSeams> surfaceGraph;
+
+        
+        public void TranslateActor(GridActor actor, Vector2 translation)
+        {
+            if (translation.x == 0f)
+            {
+                actor.Location += translation;
+            }
+            else if (translation.x > 0f)
+            {
+                float xRemaining = translation.x;
+                float slope = translation.y / translation.x;
+                Vector2 position = actor.Location;
+                int i = 0;
+                int breaker = 0;
+                while (i < surfaceGraph[actor.CurrentSurface].RightSeams.Length)
+                {
+                    breaker++;
+                    if (breaker > 50)
+                    {
+                        Debug.Log("broke-right");
+                        break;
+                    }
+
+                    float stepX = surfaceGraph[actor.CurrentSurface].RightSeams[i].X - position.x;
+                    if (stepX < 0f)
+                    {
+                        // Step until we are at the seam following
+                        // this position.
+                        i++;
+                        continue;
+                    }
+                    if (xRemaining >= stepX)
+                    {
+                        xRemaining -= stepX;
+                        position += new Vector2(stepX, stepX * slope);
+                        // Should we step into this seam?
+                        if (position.y >= surfaceGraph[actor.CurrentSurface].RightSeams[i].YMin
+                            && position.y <= surfaceGraph[actor.CurrentSurface].RightSeams[i].YMax)
+                        {
+                            position += surfaceGraph[actor.CurrentSurface].RightSeams[i].Offset;
+                            actor.CurrentSurface = surfaceGraph[actor.CurrentSurface].RightSeams[i].ToSurface;
+                            i = 0;
+                        }
+                        else
+                        {
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        position += new Vector2(xRemaining, xRemaining * slope);
+                        xRemaining = 0f;
+                        break;
+                    }
+                }
+                if (xRemaining > 0f)
+                {
+                    position += new Vector2(xRemaining, xRemaining * slope);
+                }
+                actor.Location = position;
+            }
+            else
+            {
+                float xRemaining = translation.x;
+                float slope = translation.y / translation.x;
+                Vector2 position = actor.Location;
+                int i = surfaceGraph[actor.CurrentSurface].LeftSeams.Length - 1;
+                int breaker = 0;
+                while (i >= 0)
+                {
+                    breaker++;
+                    if (breaker > 50)
+                    {
+                        Debug.Log("broke-left");
+                        break;
+                    }
+
+                    float stepX = surfaceGraph[actor.CurrentSurface].LeftSeams[i].X - position.x;
+                    if (stepX > 0f)
+                    {
+                        // Step until we are at the seam following
+                        // this position.
+                        i--;
+                        continue;
+                    }
+                    if (xRemaining <= stepX)
+                    {
+                        xRemaining -= stepX;
+                        position += new Vector2(stepX, stepX * slope);
+                        // Should we step into this seam?
+                        if (position.y >= surfaceGraph[actor.CurrentSurface].LeftSeams[i].YMin
+                            && position.y <= surfaceGraph[actor.CurrentSurface].LeftSeams[i].YMax)
+                        {
+                            position += surfaceGraph[actor.CurrentSurface].LeftSeams[i].Offset;
+                            actor.CurrentSurface = surfaceGraph[actor.CurrentSurface].LeftSeams[i].ToSurface;
+                            i = surfaceGraph[actor.CurrentSurface].LeftSeams.Length - 1;
+                        }
+                        else
+                        {
+                            i--;
+                        }
+                    }
+                    else
+                    {
+                        position += new Vector2(xRemaining, xRemaining * slope);
+                        xRemaining = 0f;
+                        break;
+                    }
+                }
+                if (xRemaining < 0f)
+                {
+                    position += new Vector2(xRemaining, xRemaining * slope);
+                }
+                actor.Location = position;
+            }
+        }
+
+        /// <summary>
+        /// Checks to see if the actor can turn towards a
+        /// surface in front of them. If there is a surface the
+        /// actor will turn onto it accordingly with no movement.
+        /// </summary>
+        /// <param name="actor">The actor to turn.</param>
+        /// <returns>True if a surface was turned onto.</returns>
+        public bool TryTurnForwards(GridActor actor)
+        {
+            Vector2 tile = actor.Tile;
+            // Iterate through the door seams
+            // on this surface to check for a match.
+            foreach (Seam seam in surfaceGraph[actor.CurrentSurface].DoorSeams)
+            {
+                // Stop checking once we have stepped
+                // over the actor position.
+                if (seam.X > tile.x)
+                    return false;
+                // Is this doorway a match?
+                if (seam.X == tile.x &&
+                    seam.YMin <= tile.y &&
+                    seam.YMax >= tile.y)
+                {
+                    // Traverse the seam.
+                    actor.CurrentSurface = seam.ToSurface;
+                    actor.Location += seam.Offset;
+                    return true;
+                }
+            }
+            // None of the doorways matched.
+            return false;
+        }
+
+
+        private void Awake()
+        {
+            // Compile the designer data down to a more graph
+            // like structure that is easier to traverse via code.
+            surfaceGraph = new Dictionary<Surface, SurfaceSeams>();
+            Surface[] surfaces = GetComponentsInChildren<Surface>();
+            foreach (Surface surface in surfaces)
+            {
+                // These lists will accumulate seams extracted
+                // from the constraints processed from the scene.
+                List<Seam> leftSeams = new List<Seam>();
+                List<Seam> rightSeams = new List<Seam>();
+                List<Seam> doorSeams = new List<Seam>();
+                // Start with the constraints that connect from this
+                // surface to other surfaces.
+                if (surface.surfaceLinks != null)
+                {
+                    foreach (StitchingConstraint constraint in surface.surfaceLinks)
+                    {
+                        // Account for the designer being able to
+                        // specify links from either a left or right anchor.
+                        float fromTile = constraint.fromTileOfThisSurface;
+                        float toTile = constraint.toTileOfOtherSurface;
+                        if (fromTile < 0f) fromTile += surface.LengthX + 1;
+                        if (toTile < 0f) toTile += constraint.other.LengthX + 1;
+                        // Calculate the base offset value.
+                        Vector2 offset = new Vector2(toTile - fromTile, -constraint.yStep);
+                        List<Seam> targetList = null;
+                        // Based on the constraint type, make the
+                        // appropriate adjustments to the seam data
+                        // and target the seam list.
+                        switch (constraint.linkDirection)
+                        {
+                            case StitchingConstraint.Direction.Right:
+                                targetList = rightSeams;
+                                fromTile += 0.5f;
+                                offset.x--;
+                                break;
+                            case StitchingConstraint.Direction.Left:
+                                targetList = leftSeams;
+                                fromTile -= 0.5f;
+                                offset.x++;
+                                break;
+                            case StitchingConstraint.Direction.ExitRight:
+                                targetList = rightSeams;
+                                //fromTile -= 0.5f;
+                                //offset.x--;
+                                break;
+                            case StitchingConstraint.Direction.ExitLeft:
+                                targetList = leftSeams;
+                                //fromTile += 0.5f;
+                                //offset.x++;
+                                break;
+                            case StitchingConstraint.Direction.EntranceLeftFacing:
+                            case StitchingConstraint.Direction.EntranceRightFacing:
+                                targetList = doorSeams;
+                                break;
+                        }
+                        // Compile this information into a new seam.
+                        targetList.Add(new Seam(
+                            fromTile,
+                            Mathf.Max(1, constraint.yStep + 1),
+                            Mathf.Min(surface.LengthY, constraint.other.LengthY + constraint.yStep),
+                            constraint.other,
+                            offset));
+                    }
+                }
+                // Check all other surface constraints to see if they link
+                // back to this surface. The logic for making seams
+                // out of these constraints will be inverted.
+                foreach (Surface otherSurface in surfaces)
+                {
+                    // Skip self and null link collections.
+                    if (otherSurface == surface || otherSurface.surfaceLinks == null)
+                        continue;
+                    foreach (StitchingConstraint constraint in otherSurface.surfaceLinks)
+                    {
+                        if (constraint.other == surface)
+                        {
+                            // Account for the designer being able to
+                            // specify links from either a left or right anchor.
+                            float fromTile = constraint.fromTileOfThisSurface;
+                            float toTile = constraint.toTileOfOtherSurface;
+                            if (fromTile < 0f) fromTile += surface.LengthX + 1;
+                            if (toTile < 0f) toTile += constraint.other.LengthX + 1;
+                            // Calculate the base offset value.
+                            Vector2 offset = new Vector2(fromTile - toTile, constraint.yStep);
+                            List<Seam> targetList = null;
+                            // Based on the constraint type, make the
+                            // appropriate adjustments to the seam data
+                            // and target the seam list.
+                            switch (constraint.linkDirection)
+                            {
+                                case StitchingConstraint.Direction.Left:
+                                    targetList = rightSeams;
+                                    toTile += 0.5f;
+                                    offset.x--;
+                                    break;
+                                case StitchingConstraint.Direction.Right:
+                                    targetList = leftSeams;
+                                    toTile -= 0.5f;
+                                    offset.x++;
+                                    break;
+                                case StitchingConstraint.Direction.ExitLeft:
+                                    targetList = doorSeams;
+                                    offset.x -= 0f;
+                                    break;
+                                case StitchingConstraint.Direction.ExitRight:
+                                    targetList = doorSeams;
+                                    offset.x += 0f;
+                                    break;
+                                case StitchingConstraint.Direction.EntranceLeftFacing:
+                                    targetList = rightSeams;
+                                    //toTile -= 0.5f;
+                                    offset.x -= 1f;
+                                    break;
+                                case StitchingConstraint.Direction.EntranceRightFacing:
+                                    targetList = leftSeams;
+                                    //toTile += 0.5f;
+                                    offset.x += 1f;
+                                    break;
+                            }
+                            // Compile this information into a new seam.
+                            targetList.Add(new Seam(
+                                toTile,
+                                Mathf.Max(1, -constraint.yStep) - 1000,
+                                Mathf.Min(surface.LengthY - constraint.yStep, constraint.other.LengthY) + 1000,
+                                otherSurface,
+                                offset));
+                        }
+                    }
+                }
+                // Sort the seams so that they appear in
+                // the relevant order that a sweep
+                // will check in.
+                leftSeams.Sort((Seam lhs, Seam rhs) => { return (lhs.X > rhs.X) ? 1 : -1; });
+                rightSeams.Sort((Seam lhs, Seam rhs) => { return (lhs.X > rhs.X) ? -1 : 1; });
+                doorSeams.Sort((Seam lhs, Seam rhs) => { return (lhs.X > rhs.X) ? 1 : -1; });
+                // Document all seams for this surface.
+                surfaceGraph.Add(surface, new SurfaceSeams(
+                    leftSeams.ToArray(), rightSeams.ToArray(), doorSeams.ToArray()));
+            }
+            // Give all actors a reference to this world.
+            foreach (GridActor actor in GetComponentsInChildren<GridActor>())
+                actor.World = this;
+        }
+
 
 #if UNITY_EDITOR
+        #region Gizmos Drawing
         private List<Vector3[]> stitchArrowPolylines;
-
         private void OnDrawGizmos()
         {
             // Draw the stitching arrows if they have
@@ -32,8 +366,8 @@ namespace BattleRoyalRhythm.GridActors
                         Gizmos.DrawLine(polyline[i - 1], polyline[i]);
             }
         }
-#endif
-
+        #endregion
+        #region Editor Surface Constraints
         /// <summary>
         /// Starting from the root surface, resolves the transform
         /// layout of all surfaces in the scene. Should be called
@@ -42,12 +376,10 @@ namespace BattleRoyalRhythm.GridActors
         /// </summary>
         public void SolveStitchingConstraints()
         {
-#if UNITY_EDITOR
             // Reset the scene polylines. These are generated
             // as each stitch is completed and cached until
             // the next validation call.
             stitchArrowPolylines = new List<Vector3[]>();
-#endif
             // Track which surfaces are solved and are thus
             // locked in place. The root surface is solved
             // by default as it does not depend on anything else.
@@ -90,10 +422,8 @@ namespace BattleRoyalRhythm.GridActors
                     fromSample.x += from.LengthX + 1;
                 if (toSample.x < 0f)
                     toSample.x += to.LengthX + 1;
-                // Store more info for offsets caused by doorways
-                // that consist of intersecting surfaces.
+                // Add offsets for the link type.
                 float addedAngle = 0f;
-                Vector3 offsetTranslation = Vector3.zero;
                 switch (constraint.linkDirection)
                 {
                     case StitchingConstraint.Direction.Left:
@@ -103,26 +433,24 @@ namespace BattleRoyalRhythm.GridActors
                         toSample.x -= 1.0f;
                         break;
                     case StitchingConstraint.Direction.ExitLeft:
-                        fromSample.x -= 1.0f;
+                        fromSample.x -= 0.5f;
                         toSample.x -= 0.5f;
                         addedAngle = 90.0f;
-                        offsetTranslation = -from.GetRight(fromSample) * 0.5f;
                         break;
                     case StitchingConstraint.Direction.ExitRight:
+                        fromSample.x -= 0.5f;
                         toSample.x -= 0.5f;
                         addedAngle = -90.0f;
-                        offsetTranslation = from.GetRight(fromSample) * 0.5f;
                         break;
                     case StitchingConstraint.Direction.EntranceLeftFacing:
                         fromSample.x -= 0.5f;
+                        toSample.x -= 0.5f;
                         addedAngle = 90.0f;
-                        offsetTranslation = from.GetOutwards(fromSample) * 0.5f;
                         break;
                     case StitchingConstraint.Direction.EntranceRightFacing:
                         fromSample.x -= 0.5f;
-                        toSample.x -= 1.0f;
+                        toSample.x -= 0.5f;
                         addedAngle = -90.0f;
-                        offsetTranslation = from.GetOutwards(fromSample) * 0.5f;
                         break;
                 }
                 #endregion
@@ -146,7 +474,7 @@ namespace BattleRoyalRhythm.GridActors
                 // seams together.
                 to.SetTransform(
                     from.GetLocation(fromSample) - to.GetLocation(toSample)
-                        + fromUp * constraint.yStep + offsetTranslation,
+                        + fromUp * constraint.yStep,
                     to.transform.rotation);
                 #endregion
                 #region Circular Constraint Check
@@ -179,7 +507,6 @@ namespace BattleRoyalRhythm.GridActors
                             ProcessConstraint(to, link.other, link);
                 }
                 #endregion
-#if UNITY_EDITOR
                 #region Generate Gizmo Arrows
                 float ARROW_SIZE = 0.25f;
                 // Get the range to draw the arrows in,
@@ -395,7 +722,6 @@ namespace BattleRoyalRhythm.GridActors
                     }
                 }
                 #endregion
-#endif
             }
             // Finally update the position and orientation of
             // any grid actors in the editor, to match the new
@@ -403,7 +729,6 @@ namespace BattleRoyalRhythm.GridActors
             foreach (GridActor actor in transform.GetComponentsInChildren<GridActor>())
                 actor.RefreshPosition();
         }
-
         /// <summary>
         /// Iterates through surfaces and validates their constraint
         /// values if they are linked to this updated surface.
@@ -433,5 +758,7 @@ namespace BattleRoyalRhythm.GridActors
             // Finally revalidate the calling surface.
             changedSurface.ValidateConstraints();
         }
+        #endregion
+#endif
     }
 }

@@ -17,7 +17,7 @@ namespace BattleRoyalRhythm.GridActors
         #endregion
 
         #region Compiled Surface Data Structures
-        // These classes stores information for a
+        // These classes store information for a
         // graphlike structure that is assembled
         // from the designer specified constraints.
         private sealed class Seam
@@ -52,119 +52,104 @@ namespace BattleRoyalRhythm.GridActors
 
         private Dictionary<Surface, SurfaceSeams> surfaceGraph;
 
-        
+        // NOTE translate actor ignores collision so that that we
+        // don't have to step at each tile; for the purposes of this
+        // game the actor should use the tile raycast to validate
+        // movement, and translation is simply used to animate the
+        // actor over time.
+        /// <summary>
+        /// Applies a translation to the actor on the grid,
+        /// crossing over any seams that are encountered. This
+        /// method ignores colliders.
+        /// </summary>
+        /// <param name="actor">The actor to move.</param>
+        /// <param name="translation">The translation to apply to the actor.</param>
         public void TranslateActor(GridActor actor, Vector2 translation)
         {
+            // If the translation is strictly vertical,
+            // then we don't need to sweep across the
+            // seams.
             if (translation.x == 0f)
-            {
                 actor.Location += translation;
-            }
-            else if (translation.x > 0f)
-            {
-                float xRemaining = translation.x;
-                float slope = translation.y / translation.x;
-                Vector2 position = actor.Location;
-                int i = 0;
-                int breaker = 0;
-                while (i < surfaceGraph[actor.CurrentSurface].RightSeams.Length)
-                {
-                    breaker++;
-                    if (breaker > 50)
-                    {
-                        Debug.Log("broke-right");
-                        break;
-                    }
-
-                    float stepX = surfaceGraph[actor.CurrentSurface].RightSeams[i].X - position.x;
-                    if (stepX < 0f)
-                    {
-                        // Step until we are at the seam following
-                        // this position.
-                        i++;
-                        continue;
-                    }
-                    if (xRemaining >= stepX)
-                    {
-                        xRemaining -= stepX;
-                        position += new Vector2(stepX, stepX * slope);
-                        // Should we step into this seam?
-                        if (position.y >= surfaceGraph[actor.CurrentSurface].RightSeams[i].YMin
-                            && position.y <= surfaceGraph[actor.CurrentSurface].RightSeams[i].YMax)
-                        {
-                            position += surfaceGraph[actor.CurrentSurface].RightSeams[i].Offset;
-                            actor.CurrentSurface = surfaceGraph[actor.CurrentSurface].RightSeams[i].ToSurface;
-                            i = 0;
-                        }
-                        else
-                        {
-                            i++;
-                        }
-                    }
-                    else
-                    {
-                        position += new Vector2(xRemaining, xRemaining * slope);
-                        xRemaining = 0f;
-                        break;
-                    }
-                }
-                if (xRemaining > 0f)
-                {
-                    position += new Vector2(xRemaining, xRemaining * slope);
-                }
-                actor.Location = position;
-            }
+            // Otherwise we will sweep across the seams
+            // based on seam direction.
             else
             {
+                bool isRight = translation.x > 0f;
+                // Setup sweeping loop logic. The actor Location
+                // property is not used directly since it updates
+                // the transform, which we only want to do once
+                // upon sweep completion.
+                Vector2 position = actor.Location;
                 float xRemaining = translation.x;
                 float slope = translation.y / translation.x;
-                Vector2 position = actor.Location;
-                int i = surfaceGraph[actor.CurrentSurface].LeftSeams.Length - 1;
+                // We will iterate over the seams in the right direction.
+                int seamIndex = 0;
+                Seam[] seams = isRight ?
+                    surfaceGraph[actor.CurrentSurface].RightSeams :
+                    surfaceGraph[actor.CurrentSurface].LeftSeams;
+#if UNITY_EDITOR
                 int breaker = 0;
-                while (i >= 0)
+#endif
+                while (seamIndex < seams.Length)
                 {
+#if UNITY_EDITOR
                     breaker++;
                     if (breaker > 50)
                     {
-                        Debug.Log("broke-left");
+                        Debug.LogError("There is an unhandled edge case in grid translation.\n" +
+                            "Please report this bug referencing the surface layout in the scene." +
+                            "This would be a crash during runtime.");
                         break;
                     }
-
-                    float stepX = surfaceGraph[actor.CurrentSurface].LeftSeams[i].X - position.x;
-                    if (stepX > 0f)
+#endif
+                    // How far is the step to the next seam?
+                    float stepX = seams[seamIndex].X - position.x;
+                    // Check for conditions where we can ignore the seam.
+                    // This seam is behind us, check the
+                    // following seam.
+                    if ((isRight && stepX < 0f) || (!isRight && stepX > 0f))
                     {
-                        // Step until we are at the seam following
-                        // this position.
-                        i--;
+                        seamIndex++;
                         continue;
                     }
-                    if (xRemaining <= stepX)
-                    {
-                        xRemaining -= stepX;
-                        position += new Vector2(stepX, stepX * slope);
-                        // Should we step into this seam?
-                        if (position.y >= surfaceGraph[actor.CurrentSurface].LeftSeams[i].YMin
-                            && position.y <= surfaceGraph[actor.CurrentSurface].LeftSeams[i].YMax)
-                        {
-                            position += surfaceGraph[actor.CurrentSurface].LeftSeams[i].Offset;
-                            actor.CurrentSurface = surfaceGraph[actor.CurrentSurface].LeftSeams[i].ToSurface;
-                            i = surfaceGraph[actor.CurrentSurface].LeftSeams.Length - 1;
-                        }
-                        else
-                        {
-                            i--;
-                        }
-                    }
-                    else
-                    {
-                        position += new Vector2(xRemaining, xRemaining * slope);
-                        xRemaining = 0f;
+                    // This seam is ahead of our translation,
+                    // so stop checking seams.
+                    if ((isRight && xRemaining < stepX) || (!isRight && xRemaining > stepX))
                         break;
+                    // Step onto the seam.
+                    xRemaining -= stepX;
+                    position += new Vector2(stepX, stepX * slope);
+                    Seam seam = seams[seamIndex];
+                    // If we are within the y range of the seam,
+                    // cross over the seam.
+                    if (position.y >= seam.YMin && position.y <= seam.YMax)
+                    {
+                        position += seam.Offset;
+                        actor.CurrentSurface = seam.ToSurface;
+                        if (xRemaining != 0f)
+                        {
+                            // Update the seams that we are sweeping.
+                            seams = isRight ?
+                                surfaceGraph[actor.CurrentSurface].RightSeams :
+                                surfaceGraph[actor.CurrentSurface].LeftSeams;
+                            seamIndex = 0;
+                        }
+                        // Stop sweeping if there is offset left.
+                        // This prevents a recursive seam crossing
+                        // when there is exactly zero translation left.
+                        else
+                            break;
                     }
+                    // Otherwise continue sweeping seams.
+                    else
+                        seamIndex++;
                 }
-                if (xRemaining < 0f)
-                {
+                // Finally if we have run out of seams
+                // then apply the remaining translation
+                // and apply to the actor transform.
+                if (xRemaining != 0f)
                     position += new Vector2(xRemaining, xRemaining * slope);
-                }
                 actor.Location = position;
             }
         }
@@ -202,7 +187,7 @@ namespace BattleRoyalRhythm.GridActors
             return false;
         }
 
-
+        #region Surfaces Initialization
         private void Awake()
         {
             // Compile the designer data down to a more graph
@@ -264,7 +249,7 @@ namespace BattleRoyalRhythm.GridActors
                         // Compile this information into a new seam.
                         targetList.Add(new Seam(
                             fromTile,
-                            Mathf.Max(1, constraint.yStep + 1),
+                            Mathf.Max(1, 1 + constraint.yStep),
                             Mathf.Min(surface.LengthY, constraint.other.LengthY + constraint.yStep),
                             constraint.other,
                             offset));
@@ -273,12 +258,12 @@ namespace BattleRoyalRhythm.GridActors
                 // Check all other surface constraints to see if they link
                 // back to this surface. The logic for making seams
                 // out of these constraints will be inverted.
-                foreach (Surface otherSurface in surfaces)
+                foreach (Surface fromSurface in surfaces)
                 {
                     // Skip self and null link collections.
-                    if (otherSurface == surface || otherSurface.surfaceLinks == null)
+                    if (fromSurface == surface || fromSurface.surfaceLinks == null)
                         continue;
-                    foreach (StitchingConstraint constraint in otherSurface.surfaceLinks)
+                    foreach (StitchingConstraint constraint in fromSurface.surfaceLinks)
                     {
                         if (constraint.other == surface)
                         {
@@ -286,8 +271,8 @@ namespace BattleRoyalRhythm.GridActors
                             // specify links from either a left or right anchor.
                             float fromTile = constraint.fromTileOfThisSurface;
                             float toTile = constraint.toTileOfOtherSurface;
-                            if (fromTile < 0f) fromTile += surface.LengthX + 1;
-                            if (toTile < 0f) toTile += constraint.other.LengthX + 1;
+                            if (fromTile < 0f) fromTile += fromSurface.LengthX + 1;
+                            if (toTile < 0f) toTile += surface.LengthX + 1;
                             // Calculate the base offset value.
                             Vector2 offset = new Vector2(fromTile - toTile, constraint.yStep);
                             List<Seam> targetList = null;
@@ -296,41 +281,33 @@ namespace BattleRoyalRhythm.GridActors
                             // and target the seam list.
                             switch (constraint.linkDirection)
                             {
-                                case StitchingConstraint.Direction.Left:
-                                    targetList = rightSeams;
-                                    toTile += 0.5f;
-                                    offset.x--;
-                                    break;
                                 case StitchingConstraint.Direction.Right:
                                     targetList = leftSeams;
                                     toTile -= 0.5f;
                                     offset.x++;
                                     break;
-                                case StitchingConstraint.Direction.ExitLeft:
-                                    targetList = doorSeams;
-                                    offset.x -= 0f;
+                                case StitchingConstraint.Direction.Left:
+                                    targetList = rightSeams;
+                                    toTile += 0.5f;
+                                    offset.x--;
                                     break;
                                 case StitchingConstraint.Direction.ExitRight:
+                                case StitchingConstraint.Direction.ExitLeft:
                                     targetList = doorSeams;
-                                    offset.x += 0f;
-                                    break;
-                                case StitchingConstraint.Direction.EntranceLeftFacing:
-                                    targetList = rightSeams;
-                                    //toTile -= 0.5f;
-                                    offset.x -= 1f;
                                     break;
                                 case StitchingConstraint.Direction.EntranceRightFacing:
                                     targetList = leftSeams;
-                                    //toTile += 0.5f;
-                                    offset.x += 1f;
+                                    break;
+                                case StitchingConstraint.Direction.EntranceLeftFacing:
+                                    targetList = rightSeams;
                                     break;
                             }
                             // Compile this information into a new seam.
                             targetList.Add(new Seam(
                                 toTile,
-                                Mathf.Max(1, -constraint.yStep) - 1000,
-                                Mathf.Min(surface.LengthY - constraint.yStep, constraint.other.LengthY) + 1000,
-                                otherSurface,
+                                Mathf.Max(1, 1 - constraint.yStep),
+                                Mathf.Min(surface.LengthY, fromSurface.LengthY - constraint.yStep),
+                                fromSurface,
                                 offset));
                         }
                     }
@@ -338,8 +315,8 @@ namespace BattleRoyalRhythm.GridActors
                 // Sort the seams so that they appear in
                 // the relevant order that a sweep
                 // will check in.
-                leftSeams.Sort((Seam lhs, Seam rhs) => { return (lhs.X > rhs.X) ? 1 : -1; });
-                rightSeams.Sort((Seam lhs, Seam rhs) => { return (lhs.X > rhs.X) ? -1 : 1; });
+                leftSeams.Sort((Seam lhs, Seam rhs) => { return (lhs.X > rhs.X) ? -1 : 1; });
+                rightSeams.Sort((Seam lhs, Seam rhs) => { return (lhs.X > rhs.X) ? 1 : -1; });
                 doorSeams.Sort((Seam lhs, Seam rhs) => { return (lhs.X > rhs.X) ? 1 : -1; });
                 // Document all seams for this surface.
                 surfaceGraph.Add(surface, new SurfaceSeams(
@@ -349,6 +326,7 @@ namespace BattleRoyalRhythm.GridActors
             foreach (GridActor actor in GetComponentsInChildren<GridActor>())
                 actor.World = this;
         }
+        #endregion
 
 
 #if UNITY_EDITOR

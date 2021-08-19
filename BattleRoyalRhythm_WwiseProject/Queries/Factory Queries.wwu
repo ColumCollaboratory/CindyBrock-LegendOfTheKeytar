@@ -256,32 +256,27 @@
 								</SearchCriteria>
 							</ChildrenList>
 						</Query>
-						<Query Name="2D Positioning" ID="{CB2F5C2D-6B65-4EA0-94A1-7F03B3E08C42}">
+						<Query Name="Direct Speaker Assignment" ID="{CB2F5C2D-6B65-4EA0-94A1-7F03B3E08C42}">
 							<PropertyList>
 								<Property Name="ObjectType" Type="int32" Value="620"/>
 							</PropertyList>
 							<ChildrenList>
 								<SearchCriteria Name="PropertyValue" ID="{FE756298-8E32-4C80-B372-7FE54E3FA60B}" SearchOperationID="{560736B7-4F5C-4EF7-9354-8D8DC6BBD70A}">
 									<PropertyList>
-										<Property Name="PropertyName" Type="string" Value="PositioningType"/>
+										<Property Name="PropertyName" Type="string" Value="PanningType"/>
 									</PropertyList>
 								</SearchCriteria>
 							</ChildrenList>
 						</Query>
-						<Query Name="2D Positioning + Panner" ID="{5B5FADD1-0B8B-48F7-A1A0-7794AC707DC4}">
+						<Query Name="Balance-Fade Speaker Panning" ID="{5B5FADD1-0B8B-48F7-A1A0-7794AC707DC4}">
 							<PropertyList>
 								<Property Name="ObjectType" Type="int32" Value="620"/>
 							</PropertyList>
 							<ChildrenList>
 								<SearchCriteria Name="PropertyValue" ID="{A73FB12B-AE1A-499B-9EE3-55BDBDCDCE0F}" SearchOperationID="{560736B7-4F5C-4EF7-9354-8D8DC6BBD70A}">
 									<PropertyList>
-										<Property Name="PropertyName" Type="string" Value="PositioningType"/>
-									</PropertyList>
-								</SearchCriteria>
-								<SearchCriteria Name="PropertyValue" ID="{7262F203-409F-445A-9854-ED339A2D394A}" SearchOperationID="{560736B7-4F5C-4EF7-9354-8D8DC6BBD70A}">
-									<PropertyList>
-										<Property Name="IsChecked" Type="bool" Value="True"/>
-										<Property Name="PropertyName" Type="string" Value="EnablePanner"/>
+										<Property Name="LeftValue" Type="Real64" Value="1"/>
+										<Property Name="PropertyName" Type="string" Value="PanningType"/>
 									</PropertyList>
 								</SearchCriteria>
 							</ChildrenList>
@@ -434,69 +429,66 @@
 				</Folder>
 				<Folder Name="Actor-Mixer Hierarchy" ID="{75E26115-FC3D-4E25-99F9-448BC918921E}" ShortID="657523609">
 					<ChildrenList>
-						<Query Name="2D Positioning" ID="{93BB05B6-6653-4842-9DE8-07BF927ED117}">
+						<Query Name="Direct Speaker Assignment" ID="{93BB05B6-6653-4842-9DE8-07BF927ED117}">
 							<PropertyList>
 								<Property Name="ObjectType" Type="int32" Value="200"/>
 							</PropertyList>
 							<ChildrenList>
 								<SearchCriteria Name="PropertyValue" ID="{57AD2421-B502-42DB-AD05-10F7968B4718}" SearchOperationID="{560736B7-4F5C-4EF7-9354-8D8DC6BBD70A}">
 									<PropertyList>
-										<Property Name="PropertyName" Type="string" Value="PositioningType"/>
+										<Property Name="PropertyName" Type="string" Value="PanningType"/>
 									</PropertyList>
 								</SearchCriteria>
 							</ChildrenList>
 						</Query>
-						<Query Name="2D Positioning + Panner" ID="{834DE5CA-8DD6-4BC1-B8B2-EFE7E4FD8319}">
+						<Query Name="Balance-Fade Speaker Panning" ID="{834DE5CA-8DD6-4BC1-B8B2-EFE7E4FD8319}">
 							<PropertyList>
 								<Property Name="ObjectType" Type="int32" Value="200"/>
 							</PropertyList>
 							<ChildrenList>
 								<SearchCriteria Name="PropertyValue" ID="{6B72112E-B63A-4807-8BCB-86CFD81DF3B0}" SearchOperationID="{560736B7-4F5C-4EF7-9354-8D8DC6BBD70A}">
 									<PropertyList>
-										<Property Name="PropertyName" Type="string" Value="PositioningType"/>
-									</PropertyList>
-								</SearchCriteria>
-								<SearchCriteria Name="PropertyValue" ID="{4CC8788B-64D0-4F9B-ADFA-F2DC95CB85C6}" SearchOperationID="{560736B7-4F5C-4EF7-9354-8D8DC6BBD70A}">
-									<PropertyList>
-										<Property Name="IsChecked" Type="bool" Value="True"/>
-										<Property Name="PropertyName" Type="string" Value="EnablePanner"/>
+										<Property Name="LeftValue" Type="Real64" Value="1"/>
+										<Property Name="PropertyName" Type="string" Value="PanningType"/>
 									</PropertyList>
 								</SearchCriteria>
 							</ChildrenList>
 						</Query>
-						<Query Name="3D Positioning - User-defined" ID="{CE928DF7-C351-449E-AC18-A2C782D06E02}">
+						<Query Name="3D Automation" ID="{CE928DF7-C351-449E-AC18-A2C782D06E02}">
 							<PropertyList>
+								<Property Name="LogicalOperator" Type="int16" Value="1"/>
 								<Property Name="ObjectType" Type="int32" Value="200"/>
 							</PropertyList>
 							<ChildrenList>
-								<SearchCriteria Name="PropertyValue" ID="{8742B63F-36DB-4394-9D76-70A60E865205}" SearchOperationID="{560736B7-4F5C-4EF7-9354-8D8DC6BBD70A}">
-									<PropertyList>
-										<Property Name="LeftValue" Type="Real64" Value="1"/>
-										<Property Name="PropertyName" Type="string" Value="PositioningType"/>
-									</PropertyList>
-								</SearchCriteria>
 								<SearchCriteria Name="PropertyValue" ID="{F584549F-0CD1-4B62-874A-C477EF188173}" SearchOperationID="{560736B7-4F5C-4EF7-9354-8D8DC6BBD70A}">
 									<PropertyList>
+										<Property Name="LeftValue" Type="Real64" Value="2"/>
+										<Property Name="PropertyName" Type="string" Value="3DPositionSource"/>
+									</PropertyList>
+								</SearchCriteria>
+								<SearchCriteria Name="PropertyValue" ID="{D65DDE6B-1E28-427C-A989-6FFDCEB08D67}" SearchOperationID="{560736B7-4F5C-4EF7-9354-8D8DC6BBD70A}">
+									<PropertyList>
+										<Property Name="LeftValue" Type="Real64" Value="1"/>
 										<Property Name="PropertyName" Type="string" Value="3DPositionSource"/>
 									</PropertyList>
 								</SearchCriteria>
 							</ChildrenList>
 						</Query>
-						<Query Name="3D Positioning - Game-defined" ID="{4CD5A13D-3ECB-4359-BD07-B6B79530D180}">
+						<Query Name="3D Spatialization" ID="{4CD5A13D-3ECB-4359-BD07-B6B79530D180}">
 							<PropertyList>
 								<Property Name="ObjectType" Type="int32" Value="200"/>
 							</PropertyList>
 							<ChildrenList>
-								<SearchCriteria Name="PropertyValue" ID="{CBBFA240-364A-4B15-9E68-D632F3B5FD32}" SearchOperationID="{560736B7-4F5C-4EF7-9354-8D8DC6BBD70A}">
-									<PropertyList>
-										<Property Name="LeftValue" Type="Real64" Value="1"/>
-										<Property Name="PropertyName" Type="string" Value="PositioningType"/>
-									</PropertyList>
-								</SearchCriteria>
 								<SearchCriteria Name="PropertyValue" ID="{0FE6C467-ACBB-40BD-B180-B6F1E4D2BCC7}" SearchOperationID="{560736B7-4F5C-4EF7-9354-8D8DC6BBD70A}">
 									<PropertyList>
 										<Property Name="LeftValue" Type="Real64" Value="1"/>
-										<Property Name="PropertyName" Type="string" Value="3DPositionSource"/>
+										<Property Name="PropertyName" Type="string" Value="Spatialization"/>
+									</PropertyList>
+								</SearchCriteria>
+								<SearchCriteria Name="PropertyValue" ID="{7E2ECB28-E3BF-4C61-91B0-9BE73D8D04EE}" SearchOperationID="{560736B7-4F5C-4EF7-9354-8D8DC6BBD70A}">
+									<PropertyList>
+										<Property Name="LeftValue" Type="Real64" Value="2"/>
+										<Property Name="PropertyName" Type="string" Value="Spatialization"/>
 									</PropertyList>
 								</SearchCriteria>
 							</ChildrenList>
@@ -578,19 +570,6 @@
 									<PropertyList>
 										<Property Name="IsChecked" Type="bool" Value="True"/>
 										<Property Name="PropertyName" Type="string" Value="IsEnvironmental"/>
-									</PropertyList>
-								</SearchCriteria>
-							</ChildrenList>
-						</Query>
-						<Query Name="Background Music bus" ID="{97D7E2E0-AFBF-4945-B938-8363048319BB}">
-							<PropertyList>
-								<Property Name="ObjectType" Type="int32" Value="500"/>
-							</PropertyList>
-							<ChildrenList>
-								<SearchCriteria Name="PropertyValue" ID="{65AA8EBE-5412-41BD-8CFF-7873DC1BA6EE}" SearchOperationID="{560736B7-4F5C-4EF7-9354-8D8DC6BBD70A}">
-									<PropertyList>
-										<Property Name="IsChecked" Type="bool" Value="True"/>
-										<Property Name="PropertyName" Type="string" Value="UsedForBackgroundMusic"/>
 									</PropertyList>
 								</SearchCriteria>
 							</ChildrenList>

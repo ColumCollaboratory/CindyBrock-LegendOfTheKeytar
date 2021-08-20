@@ -31,6 +31,7 @@ namespace BattleRoyalRhythm.Surfaces
 #if UNITY_EDITOR
     [ExecuteInEditMode]
 #endif
+    [DisallowMultipleComponent]
     public abstract class Surface : MonoBehaviour
     {
 #if UNITY_EDITOR

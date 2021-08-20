@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BattleRoyalRhythm.Surfaces;
+using System;
 
 namespace BattleRoyalRhythm.GridActors
 {
@@ -8,6 +9,7 @@ namespace BattleRoyalRhythm.GridActors
     /// Holds a collection of surfaces and actors that move on those
     /// surfaces. Actors can see other actors in the same Grid World.
     /// </summary>
+    [DisallowMultipleComponent]
     public sealed class GridWorld : MonoBehaviour
     {
 
@@ -50,13 +52,120 @@ namespace BattleRoyalRhythm.GridActors
         }
         #endregion
 
-        private Dictionary<Surface, SurfaceSeams> surfaceGraph;
+        private Dictionary<Surface, SurfaceSeams> surfaceSeams;
+        private Dictionary<Surface, bool[,]> surfaceColliders;
 
-        // NOTE translate actor ignores collision so that that we
-        // don't have to step at each tile; for the purposes of this
-        // game the actor should use the tile raycast to validate
-        // movement, and translation is simply used to animate the
-        // actor over time.
+
+
+        /// <summary>
+        /// Gets the nearby static colliders around an actor. This method should be used
+        /// once at the start of movement logic, taking a scan of relevant tiles.
+        /// </summary>
+        /// <param name="actor">The actor to check around.</param>
+        /// <param name="tilesHorizontal">The number of tiles to check in the left and right directions.</param>
+        /// <param name="tilesVertical">The number of tiles to check in the up and down directions.</param>
+        /// <returns>
+        /// A set that contains the surrounding collider state out to the distances
+        /// specified in each direction.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when tile values are negative.</exception>
+        public NearbyColliderSet GetNearbyColliders(GridActor actor,
+            int tilesHorizontal, int tilesVertical)
+        {
+            return GetNearbyColliders(actor, tilesHorizontal, tilesHorizontal, tilesVertical, tilesVertical);
+        }
+
+        /// <summary>
+        /// Gets the nearby static colliders around an actor. This method should be used
+        /// once at the start of movement logic, taking a scan of relevant tiles.
+        /// </summary>
+        /// <param name="actor">The actor to check around.</param>
+        /// <param name="tilesLeft">The number of tiles to check to the left.</param>
+        /// <param name="tilesRight">The number of tiles to check to the right.</param>
+        /// <param name="tilesUp">The number of tiles to check up.</param>
+        /// <param name="tilesDown">The number of tiles to check down.</param>
+        /// <returns>
+        /// A set that contains the surrounding collider state out to the distances
+        /// specified in each direction.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when tile values are negative.</exception>
+        public NearbyColliderSet GetNearbyColliders(GridActor actor,
+            int tilesLeft, int tilesRight, int tilesUp, int tilesDown)
+        {
+            #region Error Checking
+            if (tilesLeft < 0)
+                throw new ArgumentOutOfRangeException("tilesLeft", "Tile values cannot be negative.");
+            else if (tilesRight < 0)
+                throw new ArgumentOutOfRangeException("tilesRight", "Tile values cannot be negative.");
+            else if (tilesUp < 0)
+                throw new ArgumentOutOfRangeException("tilesUp", "Tile values cannot be negative.");
+            else if (tilesDown < 0)
+                throw new ArgumentOutOfRangeException("tilesDown", "Tile values cannot be negative.");
+            #endregion
+            // Create a new array sized to store the
+            // resulting nearby colliders.
+            bool[,] nearbyColliders = new bool[
+                1 + tilesLeft + tilesRight, 1 + tilesDown + tilesUp];
+            #region State Setup
+            // x and y will track the local surface tile
+            // while dX and dY will track the tile relative
+            // to where we started. Location will track
+            // the continuous sweeping location.
+            int x, y, dX, dY;
+            Vector2 location;
+            // Get the current surface state.
+            Surface surface = actor.CurrentSurface;
+            bool[,] colliders = surfaceColliders[surface];
+            #endregion
+            #region Collider Sampling
+            // Fill in the column the actor is on.
+            location = actor.Tile;
+            dX = 0;
+            SampleY();
+            void SampleY()
+            {
+                x = Mathf.RoundToInt(location.x);
+                int startY = Mathf.RoundToInt(location.y);
+                // Iterate up the column.
+                for (dY = -tilesDown; dY <= tilesUp; dY++)
+                {
+                    y = startY + dY;
+                    // If this tile is out of range then
+                    // mark it as a solid collider.
+                    if (x < 1 || y < 1 ||
+                        x > surface.LengthX || y > surface.LengthY)
+                        nearbyColliders[tilesLeft + dX, tilesDown + dY] = true;
+                    // Otherwise sample the collider on the surface.
+                    else
+                        nearbyColliders[tilesLeft + dX, tilesDown + dY] = colliders[x - 1, y - 1];
+                }
+            }
+            // Sweep at the actor elevation towards the right
+            // in unit step increments.
+            for (dX = 1; dX <= tilesRight; dX++)
+            {
+                SweepTranslate(surface, location, Vector2.right, out surface, out location);
+                colliders = surfaceColliders[surface];
+                // Resample at each step.
+                SampleY();
+            }
+            // Move back to the start and repeat the sweep
+            // in the left direction.
+            location = actor.Tile;
+            surface = actor.CurrentSurface;
+            for (dX = -1; dX >= -tilesLeft; dX--)
+            {
+                SweepTranslate(surface, location, Vector2.left, out surface, out location);
+                colliders = surfaceColliders[surface];
+                // Resample at each step.
+                SampleY();
+            }
+            #endregion
+            // Compile and return the results.
+            return new NearbyColliderSet(nearbyColliders, tilesLeft, tilesDown);
+        }
+
+
         /// <summary>
         /// Applies a translation to the actor on the grid,
         /// crossing over any seams that are encountered. This
@@ -75,84 +184,97 @@ namespace BattleRoyalRhythm.GridActors
             // based on seam direction.
             else
             {
-                bool isRight = translation.x > 0f;
-                // Setup sweeping loop logic. The actor Location
-                // property is not used directly since it updates
-                // the transform, which we only want to do once
-                // upon sweep completion.
-                Vector2 position = actor.Location;
-                float xRemaining = translation.x;
-                float slope = translation.y / translation.x;
-                // We will iterate over the seams in the right direction.
-                int seamIndex = 0;
-                Seam[] seams = isRight ?
-                    surfaceGraph[actor.CurrentSurface].RightSeams :
-                    surfaceGraph[actor.CurrentSurface].LeftSeams;
-#if UNITY_EDITOR
-                int breaker = 0;
-#endif
-                while (seamIndex < seams.Length)
-                {
-#if UNITY_EDITOR
-                    breaker++;
-                    if (breaker > 50)
-                    {
-                        Debug.LogError("There is an unhandled edge case in grid translation.\n" +
-                            "Please report this bug referencing the surface layout in the scene." +
-                            "This would be a crash during runtime.");
-                        break;
-                    }
-#endif
-                    // How far is the step to the next seam?
-                    float stepX = seams[seamIndex].X - position.x;
-                    // Check for conditions where we can ignore the seam.
-                    // This seam is behind us, check the
-                    // following seam.
-                    if ((isRight && stepX < 0f) || (!isRight && stepX > 0f))
-                    {
-                        seamIndex++;
-                        continue;
-                    }
-                    // This seam is ahead of our translation,
-                    // so stop checking seams.
-                    if ((isRight && xRemaining < stepX) || (!isRight && xRemaining > stepX))
-                        break;
-                    // Step onto the seam.
-                    xRemaining -= stepX;
-                    position += new Vector2(stepX, stepX * slope);
-                    Seam seam = seams[seamIndex];
-                    // If we are within the y range of the seam,
-                    // cross over the seam.
-                    if (position.y >= seam.YMin && position.y <= seam.YMax)
-                    {
-                        position += seam.Offset;
-                        actor.CurrentSurface = seam.ToSurface;
-                        if (xRemaining != 0f)
-                        {
-                            // Update the seams that we are sweeping.
-                            seams = isRight ?
-                                surfaceGraph[actor.CurrentSurface].RightSeams :
-                                surfaceGraph[actor.CurrentSurface].LeftSeams;
-                            seamIndex = 0;
-                        }
-                        // Stop sweeping if there is offset left.
-                        // This prevents a recursive seam crossing
-                        // when there is exactly zero translation left.
-                        else
-                            break;
-                    }
-                    // Otherwise continue sweeping seams.
-                    else
-                        seamIndex++;
-                }
-                // Finally if we have run out of seams
-                // then apply the remaining translation
-                // and apply to the actor transform.
-                if (xRemaining != 0f)
-                    position += new Vector2(xRemaining, xRemaining * slope);
-                actor.Location = position;
+                SweepTranslate(actor.CurrentSurface, actor.Location, translation,
+                    out Surface endingOn, out Vector2 endingLocation);
+                actor.CurrentSurface = endingOn;
+                actor.Location = endingLocation;
             }
         }
+
+        // NOTE this sweeping translation only checks for crossing seams,
+        // use GetNearbyColliders to query colliders before translating.
+        private void SweepTranslate(Surface surface, Vector2 position, Vector2 translation,
+            out Surface endingOn, out Vector2 endingLocation)
+        {
+            bool isRight = translation.x > 0f;
+            // Setup sweeping loop logic. The actor Location
+            // property is not used directly since it updates
+            // the transform, which we only want to do once
+            // upon sweep completion.
+            float xRemaining = translation.x;
+            float slope = translation.y / translation.x;
+            // We will iterate over the seams in the right direction.
+            int seamIndex = 0;
+            Seam[] seams = isRight ?
+                surfaceSeams[surface].RightSeams :
+                surfaceSeams[surface].LeftSeams;
+#if UNITY_EDITOR
+            int breaker = 0;
+#endif
+            while (seamIndex < seams.Length)
+            {
+#if UNITY_EDITOR
+                breaker++;
+                if (breaker > 50)
+                {
+                    Debug.LogError("There is an unhandled edge case in grid translation.\n" +
+                        "Please report this bug referencing the surface layout in the scene." +
+                        "This would be a crash during runtime.");
+                    break;
+                }
+#endif
+                // How far is the step to the next seam?
+                float stepX = seams[seamIndex].X - position.x;
+                // Check for conditions where we can ignore the seam.
+                // This seam is behind us, check the
+                // following seam.
+                if ((isRight && stepX < 0f) || (!isRight && stepX > 0f))
+                {
+                    seamIndex++;
+                    continue;
+                }
+                // This seam is ahead of our translation,
+                // so stop checking seams.
+                if ((isRight && xRemaining < stepX) || (!isRight && xRemaining > stepX))
+                    break;
+                // Step onto the seam.
+                xRemaining -= stepX;
+                position += new Vector2(stepX, stepX * slope);
+                Seam seam = seams[seamIndex];
+                // If we are within the y range of the seam,
+                // cross over the seam.
+                if (position.y >= seam.YMin && position.y <= seam.YMax)
+                {
+                    position += seam.Offset;
+                    surface = seam.ToSurface;
+                    if (xRemaining != 0f)
+                    {
+                        // Update the seams that we are sweeping.
+                        seams = isRight ?
+                            surfaceSeams[surface].RightSeams :
+                            surfaceSeams[surface].LeftSeams;
+                        seamIndex = 0;
+                    }
+                    // Stop sweeping if there is offset left.
+                    // This prevents a recursive seam crossing
+                    // when there is exactly zero translation left.
+                    else
+                        break;
+                }
+                // Otherwise continue sweeping seams.
+                else
+                    seamIndex++;
+            }
+            // Finally if we have run out of seams
+            // then apply the remaining translation
+            // and apply to the actor transform.
+            if (xRemaining != 0f)
+                position += new Vector2(xRemaining, xRemaining * slope);
+            // Post result.
+            endingOn = surface;
+            endingLocation = position;
+        }
+
 
         /// <summary>
         /// Checks to see if the actor can turn towards a
@@ -166,7 +288,7 @@ namespace BattleRoyalRhythm.GridActors
             Vector2 tile = actor.Tile;
             // Iterate through the door seams
             // on this surface to check for a match.
-            foreach (Seam seam in surfaceGraph[actor.CurrentSurface].DoorSeams)
+            foreach (Seam seam in surfaceSeams[actor.CurrentSurface].DoorSeams)
             {
                 // Stop checking once we have stepped
                 // over the actor position.
@@ -187,15 +309,17 @@ namespace BattleRoyalRhythm.GridActors
             return false;
         }
 
-        #region Surfaces Initialization
+#region Surfaces Initialization
         private void Awake()
         {
             // Compile the designer data down to a more graph
             // like structure that is easier to traverse via code.
-            surfaceGraph = new Dictionary<Surface, SurfaceSeams>();
+            surfaceSeams = new Dictionary<Surface, SurfaceSeams>();
+            surfaceColliders = new Dictionary<Surface, bool[,]>();
             Surface[] surfaces = GetComponentsInChildren<Surface>();
             foreach (Surface surface in surfaces)
             {
+#region Process Seams
                 // These lists will accumulate seams extracted
                 // from the constraints processed from the scene.
                 List<Seam> leftSeams = new List<Seam>();
@@ -319,18 +443,30 @@ namespace BattleRoyalRhythm.GridActors
                 rightSeams.Sort((Seam lhs, Seam rhs) => { return (lhs.X > rhs.X) ? 1 : -1; });
                 doorSeams.Sort((Seam lhs, Seam rhs) => { return (lhs.X > rhs.X) ? 1 : -1; });
                 // Document all seams for this surface.
-                surfaceGraph.Add(surface, new SurfaceSeams(
+                surfaceSeams.Add(surface, new SurfaceSeams(
                     leftSeams.ToArray(), rightSeams.ToArray(), doorSeams.ToArray()));
+#endregion
+#region Process Static Colliders
+                // Is there a designer specified layout?
+                StaticBlockLayout layout =
+                    surface.gameObject.GetComponent<StaticBlockLayout>();
+                if (layout != null)
+                    surfaceColliders.Add(surface, layout.Layout);
+                // If not assign an empty layout by default.
+                else
+                    surfaceColliders.Add(surface,
+                        new bool[surface.LengthX, surface.LengthY]);
+#endregion
             }
             // Give all actors a reference to this world.
             foreach (GridActor actor in GetComponentsInChildren<GridActor>())
                 actor.World = this;
         }
-        #endregion
+#endregion
 
 
 #if UNITY_EDITOR
-        #region Gizmos Drawing
+#region Gizmos Drawing
         private List<Vector3[]> stitchArrowPolylines;
         private void OnDrawGizmos()
         {
@@ -344,8 +480,8 @@ namespace BattleRoyalRhythm.GridActors
                         Gizmos.DrawLine(polyline[i - 1], polyline[i]);
             }
         }
-        #endregion
-        #region Editor Surface Constraints
+#endregion
+#region Editor Surface Constraints
         /// <summary>
         /// Starting from the root surface, resolves the transform
         /// layout of all surfaces in the scene. Should be called
@@ -376,21 +512,21 @@ namespace BattleRoyalRhythm.GridActors
             // just clutter the scope.
             void ProcessConstraint(Surface from, Surface to, StitchingConstraint constraint)
             {
-                #region Invalid Cases Check
+#region Invalid Cases Check
                 // Break the recursive function if this surface links
                 // to itself (stack overflow), or if the specified
                 // surface is null (not yet specified).
                 if (constraint.other == null || from == constraint.other)
                     return;
-                #endregion
-                #region Circular Constraint Setup
+#endregion
+#region Circular Constraint Setup
                 // Grab the initial state of the transform
                 // to solve so we can check if it matches previously
                 // solved constraints in a circular loop.
                 Vector3 expectedPosition = to.transform.position;
                 Quaternion expectedRotation = to.transform.rotation;
-                #endregion
-                #region Direction Conditions Setup
+#endregion
+#region Direction Conditions Setup
                 // Get the sampling points for merging these two
                 // surfaces together, as well as an angle offset and
                 // added translation for the link type.
@@ -431,8 +567,8 @@ namespace BattleRoyalRhythm.GridActors
                         addedAngle = -90.0f;
                         break;
                 }
-                #endregion
-                #region Solve Constraint Transform
+#endregion
+#region Solve Constraint Transform
                 // Zero out the transform that we will snap, so
                 // that we don't have to deal with offsets.
                 to.SetTransform(Vector3.zero, Quaternion.identity);
@@ -454,8 +590,8 @@ namespace BattleRoyalRhythm.GridActors
                     from.GetLocation(fromSample) - to.GetLocation(toSample)
                         + fromUp * constraint.yStep,
                     to.transform.rotation);
-                #endregion
-                #region Circular Constraint Check
+#endregion
+#region Circular Constraint Check
                 // If this surface has already been locked
                 // by another constraint, compare the outcome
                 // of the two constraints.
@@ -484,8 +620,8 @@ namespace BattleRoyalRhythm.GridActors
                         foreach (StitchingConstraint link in to.surfaceLinks)
                             ProcessConstraint(to, link.other, link);
                 }
-                #endregion
-                #region Generate Gizmo Arrows
+#endregion
+#region Generate Gizmo Arrows
                 float ARROW_SIZE = 0.25f;
                 // Get the range to draw the arrows in,
                 // accounting for the y shift.
@@ -699,7 +835,7 @@ namespace BattleRoyalRhythm.GridActors
                             break;
                     }
                 }
-                #endregion
+#endregion
             }
             // Finally update the position and orientation of
             // any grid actors in the editor, to match the new
@@ -736,7 +872,7 @@ namespace BattleRoyalRhythm.GridActors
             // Finally revalidate the calling surface.
             changedSurface.ValidateConstraints();
         }
-        #endregion
+#endregion
 #endif
     }
 }

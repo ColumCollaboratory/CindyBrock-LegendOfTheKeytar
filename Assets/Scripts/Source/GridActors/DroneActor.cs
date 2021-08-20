@@ -30,6 +30,11 @@ namespace BattleRoyalRhythm.GridActors
             if (World != null)
             {
                 bool enteredDoorway = false;
+
+                NearbyColliderSet colliders = World.GetNearbyColliders(this, 2, 2);
+
+
+
                 switch (movementMode)
                 {
                     case MovementMode.GridUnit:
@@ -40,13 +45,18 @@ namespace BattleRoyalRhythm.GridActors
                                 World.TranslateActor(this, Vector2.up);
                         }
                         else if (Keyboard.current.sKey.wasPressedThisFrame)
-                            World.TranslateActor(this, Vector2.down);
+                        {
+                            if (!colliders[0, -1])
+                                World.TranslateActor(this, Vector2.down);
+                        }
                         else if (!enteredDoorway)
                         {
                             if (Keyboard.current.aKey.wasPressedThisFrame)
-                                World.TranslateActor(this, Vector2.left);
+                                if (!colliders[-1, 0])
+                                    World.TranslateActor(this, Vector2.left);
                             else if (Keyboard.current.dKey.wasPressedThisFrame)
-                                World.TranslateActor(this, Vector2.right);
+                                if (!colliders[1, 0])
+                                    World.TranslateActor(this, Vector2.right);
                         }
                         Location = Tile;
                         break;

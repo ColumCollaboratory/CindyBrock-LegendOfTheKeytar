@@ -7,6 +7,7 @@ using BattleRoyalRhythm.Collections;
 namespace BattleRoyalRhythm.Surfaces
 {
     [ExecuteInEditMode]
+    [DisallowMultipleComponent]
     public sealed class StaticBlockLayout : MonoBehaviour
     {
         [SerializeField][HideInInspector] private ArraySerializer2D<bool> savedLayout = new ArraySerializer2D<bool>();
@@ -22,6 +23,8 @@ namespace BattleRoyalRhythm.Surfaces
 
         private MeshFilter meshFilter;
         private MeshRenderer meshRenderer;
+
+        public bool[,] Layout => savedLayout.Load();
 
         private Surface priorTargetSurface;
 

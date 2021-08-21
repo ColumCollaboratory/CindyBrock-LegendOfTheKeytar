@@ -1,20 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace BattleRoyalRhythm.Surfaces
 {
-
+    /// <summary>
+    /// A surface that wraps around a cylinder.
+    /// </summary>
     public sealed class CylinderSurface : Surface
     {
+        #region Surface Properties
         [Tooltip("Radius of the cylindrical surface.")]
         [SerializeField][Min(1f)] private float radius = 5f;
         [Tooltip("The revolve angle of the surface.")]
         [SerializeField][Range(-360f, 360f)] private float angle = 90f;
-
-
-        public override Mesh GetTileMesh()
+        #endregion
+#if UNITY_EDITOR
+        #region Editor Visuals Generation
+        /// <summary>
+        /// Generates the curved surface tile mesh.
+        /// </summary>
+        /// <returns>A curved mesh.</returns>
+        public override sealed Mesh GetTileMesh()
         {
             int index = 0;
             int curveCuts = 3;
@@ -59,34 +64,15 @@ namespace BattleRoyalRhythm.Surfaces
                 uvs[index] = new Vector2(
                     (index % bottomRing.Length) * uvTileScale * fraction,
                     vertices[index].y * uvTileScale);
-
+            // Create the mesh.
             Mesh mesh = new Mesh();
             mesh.vertices = vertices;
             mesh.triangles = triangles;
             mesh.uv = uvs;
             mesh.RecalculateNormals();
-
-
             return mesh;
         }
-
-        private Vector3[] GetRing(int detailCuts)
-        {
-            Vector3[] bottomRing = new Vector3[LengthX * (detailCuts + 1) + 1];
-            for (int x = 0; x < bottomRing.Length; x++)
-            {
-                float stepAngle = Mathf.Abs(Mathf.Deg2Rad * angle)
-                    * (x / (float)(bottomRing.Length - 1));
-                bottomRing[x] = new Vector3(
-                    radius * Mathf.Sin(stepAngle),
-                    0f,
-                    (radius - radius * Mathf.Cos(stepAngle)) * (angle > 0f ? 1f : -1f)
-                );
-            }
-            return bottomRing;
-        }
-
-        protected override Vector3[][] GetWireFramePolylines()
+        protected override sealed Vector3[][] GetWireFramePolylines()
         {
             // Setup wireframe size.
             Vector3[][] wireframe = new Vector3[LengthX + LengthY + 2][];
@@ -120,10 +106,35 @@ namespace BattleRoyalRhythm.Surfaces
             }
             return wireframe;
         }
-
-        protected override bool TryLinecastLocal(Vector3 start, Vector3 end, out Vector2 hitLocation)
+        // Does the trig to generate the ring
+        // that the cylinder is extruded from.
+        private Vector3[] GetRing(int detailCuts)
         {
-
+            // Size the array based on parition each unit segment.
+            Vector3[] bottomRing = new Vector3[LengthX * (detailCuts + 1) + 1];
+            float radians = Mathf.Abs(Mathf.Deg2Rad * angle);
+            for (int x = 0; x < bottomRing.Length; x++)
+            {
+                // What is the angle at this vertex;
+                float stepRadians = radians * (x / (float)(bottomRing.Length - 1));
+                // Calculate the circle position. The z coordinate here
+                // if offset by radius because the circle tangent aligns
+                // to the origin.
+                bottomRing[x] = new Vector3(
+                    radius * Mathf.Sin(stepRadians),
+                    0f,
+                    (radius - radius * Mathf.Cos(stepRadians)) * (angle > 0f ? 1f : -1f)
+                );
+            }
+            return bottomRing;
+        }
+        #endregion
+        #region Editor Mouse Linecast
+        protected override sealed bool TryLinecastLocal(Vector3 start, Vector3 end, out Vector2 hitLocation)
+        {
+            //
+            // TODO camera pitch is not properly accounted for somewhere.
+            //
             // Figure it whether the surface is facing outwards
             // based on both angle and flip values.
             bool expectingInwards = angle > 0f;
@@ -147,7 +158,6 @@ namespace BattleRoyalRhythm.Surfaces
             // all the way through the ring; this will also form
             // a right triangle making the final point on the cylinder
             // easier to calculate.
-            //Vector3 nearest = Vector3.Project(center - start, end - start) + start;
             Vector3 flatStart = new Vector3(start.x, 0f, start.z);
             Vector3 flatEnd = new Vector3(end.x, 0f, end.z);
             Vector3 nearest = Vector3.Project(center - flatStart, flatEnd - flatStart) + flatStart;
@@ -190,66 +200,58 @@ namespace BattleRoyalRhythm.Surfaces
             Vector3 hitPoint = Vector3.Lerp(start, end,
                 (startRadiusSquared < endRadiusSquared) ?
                 lineInterpolant : 1f - lineInterpolant);
-            //Debug.Log(hitPoint);
             // Finally we must convert from 3D space into the relevant
             // polor coordinates that map to the cylinder.
             Vector3 circlePoint = hitPoint - center;
             float pointAngle = 90f - ((angle > 0f) ? Mathf.Atan2(-circlePoint.z, circlePoint.x)
                 : Mathf.Atan2(circlePoint.z, circlePoint.x)) * Mathf.Rad2Deg;
-            //Debug.Log($"Elevation = {hitPoint.y}");
             // Return the final hit point.
             hitLocation = new Vector2(pointAngle / Mathf.Abs(angle) * LengthX, hitPoint.y);
             return true;
         }
-
-        #region Exposed Dimension Properties
-        public float Radius => radius;
-        public float Angle => angle;
         #endregion
-
-
+#endif
+        #region Surface Calculation Methods
         protected override sealed Vector3 GetLocationLocal(Vector2 surfaceLocation)
         {
-            float angle = Mathf.Abs(Mathf.Deg2Rad * Angle * (surfaceLocation.x / LengthX));
+            // Get the angle specified by the passed location
+            // and calculate the location on the circle.
+            float radians = Mathf.Abs(Mathf.Deg2Rad * angle * (surfaceLocation.x / LengthX));
             return new Vector3(
-                Radius * Mathf.Sin(angle),
+                radius * Mathf.Sin(radians),
                 surfaceLocation.y,
-                (Radius - Radius * Mathf.Cos(angle)) * (Angle > 0f ? 1f : -1f)
-            );
+                (radius - radius * Mathf.Cos(radians)) * (radians > 0f ? 1f : -1f));
         }
-
         protected override sealed Vector3 GetOutwardsLocal(Vector2 surfaceLocation)
         {
-            float currentAngle = surfaceLocation.x / LengthX * Angle * Mathf.Deg2Rad;
+            float radians = surfaceLocation.x / LengthX * angle * Mathf.Deg2Rad;
             return new Vector3(
-                -Mathf.Sin(currentAngle),
+                -Mathf.Sin(radians),
                 0f,
-                Mathf.Cos(currentAngle));
+                Mathf.Cos(radians));
         }
-
+        protected override sealed Vector3 GetUpLocal(Vector2 surfaceLocation) => Vector3.up;
         protected override sealed Vector3 GetRightLocal(Vector2 surfaceLocation)
         {
-            float currentAngle = surfaceLocation.x / LengthX * Angle * Mathf.Deg2Rad;
-            if (Angle > 0f)
+            float radians = surfaceLocation.x / LengthX * angle * Mathf.Deg2Rad;
+            // TODO not sure if this if else is
+            // needed; should be able to do something
+            // like get outwards.
+            if (angle > 0f)
             {
                 return new Vector3(
-                    Mathf.Cos(currentAngle),
+                    Mathf.Cos(radians),
                     0f,
-                    Mathf.Sin(currentAngle));
+                    Mathf.Sin(radians));
             }
             else
             {
                 return new Vector3(
-                    Mathf.Cos(currentAngle),
+                    Mathf.Cos(radians),
                     0f,
-                    -Mathf.Sin(currentAngle));
+                    -Mathf.Sin(radians));
             }
         }
-
-        protected override sealed Vector3 GetUpLocal(Vector2 surfaceLocation)
-        {
-            return Vector3.up;
-        }
+        #endregion
     }
-
 }

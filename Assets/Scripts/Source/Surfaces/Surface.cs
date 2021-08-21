@@ -24,13 +24,10 @@ namespace BattleRoyalRhythm.Surfaces
     public delegate void SurfaceDimensionsChangedHandler(Surface surface, int newX, int newY);
     #endregion
 #endif
-
     /// <summary>
-    /// Scene instance for the base class of surface.
+    /// The base class for grid surfaces.
     /// </summary>
-#if UNITY_EDITOR
     [ExecuteInEditMode]
-#endif
     [DisallowMultipleComponent]
     public abstract class Surface : MonoBehaviour
     {

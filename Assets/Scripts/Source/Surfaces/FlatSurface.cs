@@ -1,15 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BattleRoyalRhythm.Surfaces
 {
-
+    /// <summary>
+    /// A surface that extends along a flat plane.
+    /// </summary>
     public sealed class FlatSurface : Surface
     {
-
-
-        public override Mesh GetTileMesh()
+#if UNITY_EDITOR
+        #region Editor Visuals Generation
+        /// <summary>
+        /// Generates the planar tile mesh.
+        /// </summary>
+        /// <returns>A flat plane mesh.</returns>
+        public override sealed Mesh GetTileMesh()
         {
             // Generate the flat vertices.
             int index = 0;
@@ -47,7 +51,7 @@ namespace BattleRoyalRhythm.Surfaces
             float uvTileScale = 1f / UVUnit;
             for (index = 0; index < uvs.Length; index++)
                 uvs[index] = vertices[index] * uvTileScale;
-
+            // Create the mesh.
             Mesh mesh = new Mesh();
             mesh.vertices = vertices;
             mesh.triangles = triangles;
@@ -55,11 +59,11 @@ namespace BattleRoyalRhythm.Surfaces
             mesh.RecalculateNormals();
             return mesh;
         }
-
-        protected override Vector3[][] GetWireFramePolylines()
+        protected override sealed Vector3[][] GetWireFramePolylines()
         {
             Vector3[][] wireframe = new Vector3[LengthX + LengthY + 2][];
             int wireIndex = 0;
+            // Generates lines along the x axis.
             for (int x = 0; x < LengthX + 1; x++)
             {
                 wireframe[wireIndex] = new Vector3[]
@@ -69,6 +73,7 @@ namespace BattleRoyalRhythm.Surfaces
                 };
                 wireIndex++;
             }
+            // Generate lines along the y axis.
             for (int y = 0; y < LengthY + 1; y++)
             {
                 wireframe[wireIndex] = new Vector3[]
@@ -80,8 +85,9 @@ namespace BattleRoyalRhythm.Surfaces
             }
             return wireframe;
         }
-
-        protected override bool TryLinecastLocal(Vector3 start, Vector3 end, out Vector2 hitLocation)
+        #endregion
+        #region Editor Mouse Linecast
+        protected override sealed bool TryLinecastLocal(Vector3 start, Vector3 end, out Vector2 hitLocation)
         {
             // Eliminate cases where the line does not
             // intersect the surface in the correct direction.
@@ -95,25 +101,13 @@ namespace BattleRoyalRhythm.Surfaces
             hitLocation = start + direction * (Mathf.Abs(start.z) / direction.z);
             return true;
         }
-
-        protected override Vector3 GetLocationLocal(Vector2 surfaceLocation)
-        {
-            return surfaceLocation;
-        }
-
-        protected override Vector3 GetOutwardsLocal(Vector2 surfaceLocation)
-        {
-            return Vector3.forward;
-        }
-
-        protected override Vector3 GetUpLocal(Vector2 surfaceLocation)
-        {
-            return Vector3.up;
-        }
-
-        protected override Vector3 GetRightLocal(Vector2 surfaceLocation)
-        {
-            return Vector3.right;
-        }
+        #endregion
+#endif
+        #region Surface Calculation Methods
+        protected override sealed Vector3 GetLocationLocal(Vector2 surfaceLocation) => surfaceLocation;
+        protected override sealed Vector3 GetOutwardsLocal(Vector2 surfaceLocation) => Vector3.forward;
+        protected override sealed Vector3 GetUpLocal(Vector2 surfaceLocation) => Vector3.up;
+        protected override sealed Vector3 GetRightLocal(Vector2 surfaceLocation) => Vector3.right;
+        #endregion
     }
 }

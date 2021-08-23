@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}" SchemaVersion="97">
 	<Switches>
-		<WorkUnit Name="Default Work Unit" ID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}" PersistMode="Standalone">
+			<ChildrenList>
+				<SwitchGroup Name="Boss_Music" ID="{40BF78E9-8001-4A45-9346-93FE860BDDE8}">
+					<ChildrenList>
+						<Switch Name="Boss_Metal" ID="{E59FA304-F7A1-441A-B20A-9169FDCACA97}"/>
+						<Switch Name="Boss_Chiptune" ID="{A87100D1-68E3-48F3-B257-99A10DC5036B}"/>
+						<Switch Name="Boss_Cartoon" ID="{72193CDF-BBDE-4A2D-94FC-930F64B4424B}"/>
+						<Switch Name="Boss_Chillwave" ID="{355907E4-FE24-42A3-8DF0-1CBCD929C9AB}"/>
+						<Switch Name="Boss_Classical" ID="{456482CA-782D-474E-9E29-BA93F803C394}"/>
+						<Switch Name="Boss_Dubstep" ID="{B7AE7BF8-F088-4AF2-BA99-9A54DBB9B07C}"/>
+						<Switch Name="Boss_Folk" ID="{7E2A34BC-4E7C-40B9-8547-48B6364EBB2B}"/>
+						<Switch Name="Boss_LofiJazz" ID="{EEF83132-7AD2-4E31-A6BB-6D252D3AC746}"/>
+					</ChildrenList>
+				</SwitchGroup>
+				<SwitchGroup Name="Level_1" ID="{5B8DF43D-E33A-45CF-9570-11344F7BB92D}">
+					<ChildrenList>
+						<Switch Name="_Level_1_Chiptune" ID="{20F2C394-C29A-42BA-BD85-713C7DBE753D}"/>
+						<Switch Name="Level_1_Metal" ID="{EA4A5B29-4A7D-4587-A1FF-F27933F7AB8C}"/>
+						<Switch Name="Level_1_Folk" ID="{83BCB260-AAD5-4F5C-A912-4C1DC7718089}"/>
+						<Switch Name="Level_1_LofiJazz" ID="{5742BBEE-825B-4C21-9A48-E1200ACF686E}"/>
+					</ChildrenList>
+				</SwitchGroup>
+				<SwitchGroup Name="Level_2" ID="{2D016B1D-D564-4A6E-9C53-C80A552375A2}">
+					<ChildrenList>
+						<Switch Name="_Level_2_Cartoon" ID="{0BC94AAD-026D-4F51-8DC6-748C562A7558}"/>
+						<Switch Name="Level_2_Chillwave" ID="{76CE2D37-5A3D-4A46-9E54-DD7015476C45}"/>
+						<Switch Name="Level_2_Classical" ID="{E035AF48-C694-47B2-B0D1-731C447B44EB}"/>
+						<Switch Name="Level_2_Dubstep" ID="{DD36B612-9A5E-444F-BB54-A6414008E70E}"/>
+					</ChildrenList>
+				</SwitchGroup>
+				<SwitchGroup Name="Level_3" ID="{630C90C4-24F1-4C4F-AFBB-301CE2C1DFC9}">
+					<ChildrenList>
+						<Switch Name="_Level_3_Folk" ID="{55A47EA4-C645-40EF-A684-9F2B143C7BB2}"/>
+						<Switch Name="Level_3_1" ID="{845BF1DA-3CB6-494F-824F-C954147E7721}"/>
+						<Switch Name="Level_3_2" ID="{2AD77BC9-D43C-44C2-94B2-1AEB858FC861}"/>
+						<Switch Name="Level_3_3" ID="{61ED876C-A283-4BFC-A90C-3C31E08C2D89}"/>
+					</ChildrenList>
+				</SwitchGroup>
+			</ChildrenList>
+		</WorkUnit>
 	</Switches>
 </WwiseDocument>

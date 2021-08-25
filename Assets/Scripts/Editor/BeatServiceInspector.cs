@@ -1,39 +1,70 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using BattleRoyalRhythm.Audio;
 
+/// <summary>
+/// Custom inspector for beat services, provides
+/// added utility in a metronome for testing the
+/// service without audio.
+/// </summary>
 [CustomEditor(typeof(BeatService), true)]
-public class BeatServiceInspector : Editor
+public sealed class BeatServiceInspector : Editor
 {
-    IBeatService service;
-    bool metronomeIsRight;
-
-    private float value;
-
+    #region Inspector State
+    private IBeatService service;
+    private bool metronomeSide;
+    private bool needsConstantRedraw;
+    #endregion
+    #region Enabling/Disabling
     private void OnEnable()
     {
+        // Extract the beat service from
+        // the MonoBehaviour.
         service = target as IBeatService;
-        metronomeIsRight = true;
+        // Bind to the service to switch
+        // the metronome side.
         service.BeatElapsed += SwitchMetronome;
+        needsConstantRedraw = true;
+        // Initialize metronome side.
+        metronomeSide = true;
     }
     private void OnDisable()
     {
+        // Unbind from beat events when disabled.
         service.BeatElapsed -= SwitchMetronome;
+        needsConstantRedraw = false;
     }
-
-    private void SwitchMetronome(float beatTime) => metronomeIsRight = !metronomeIsRight;
-
-    public override void OnInspectorGUI()
+    #endregion
+    #region Draw Inspector
+    /// <summary>
+    /// Draws the metronome debug tools of the beast service.
+    /// </summary>
+    public override sealed void OnInspectorGUI()
     {
-        value = Mathf.Sin(service.CurrentInterpolant * Mathf.PI
-                * (metronomeIsRight ? 1f : -1f));
+        // Draw the default properties
+        // for the inspector.
         DrawDefaultInspector();
+        // Add a labeled slider for the metronome.
+        EditorGUILayout.LabelField(
+            "Debug Metronome",
+            EditorStyles.boldLabel);
         GUI.enabled = false;
-        EditorGUILayout.Slider(value, -1f, 1f);
+        EditorGUILayout.Slider(
+            // Sin used here to simulate the
+            // movement of a metronome.
+            Mathf.Sin(service.CurrentInterpolant * Mathf.PI
+                * (metronomeSide ? 1f : -1f)),
+            -1f, 1f);
         GUI.enabled = true;
     }
-
-    public override bool RequiresConstantRepaint() => true;
+    // This keeps the metronome always
+    // drawing in the inspector.
+    public override sealed bool RequiresConstantRepaint() => needsConstantRedraw;
+    #endregion
+    #region Beat Service Listeners
+    private void SwitchMetronome(float beatTime)
+    {
+        metronomeSide = !metronomeSide;
+    }
+    #endregion
 }

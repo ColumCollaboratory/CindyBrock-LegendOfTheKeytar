@@ -3,10 +3,11 @@ using UnityEngine;
 namespace BattleRoyalRhythm.Audio
 {
     // NOTE this class exists so a common debugging
-    // editor can be shared between implementations.
+    // inspector can be shared between implementations.
     /// <summary>
     /// Base class for beat services implemented in MonoBehaviour.
     /// </summary>
+    [DisallowMultipleComponent]
     public abstract class BeatService : MonoBehaviour, IBeatService
     {
         #region Beat Service Requirements

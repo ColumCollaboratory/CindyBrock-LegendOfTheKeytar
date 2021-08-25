@@ -1,6 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{62C11712-AFD8-4A1D-8D21-81938DD00FA5}" SchemaVersion="97">
 	<AudioObjects>
-		<WorkUnit Name="Default Work Unit" ID="{62C11712-AFD8-4A1D-8D21-81938DD00FA5}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{62C11712-AFD8-4A1D-8D21-81938DD00FA5}" PersistMode="Standalone">
+			<ChildrenList>
+				<Folder Name="General SFX" ID="{11979031-05AD-4BE2-B869-50063564AB0B}" ShortID="459630787"/>
+				<Folder Name="Level 1" ID="{69E9537C-E65E-47ED-9C59-DE8784B716CE}" ShortID="264828814">
+					<ChildrenList>
+						<Sound Name="Bomb ticking - Chiptune" ID="{B183BAEB-11E2-4465-963C-7260EEE9EDCC}" ShortID="121783029">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Bomb Tick Chiptune" ID="{EDBCADD0-4887-47B7-8832-1BDBD0345841}">
+									<Language>SFX</Language>
+									<AudioFile>Bomb Tick Chiptune.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="539274450"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Bomb Tick Chiptune" ID="{EDBCADD0-4887-47B7-8832-1BDBD0345841}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Bomb explode - Chiptune" ID="{936DBF26-B111-42AE-BC18-FC1886D12F81}" ShortID="39664543">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Bomb Explosion Chiptune" ID="{D85B4B44-AC89-4719-AE19-4CBC38459322}">
+									<Language>SFX</Language>
+									<AudioFile>Bomb Explosion Chiptune.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="98343831"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Bomb Explosion Chiptune" ID="{D85B4B44-AC89-4719-AE19-4CBC38459322}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Tether - Metal" ID="{DF9F0A58-715B-46A4-A88A-9B3E7B7C9406}" ShortID="61298972">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+								</Reference>
+							</ReferenceList>
+						</Sound>
+						<Sound Name="Dash - LofiJazz" ID="{AB15C812-6C9F-4883-8ACA-E3D04F4C3AF4}" ShortID="188764158">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+								</Reference>
+							</ReferenceList>
+						</Sound>
+						<Sound Name="Repulsor - Folk" ID="{E0CA8863-18A7-4682-AA26-62C64FA9A876}" ShortID="752863403">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+								</Reference>
+							</ReferenceList>
+						</Sound>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="Level 2" ID="{F68B3372-4CC1-43DE-BBAD-1041B11DA3E5}" ShortID="706983110">
+					<ChildrenList>
+						<Sound Name="Bomb ticking - Dubstep" ID="{1F84DF86-5B8B-4CB6-8EE5-BA1DD67E3554}" ShortID="528250257">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Bomb Tick Dubstep" ID="{FBCC432D-BBC3-4D0E-B120-30054D174740}">
+									<Language>SFX</Language>
+									<AudioFile>Bomb Tick Dubstep.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="51867565"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Bomb Tick Dubstep" ID="{FBCC432D-BBC3-4D0E-B120-30054D174740}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Bomb explode - Dubstep" ID="{23218EF3-02F6-4A73-9A8B-FFF5AE850F9C}" ShortID="178575675">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Bomb Explosion Dubstep" ID="{2D40EF66-1FDA-4AA2-83CB-A40038020640}">
+									<Language>SFX</Language>
+									<AudioFile>Bomb Explosion Dubstep.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="795616477"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Bomb Explosion Dubstep" ID="{2D40EF66-1FDA-4AA2-83CB-A40038020640}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Dash - Cartoon" ID="{870E853E-91F8-4612-A59C-0AECE5957096}" ShortID="492176469">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+								</Reference>
+							</ReferenceList>
+						</Sound>
+						<Sound Name="Repulsor - Synthwave" ID="{6FF0F269-C5D7-4DD4-8901-6976C3277AEF}" ShortID="132644803">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+								</Reference>
+							</ReferenceList>
+						</Sound>
+						<Sound Name="Tether - Classcal" ID="{33A64B50-9FB0-4CB3-AF40-D588C74E878C}" ShortID="942555737">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Tether Classical" ID="{A2DEB1A0-9420-4D29-903B-2B51F9C6AF10}">
+									<Language>SFX</Language>
+									<AudioFile>Tether Classical.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="1015277136"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Tether Classical" ID="{A2DEB1A0-9420-4D29-903B-2B51F9C6AF10}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="Level 3" ID="{8EDD019C-7A1E-4718-A06A-BAE73068C748}" ShortID="685067822"/>
+				<Folder Name="Boss" ID="{CC1BF4F9-15C6-4E8A-B970-6DC3BE5D6EDE}" ShortID="618106126"/>
+			</ChildrenList>
+		</WorkUnit>
 	</AudioObjects>
 </WwiseDocument>

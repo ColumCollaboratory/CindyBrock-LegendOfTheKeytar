@@ -31,7 +31,7 @@
 										<Property Name="MusicTrackType" Type="int16" Value="3"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>3</Value>
+												<Value>4</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -342,7 +342,7 @@
 										<Property Name="MusicTrackType" Type="int16" Value="3"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>3</Value>
+												<Value>5</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -501,6 +501,11 @@
 								<MusicTrack Name="Boss_Folk" ID="{8154E5C9-8EF7-4A5F-931D-D2A8E1542B5A}" ShortID="199777630">
 									<PropertyList>
 										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>7</Value>
+											</ValueList>
+										</Property>
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
@@ -516,6 +521,15 @@
 											<ObjectRef Name="Boss_Music" ID="{40BF78E9-8001-4A45-9346-93FE860BDDE8}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Folk Remix (BOSS)" ID="{E0F181BD-26CF-435D-AF96-160C6DB11F3C}">
+											<Language>SFX</Language>
+											<AudioFile>Folk Remix (BOSS).wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="5380953"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
 									<TransitionList>
 										<MusicTransition Name="Root" ID="{3CEFD69E-13A1-430C-B56F-F08339F4D3E4}">
 											<PropertyList>
@@ -523,7 +537,21 @@
 											</PropertyList>
 											<ChildrenList>
 												<MusicTransition Name="Transition" ID="{52022672-623A-46F4-978C-11F00C1C17AF}">
-													<TransitionInfo/>
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{0EAABDA0-ABA5-4A32-9E2C-03C8BE243383}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="3"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
 												</MusicTransition>
 											</ChildrenList>
 											<TransitionInfo/>
@@ -531,6 +559,16 @@
 									</TransitionList>
 									<SequenceList>
 										<MusicTrackSequence Name="" ID="{89CE5946-E911-4E9D-870C-7E62DA49B9E1}">
+											<ClipList>
+												<MusicClip Name="Folk Remix (BOSS)" ID="{E0E615F6-B211-41D6-8502-893B0FE2CB8B}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="85743.9791666667"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutMode" Type="int16" Value="0"/>
+													</PropertyList>
+													<AudioSourceRef Name="Folk Remix (BOSS)" ID="{E0F181BD-26CF-435D-AF96-160C6DB11F3C}"/>
+												</MusicClip>
+											</ClipList>
 											<ReferenceList>
 												<Reference Name="TrackSequenceSwitch">
 													<ObjectRef Name="Boss_Folk" ID="{7E2A34BC-4E7C-40B9-8547-48B6364EBB2B}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>

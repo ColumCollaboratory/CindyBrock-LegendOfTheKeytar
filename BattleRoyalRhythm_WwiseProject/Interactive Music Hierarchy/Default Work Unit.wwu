@@ -15,7 +15,7 @@
 					<ChildrenList>
 						<MusicSegment Name="Boss_Music" ID="{84D75A5E-7991-4F8D-82AE-3BE2918B3F9B}" ShortID="763430128">
 							<PropertyList>
-								<Property Name="EndPosition" Type="Real64" Value="87831.6458563358"/>
+								<Property Name="EndPosition" Type="Real64" Value="90000"/>
 							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
@@ -167,6 +167,11 @@
 								<MusicTrack Name="_Boss_Metal" ID="{9E20AE65-1270-4F5B-AEBC-8AC03023BCCC}" ShortID="73092224">
 									<PropertyList>
 										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-1</Value>
+											</ValueList>
+										</Property>
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="DefaultSwitchOrState">
@@ -314,6 +319,15 @@
 											<ObjectRef Name="Boss_Music" ID="{40BF78E9-8001-4A45-9346-93FE860BDDE8}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Yigit - Boss Battle Remix (Cartoon)" ID="{3AFAFDF5-3BD9-4F6F-BABE-03A5A0080CAC}">
+											<Language>SFX</Language>
+											<AudioFile>Yigit - Boss Battle Remix (Cartoon).wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="867812406"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
 									<TransitionList>
 										<MusicTransition Name="Root" ID="{D8583A89-C87D-4972-900B-A66822341BB9}">
 											<PropertyList>
@@ -321,7 +335,21 @@
 											</PropertyList>
 											<ChildrenList>
 												<MusicTransition Name="Transition" ID="{2EF0C588-FE77-4449-A9EF-94EEC9E9873D}">
-													<TransitionInfo/>
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{AA13FD64-8F91-44E8-8ED8-BE6B5D69316A}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="3"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
 												</MusicTransition>
 											</ChildrenList>
 											<TransitionInfo/>
@@ -329,6 +357,77 @@
 									</TransitionList>
 									<SequenceList>
 										<MusicTrackSequence Name="" ID="{5AC20A5A-59A1-4C6F-8E5C-5CFFA4CD69F9}">
+											<ClipList>
+												<MusicClip Name="Yigit - Boss Battle Remix (Cartoon)" ID="{6D13603E-8BE9-49D5-BF73-EF83321638BB}">
+													<PropertyList>
+														<Property Name="BeginTrimOffset" Type="Real64" Value="386.807592289385"/>
+														<Property Name="EndTrimOffset" Type="Real64" Value="86108.7156215689"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="38.6807592289406"/>
+														<Property Name="PlayAt" Type="Real64" Value="-386.807592289385"/>
+													</PropertyList>
+													<AudioSourceRef Name="Yigit - Boss Battle Remix (Cartoon)" ID="{3AFAFDF5-3BD9-4F6F-BABE-03A5A0080CAC}"/>
+													<PropertyCurveList>
+														<PropertyCurve PropertyName="Highpass">
+															<Curve Name="" ID="{BBF508E6-B578-4CD8-955A-2BEC5243CB1B}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0.38681</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>86.10872</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Lowpass">
+															<Curve Name="" ID="{1934D601-B920-4558-80AB-7DC20993E558}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0.38681</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>86.10872</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Volume">
+															<Curve Name="" ID="{46035DCB-9AC8-4228-938B-49B8ABDAF7F4}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="3"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0.38681</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>86.10872</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+													</PropertyCurveList>
+												</MusicClip>
+											</ClipList>
 											<ReferenceList>
 												<Reference Name="TrackSequenceSwitch">
 													<ObjectRef Name="Boss_Cartoon" ID="{72193CDF-BBDE-4A2D-94FC-930F64B4424B}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
@@ -419,6 +518,11 @@
 								<MusicTrack Name="Boss_Classical" ID="{9BC29B84-6427-4F9E-9BF6-6F0B75B0D9F0}" ShortID="277976214">
 									<PropertyList>
 										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>7</Value>
+											</ValueList>
+										</Property>
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
@@ -434,6 +538,15 @@
 											<ObjectRef Name="Boss_Music" ID="{40BF78E9-8001-4A45-9346-93FE860BDDE8}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Boss Battle - Classical Arrangement v1_3 0826AR_Full Mix" ID="{727D1679-4C9C-4570-92F2-8F6810AE6DA1}">
+											<Language>SFX</Language>
+											<AudioFile>Boss Battle - Classical Arrangement v1.3 0826AR_Full Mix.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="410214300"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
 									<TransitionList>
 										<MusicTransition Name="Root" ID="{24B7C601-3EB6-4804-A5F2-9DEF255E667F}">
 											<PropertyList>
@@ -441,7 +554,21 @@
 											</PropertyList>
 											<ChildrenList>
 												<MusicTransition Name="Transition" ID="{32E6BA61-9154-4DCE-B96A-856525D1361E}">
-													<TransitionInfo/>
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{5AA4A8BD-8F12-4BF3-96FE-0EBD4869DDD3}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="3"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
 												</MusicTransition>
 											</ChildrenList>
 											<TransitionInfo/>
@@ -449,6 +576,75 @@
 									</TransitionList>
 									<SequenceList>
 										<MusicTrackSequence Name="" ID="{9827A6A1-2ACB-44A4-B616-687E0E40B197}">
+											<ClipList>
+												<MusicClip Name="Boss Battle - Classical Arrangement v1_3 0826AR_Full Mix" ID="{08B06842-16FC-4F40-86A4-39C8D9C67D6E}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="85760.3805430458"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="117.512095040496"/>
+													</PropertyList>
+													<AudioSourceRef Name="Boss Battle - Classical Arrangement v1_3 0826AR_Full Mix" ID="{727D1679-4C9C-4570-92F2-8F6810AE6DA1}"/>
+													<PropertyCurveList>
+														<PropertyCurve PropertyName="Highpass">
+															<Curve Name="" ID="{EF4CC0F8-E3BC-49DE-A19C-D0E1D4A08B9D}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.76038</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Lowpass">
+															<Curve Name="" ID="{6C107888-67B1-4F18-B744-14254C86B9BC}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.76038</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Volume">
+															<Curve Name="" ID="{8C034CB2-5640-4676-9EBD-3EEC53A0F62E}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="3"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.76038</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+													</PropertyCurveList>
+												</MusicClip>
+											</ClipList>
 											<ReferenceList>
 												<Reference Name="TrackSequenceSwitch">
 													<ObjectRef Name="Boss_Classical" ID="{456482CA-782D-474E-9E29-BA93F803C394}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
@@ -562,11 +758,70 @@
 											<ClipList>
 												<MusicClip Name="Folk Remix (BOSS)" ID="{E0E615F6-B211-41D6-8502-893B0FE2CB8B}">
 													<PropertyList>
-														<Property Name="EndTrimOffset" Type="Real64" Value="85743.9791666667"/>
+														<Property Name="EndTrimOffset" Type="Real64" Value="85720.7707111293"/>
 														<Property Name="FadeInMode" Type="int16" Value="0"/>
-														<Property Name="FadeOutMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="30.944607383135"/>
 													</PropertyList>
 													<AudioSourceRef Name="Folk Remix (BOSS)" ID="{E0F181BD-26CF-435D-AF96-160C6DB11F3C}"/>
+													<PropertyCurveList>
+														<PropertyCurve PropertyName="Highpass">
+															<Curve Name="" ID="{1F0DB5C3-62CD-4F0F-9425-F9F2ACD3588D}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.72077</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Lowpass">
+															<Curve Name="" ID="{E499DD1A-7EDA-45BC-9C9B-DB15BD0829C6}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.72077</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Volume">
+															<Curve Name="" ID="{913B6428-6FF7-4563-B7FB-6B965C1D21E7}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="3"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.72077</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+													</PropertyCurveList>
 												</MusicClip>
 											</ClipList>
 											<ReferenceList>
@@ -1054,7 +1309,7 @@
 					<ChildrenList>
 						<MusicSegment Name="Level2_Music" ID="{42A0FAA8-9851-4FCA-AE2F-21C620D10A84}" ShortID="899319145">
 							<PropertyList>
-								<Property Name="EndPosition" Type="Real64" Value="98038.2978723404"/>
+								<Property Name="EndPosition" Type="Real64" Value="100461.170081986"/>
 							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
@@ -1123,7 +1378,7 @@
 													<PropertyList>
 														<Property Name="EndTrimOffset" Type="Real64" Value="96000"/>
 														<Property Name="FadeInMode" Type="int16" Value="0"/>
-														<Property Name="FadeOutMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="21.9713816324656"/>
 													</PropertyList>
 													<AudioSourceRef Name="Yigit_Level_2_main_loop_v1_2" ID="{297A2AB0-8A7B-464F-A56F-1EFF81EC949F}"/>
 												</MusicClip>
@@ -1170,7 +1425,21 @@
 											</PropertyList>
 											<ChildrenList>
 												<MusicTransition Name="Transition" ID="{B94DB645-5D5D-4B0A-A578-2FA20CECB263}">
-													<TransitionInfo/>
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{775EDD15-86B5-4596-86BB-C9BC331E8BD8}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="5"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
 												</MusicTransition>
 											</ChildrenList>
 											<TransitionInfo/>
@@ -1183,7 +1452,7 @@
 													<PropertyList>
 														<Property Name="EndTrimOffset" Type="Real64" Value="96000"/>
 														<Property Name="FadeInMode" Type="int16" Value="0"/>
-														<Property Name="FadeOutMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="14.6475877549674"/>
 													</PropertyList>
 													<AudioSourceRef Name="CCC_GJ2021_Level2 MainTheme_Synthwave Version_v1b" ID="{3273879A-F7B7-413D-AD0D-2BC697E337EC}"/>
 												</MusicClip>
@@ -1199,6 +1468,11 @@
 								<MusicTrack Name="Level2_Classical" ID="{956203F8-59F4-473D-8605-3DB848A69346}" ShortID="648706453">
 									<PropertyList>
 										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>2</Value>
+											</ValueList>
+										</Property>
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
@@ -1214,6 +1488,15 @@
 											<ObjectRef Name="Level_2" ID="{2D016B1D-D564-4A6E-9C53-C80A552375A2}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Level2_Classical" ID="{C53D50C5-BAE5-4FC1-9D27-E5C2A6A4C757}">
+											<Language>SFX</Language>
+											<AudioFile>Level2_Classical.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="1035376729"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
 									<TransitionList>
 										<MusicTransition Name="Root" ID="{DEBE7EB5-572C-4F47-869B-1D6F7E16530A}">
 											<PropertyList>
@@ -1221,7 +1504,21 @@
 											</PropertyList>
 											<ChildrenList>
 												<MusicTransition Name="Transition" ID="{29A714DB-75D0-4940-8550-B1D1B10FC7EF}">
-													<TransitionInfo/>
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{4886E0A1-8140-4ECE-A36B-2241E7963334}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="3"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
 												</MusicTransition>
 											</ChildrenList>
 											<TransitionInfo/>
@@ -1229,6 +1526,16 @@
 									</TransitionList>
 									<SequenceList>
 										<MusicTrackSequence Name="" ID="{C483A8FF-6CA8-49CF-BDF2-961353E9E62A}">
+											<ClipList>
+												<MusicClip Name="Level2_Classical" ID="{2BA057E4-C8DB-4791-A778-A3A6A33E9533}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="96000"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="14.6475877549965"/>
+													</PropertyList>
+													<AudioSourceRef Name="Level2_Classical" ID="{C53D50C5-BAE5-4FC1-9D27-E5C2A6A4C757}"/>
+												</MusicClip>
+											</ClipList>
 											<ReferenceList>
 												<Reference Name="TrackSequenceSwitch">
 													<ObjectRef Name="Level_2_Classical" ID="{E035AF48-C694-47B2-B0D1-731C447B44EB}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>

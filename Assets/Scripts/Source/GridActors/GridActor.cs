@@ -76,7 +76,7 @@ namespace BattleRoyalRhythm.GridActors
         protected virtual void Update() { }
 #endif
 
-        private void Awake()
+        protected virtual void Awake()
         {
             Location = tile;
         }

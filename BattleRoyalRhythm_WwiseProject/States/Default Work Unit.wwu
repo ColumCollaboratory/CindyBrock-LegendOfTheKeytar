@@ -1,6 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}" SchemaVersion="97">
 	<States>
-		<WorkUnit Name="Default Work Unit" ID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}" PersistMode="Standalone">
+			<ChildrenList>
+				<StateGroup Name="_Boss_Metal" ID="{DDCD4AC0-FD0F-4A41-BACA-416F043769D7}">
+					<ChildrenList>
+						<State Name="None" ID="{D51A89CA-0D9F-46E8-95CD-C23D2FACBD75}"/>
+					</ChildrenList>
+				</StateGroup>
+				<StateGroup Name="Boss_Chiptune" ID="{E9F03F7F-171F-4AA5-84C4-62148D9EF041}">
+					<ChildrenList>
+						<State Name="None" ID="{1DF82AC7-59CA-471B-ACEB-7968A2A0CE07}"/>
+					</ChildrenList>
+				</StateGroup>
+				<StateGroup Name="Boss_LofiJazz" ID="{E48644DA-B7F5-4B7A-B94E-72EF4DA13079}">
+					<ChildrenList>
+						<State Name="None" ID="{4F107F20-2182-4EF4-8633-ED2B0B8826FC}"/>
+					</ChildrenList>
+				</StateGroup>
+				<StateGroup Name="Boss_Cartoon" ID="{226B5A1D-F583-47A2-99B4-80949E067CC6}">
+					<ChildrenList>
+						<State Name="None" ID="{9908D00C-F5C7-472A-98E6-6B72A080D303}"/>
+					</ChildrenList>
+				</StateGroup>
+				<StateGroup Name="Boss_Folk" ID="{90BCF1F5-B3BC-48CA-80F4-5D015F4D92C2}">
+					<ChildrenList>
+						<State Name="None" ID="{96E57FC5-B545-4412-A9D2-E06B8536AC24}"/>
+					</ChildrenList>
+				</StateGroup>
+				<StateGroup Name="Boss_Chillwave" ID="{1F8AE0E7-231A-480B-90DA-17604D56C443}">
+					<ChildrenList>
+						<State Name="None" ID="{9BA1C814-6503-4B26-B002-2E54C8BC305C}"/>
+					</ChildrenList>
+				</StateGroup>
+				<StateGroup Name="Boss_Dubstep" ID="{2425C091-3378-4174-B51E-E88FA04C5795}">
+					<ChildrenList>
+						<State Name="None" ID="{A2F7C499-036F-4229-B2CE-93BE2EBC3DF5}"/>
+					</ChildrenList>
+				</StateGroup>
+				<StateGroup Name="Boss_Classical" ID="{CFE7D19A-701D-487D-818F-7E8C71EBBB11}">
+					<ChildrenList>
+						<State Name="None" ID="{DD42C6D0-6C25-485C-9D7C-FCFC62EF509A}"/>
+					</ChildrenList>
+				</StateGroup>
+				<StateGroup Name="Boss_Music" ID="{6AFAB787-8C36-4960-95B9-7909352A93A1}">
+					<ChildrenList>
+						<State Name="None" ID="{D723C7B9-9271-488F-8404-03247189CE88}"/>
+						<State Name="_Boss_Metal" ID="{FC79F3F1-76C1-461A-9AF0-4876FDB925EC}"/>
+						<State Name="Boss_Chiptune" ID="{BACC9AB5-D4B5-48A8-87C6-2EBA91D19D17}"/>
+						<State Name="Boss_Chillwave" ID="{5EDB5F61-159A-4AAB-A9AE-2D30B8ED32D1}"/>
+						<State Name="Boss_Dubstep" ID="{28DEE457-640E-4BDB-BF5A-DD01216B22B0}"/>
+						<State Name="Boss_Classical" ID="{F1EA93E8-FF57-4E3C-A08B-C889CC4F2EDB}"/>
+						<State Name="Boss_LofiJazz" ID="{F9148997-515B-4BE5-996A-896446171A78}"/>
+						<State Name="Boss_Cartoon" ID="{5CBE0FE6-3FBB-4FB1-81A5-4316D431BCE2}"/>
+						<State Name="Boss_Folk" ID="{727ABB89-2284-4ADC-9D2C-CC7EF77DC082}"/>
+					</ChildrenList>
+				</StateGroup>
+				<StateGroup Name="Level_1" ID="{13F51EF0-34B2-451E-97B6-8C413BEF166B}">
+					<ChildrenList>
+						<State Name="None" ID="{AF9A5061-AB7A-4277-AB35-5F67AD4642D2}"/>
+						<State Name="_Level1_Chiptune" ID="{43BF93C7-B5EA-4512-B0D5-1C697B2C381C}"/>
+						<State Name="Level1_Metal" ID="{02A5A5F8-4837-49F2-A835-058F3A43B890}"/>
+						<State Name="Level1_LofiJazz" ID="{48D1ADA9-DAC5-4DAC-9814-C410D8B6141B}"/>
+						<State Name="Level1_Folk" ID="{75CB70C0-7B59-40EB-B37C-C802F4787469}"/>
+					</ChildrenList>
+				</StateGroup>
+				<StateGroup Name="Level_2" ID="{8C35A2B4-6263-4258-B1E9-70715464B712}">
+					<ChildrenList>
+						<State Name="None" ID="{198A4107-899E-4501-91FB-0FB5767A8421}"/>
+						<State Name="_Level2_Cartoon" ID="{9F032BCC-F7A2-443B-8C96-84F448FB46CB}"/>
+						<State Name="Level2_Classical" ID="{090FB0C7-546E-46D2-A44F-E7E49F53ECC8}"/>
+						<State Name="Level2_Dubstep" ID="{AAE3C642-A034-441B-B2E8-B271FDAC49DD}"/>
+						<State Name="Level2_Chillwave" ID="{5D4E95DA-94AA-4653-BAA2-1E84895E4B33}"/>
+					</ChildrenList>
+				</StateGroup>
+				<StateGroup Name="Level_3" ID="{ED0F0373-C059-46F2-AC66-2B8AC477F0C3}">
+					<ChildrenList>
+						<State Name="None" ID="{00F7FB5B-002D-400C-B1C8-91B893C0A2A9}"/>
+						<State Name="_Level3_Folk" ID="{27A43175-DD58-4890-BF21-C19D4A8FB946}"/>
+					</ChildrenList>
+				</StateGroup>
+			</ChildrenList>
+		</WorkUnit>
 	</States>
 </WwiseDocument>

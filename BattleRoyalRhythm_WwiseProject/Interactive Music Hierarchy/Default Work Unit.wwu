@@ -943,6 +943,11 @@
 								<MusicTrack Name="_Level1_Chiptune" ID="{8D8FA059-9A78-4A94-A8BF-A60A943C4001}" ShortID="102810545">
 									<PropertyList>
 										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>3</Value>
+											</ValueList>
+										</Property>
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="DefaultSwitchOrState">

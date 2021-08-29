@@ -59,6 +59,18 @@
 									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Tether - Metal" ID="{BBA55E53-74E7-464B-8465-9DA0B8480E83}">
+									<Language>SFX</Language>
+									<AudioFile>Tether - Metal.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="907750780"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Tether - Metal" ID="{BBA55E53-74E7-464B-8465-9DA0B8480E83}" Platform="Linked"/>
+							</ActiveSourceList>
 						</Sound>
 						<Sound Name="Dash - LofiJazz" ID="{AB15C812-6C9F-4883-8ACA-E3D04F4C3AF4}" ShortID="188764158">
 							<ReferenceList>
@@ -69,6 +81,18 @@
 									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Dash - Lofi" ID="{0BE2A2AC-8A25-40E8-88A9-E4BEF7D2663A}">
+									<Language>SFX</Language>
+									<AudioFile>Dash - Lofi.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="619502304"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Dash - Lofi" ID="{0BE2A2AC-8A25-40E8-88A9-E4BEF7D2663A}" Platform="Linked"/>
+							</ActiveSourceList>
 						</Sound>
 						<Sound Name="Repulsor - Folk" ID="{E0CA8863-18A7-4682-AA26-62C64FA9A876}" ShortID="752863403">
 							<ReferenceList>
@@ -79,6 +103,18 @@
 									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Repulsor - Folk" ID="{009ECCE8-BAC7-41FE-8A57-76AFF0AA28CC}">
+									<Language>SFX</Language>
+									<AudioFile>Repulsor - Folk.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="99167098"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Repulsor - Folk" ID="{009ECCE8-BAC7-41FE-8A57-76AFF0AA28CC}" Platform="Linked"/>
+							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>
 				</Folder>
@@ -137,6 +173,18 @@
 									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Dash - Cartoon" ID="{5F22039A-76B3-4DAC-A696-DB013A9B1A3E}">
+									<Language>SFX</Language>
+									<AudioFile>Dash - Cartoon.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="32412039"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Dash - Cartoon" ID="{5F22039A-76B3-4DAC-A696-DB013A9B1A3E}" Platform="Linked"/>
+							</ActiveSourceList>
 						</Sound>
 						<Sound Name="Repulsor - Synthwave" ID="{6FF0F269-C5D7-4DD4-8901-6976C3277AEF}" ShortID="132644803">
 							<ReferenceList>
@@ -147,6 +195,18 @@
 									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Repulsor - Synthwave" ID="{0A212A0E-8D50-4A8D-BD35-5238CF41D773}">
+									<Language>SFX</Language>
+									<AudioFile>Repulsor - Synthwave.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="685281463"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Repulsor - Synthwave" ID="{0A212A0E-8D50-4A8D-BD35-5238CF41D773}" Platform="Linked"/>
+							</ActiveSourceList>
 						</Sound>
 						<Sound Name="Tether - Classcal" ID="{33A64B50-9FB0-4CB3-AF40-D588C74E878C}" ShortID="942555737">
 							<ReferenceList>

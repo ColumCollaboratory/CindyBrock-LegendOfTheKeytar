@@ -10,12 +10,10 @@ public class SceneIntegration : MonoBehaviour
     private GameObject gamePanel;
     [SerializeField]
     private GameObject creditsPanel;
-    [SerializeField]
-    private string levelOne;
 
-    public void ChangeScene()
+    public void ChangeScene(string nextLevel)
     {
-        SceneManager.LoadScene(levelOne);
+        SceneManager.LoadScene(nextLevel);
     }
 
     public void ToggleCredits()

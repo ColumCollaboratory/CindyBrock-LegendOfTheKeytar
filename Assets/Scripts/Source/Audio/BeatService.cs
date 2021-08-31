@@ -14,5 +14,7 @@ namespace BattleRoyalRhythm.Audio
         public abstract float CurrentInterpolant { get; }
         public abstract event BeatElapsedHandler BeatElapsed;
         #endregion
+
+        public float BeatOffset { get; set; }
     }
 }

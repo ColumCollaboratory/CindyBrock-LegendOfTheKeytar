@@ -73,6 +73,7 @@ namespace BattleRoyalRhythm.GridActors
                 RefreshPosition();
         }
 #else
+        protected virtual void OnValidate() { }
         protected virtual void Update() { }
 #endif
 

@@ -113,36 +113,25 @@ namespace BattleRoyalRhythm.GridActors.Player
         }
         private Queue<AnimationPath> CreateJumpPaths(int jumpX, int jumpY)
         {
-            // Precalculate variables for the
-            // parabolic jump curve.
-            float midX = Mathf.Round(0.5f * jumpX);
-            float coef1, coef2;
-            // Equations are swapped based on the direction
-            // of the jump, coefficients are calculated here
-            // so that the update time impact is minimized.
-            if (jumpX > 0f)
-            {
-                coef1 = -jumpApex / (midX * midX);
-                coef2 = (-jumpApex + jumpY) / ((jumpX - midX) * (jumpX - midX));
-            }
-            else
-            {
-                coef2 = -jumpApex / (midX * midX);
-                coef1 = (-jumpApex + jumpY) / ((jumpX - midX) * (jumpX - midX)); ;
-            }
+            // Precalculate variables for the curve.
+            // The curve is generated from left to right.
+            float midX = Mathf.Round(0.5f * Mathf.Abs(jumpX));
+            // Calculate the coefficiencts for both segments of the arc.
+            float coef1 = -jumpApex / (midX * midX);
+            float coef2 = (-jumpApex + jumpY) / ((Mathf.Abs(jumpX) - midX) * (Mathf.Abs(jumpX) - midX));
             // Create the animation arc code.
             Queue<AnimationPath> animations = new Queue<AnimationPath>();
             animations.Enqueue((float t) =>
             {
                 float x = midX * t;
-                return new Vector2(x,
+                return new Vector2(x * (jumpX > 0 ? 1f : -1f),
                     coef1 * (x - midX) * (x - midX) + jumpApex
                 );
             });
             animations.Enqueue((float t) =>
             {
-                float x = Mathf.Lerp(midX, jumpX, t);
-                return new Vector2(x - midX,
+                float x = Mathf.Lerp(midX, Mathf.Abs(jumpX), t);
+                return new Vector2((x - midX) * (jumpX > 0 ? 1f : -1f),
                     coef2 * (x - midX) * (x - midX)
                 );
             });
@@ -265,13 +254,14 @@ namespace BattleRoyalRhythm.GridActors.Player
             }
             // TODO this is needed to advance jump state.
             // Should be removed to conform structure.
-            if (affordance is BeatAffordance.JumpApex)
+            if (affordance is BeatAffordance.JumpApex && currentAnimations.Count == 1)
                 affordance = BeatAffordance.Grounded;
             void ProcessJump()
             {
                 switch (affordance)
                 {
                     case BeatAffordance.Grounded:
+                    case BeatAffordance.Ducking:
                         // Attempt to jump up.
                         if (TryJumpUp()) break;
                         // Otherwise do nothing.
@@ -287,6 +277,9 @@ namespace BattleRoyalRhythm.GridActors.Player
             {
                 switch (affordance)
                 {
+                    case BeatAffordance.Ducking:
+                        // Exit the duck state.
+                        affordance = BeatAffordance.Grounded; break;
                     case BeatAffordance.Grounded:
                         // First try hanging from either edge.
                         if (TryHangRight()) break;
@@ -304,6 +297,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 switch (affordance)
                 {
                     case BeatAffordance.Grounded:
+                    case BeatAffordance.Ducking:
                         // Try to step directly to the right.
                         if (TryWalkLeft()) break;
                         // Otherwise try to step up/down to the right.
@@ -314,6 +308,8 @@ namespace BattleRoyalRhythm.GridActors.Player
                         if (TryJumpGrabLeft()) break;
                         // Otherwise try to drop down from a ledge.
                         if (TryHangLeft()) break;
+                        // Otherwise try to jump up.
+                        if (TryJumpUp()) break;
                         // Otherwise do nothing.
                         break;
                     case BeatAffordance.HangingRight:
@@ -331,6 +327,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 switch (affordance)
                 {
                     case BeatAffordance.Grounded:
+                    case BeatAffordance.Ducking:
                         // Try to step directly to the right.
                         if (TryWalkRight()) break;
                         // Otherwise try to step up/down to the right.
@@ -341,6 +338,8 @@ namespace BattleRoyalRhythm.GridActors.Player
                         if (TryJumpGrabRight()) break;
                         // Otherwise try to drop down from a ledge.
                         if (TryHangRight()) break;
+                        // Otherwise try to jump up.
+                        if (TryJumpUp()) break;
                         // Otherwise do nothing.
                         break;
                     case BeatAffordance.HangingLeft:
@@ -456,7 +455,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                         // Is the landing space obstructed?
                         if (colliders[x, y]) break;
                         // Is there a place to land on?
-                        if (colliders[x, y - 1])
+                        if (x >= 3 && colliders[x, y - 1])
                         {
                             currentAnimations = CreateJumpPaths(x, y);
                             affordance = BeatAffordance.JumpApex;
@@ -471,7 +470,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Attempt to do an instant grab up.
                 if (colliders[1, tileHeight - 1] && !colliders.AnyInside(1, tileHeight, 1, tileHeight + tileHeight - 1))
                 {
-                    PullUpRight();
+                    PullUpLeft();
                     affordance = BeatAffordance.Grounded;
                     return true;
                 }
@@ -534,7 +533,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                         // Is the landing space obstructed?
                         if (colliders[x, y]) break;
                         // Is there a place to land on?
-                        if (colliders[x, y - 1])
+                        if (x <= -3 && colliders[x, y - 1])
                         {
                             currentAnimations = CreateJumpPaths(x, y);
                             affordance = BeatAffordance.JumpApex;
@@ -549,7 +548,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Attempt to do an instant grab up.
                 if (colliders[-1, tileHeight - 1] && !colliders.AnyInside(-1, tileHeight, -1, tileHeight + tileHeight - 1))
                 {
-                    PullUpLeft();
+                    PullUpRight();
                     affordance = BeatAffordance.Grounded;
                     return true;
                 }

@@ -945,7 +945,7 @@
 										<Property Name="MusicTrackType" Type="int16" Value="3"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>3</Value>
+												<Value>6</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -1089,6 +1089,15 @@
 											<ObjectRef Name="Level_1" ID="{5B8DF43D-E33A-45CF-9570-11344F7BB92D}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Dan - Super Keytario Bros - LoFi" ID="{9045FF20-18A2-485B-8A46-845C61881EA7}">
+											<Language>SFX</Language>
+											<AudioFile>Dan - Super Keytario Bros - LoFi.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="772760074"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
 									<TransitionList>
 										<MusicTransition Name="Root" ID="{72351FD0-626E-45BD-BDE5-3C3EB6D279F5}">
 											<PropertyList>
@@ -1118,6 +1127,16 @@
 									</TransitionList>
 									<SequenceList>
 										<MusicTrackSequence Name="" ID="{1C77F425-37CE-4744-B4BD-8E2217F687F7}">
+											<ClipList>
+												<MusicClip Name="Dan - Super Keytario Bros - LoFi" ID="{5A0FE0BB-BA47-42EF-B3AD-BAFA91949BE5}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="137142.875"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="254.913851025223"/>
+													</PropertyList>
+													<AudioSourceRef Name="Dan - Super Keytario Bros - LoFi" ID="{9045FF20-18A2-485B-8A46-845C61881EA7}"/>
+												</MusicClip>
+											</ClipList>
 											<ReferenceList>
 												<Reference Name="TrackSequenceSwitch">
 													<ObjectRef Name="Level_1_LofiJazz" ID="{5742BBEE-825B-4C21-9A48-E1200ACF686E}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>

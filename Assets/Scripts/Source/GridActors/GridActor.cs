@@ -73,10 +73,11 @@ namespace BattleRoyalRhythm.GridActors
                 RefreshPosition();
         }
 #else
+        protected virtual void OnValidate() { }
         protected virtual void Update() { }
 #endif
 
-        private void Awake()
+        protected virtual void Awake()
         {
             Location = tile;
         }

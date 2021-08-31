@@ -42,7 +42,7 @@ namespace BattleRoyalRhythm.Audio
         {
             AkSoundEngine.GetSourcePlayPosition(beatMusicID, out playPosition);
 
-            currentInterpolant = (playPosition % millisPerBeat) / millisPerBeat;
+            currentInterpolant = ((playPosition + BeatOffset / 1000f) % millisPerBeat) / millisPerBeat;
 
 
             // Check if a beat has elapsed.
@@ -50,10 +50,11 @@ namespace BattleRoyalRhythm.Audio
             {
                 // Increment the elapsed beat and
                 // notify listeners of the service.
-                BeatElapsed?.Invoke(Mathf.Lerp(lastFixedTime, Time.fixedTime, Mathf.InverseLerp(lastInterpolant, currentInterpolant + 1f, 1f)));
+                BeatElapsed?.Invoke(Mathf.Lerp(lastFixedTime, Time.fixedTime,
+                    Mathf.InverseLerp(lastInterpolant, currentInterpolant + 1f, 1f)));
             }
             lastInterpolant = currentInterpolant;
-            lastFixedTime = Time.fixedDeltaTime;
+            lastFixedTime = Time.fixedTime;
         }
     }
 }

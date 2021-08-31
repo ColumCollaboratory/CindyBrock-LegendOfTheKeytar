@@ -262,6 +262,8 @@ namespace BattleRoyalRhythm.GridActors.Player
                 {
                     case BeatAffordance.Grounded:
                     case BeatAffordance.Ducking:
+                        // Attempt to enter a door.
+                        if (TryEnterDoor()) break;
                         // Attempt to jump up.
                         if (TryJumpUp()) break;
                         // Otherwise do nothing.
@@ -363,6 +365,10 @@ namespace BattleRoyalRhythm.GridActors.Player
             {
                 currentAnimations = CreatePullUpPaths(false);
                 affordance = BeatAffordance.Grounded;
+            }
+            bool TryEnterDoor()
+            {
+                return World.TryTurnForwards(this);
             }
             bool TryJumpUp()
             {

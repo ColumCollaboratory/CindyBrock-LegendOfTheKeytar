@@ -850,6 +850,15 @@
 											<ObjectRef Name="Boss_Music" ID="{40BF78E9-8001-4A45-9346-93FE860BDDE8}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Dan_-_Boss_Battle_Remix_Lo-Fi" ID="{1E3B0BE3-4E29-4353-BE70-45BE1E7F6CE3}">
+											<Language>SFX</Language>
+											<AudioFile>Dan_-_Boss_Battle_Remix_Lo-Fi.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="616268771"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
 									<TransitionList>
 										<MusicTransition Name="Root" ID="{7E41A11E-1ED7-4C3A-9B01-24E8226841BD}">
 											<PropertyList>
@@ -865,6 +874,16 @@
 									</TransitionList>
 									<SequenceList>
 										<MusicTrackSequence Name="" ID="{95836822-AD2F-4ADB-AA48-8D52F4B3DD65}">
+											<ClipList>
+												<MusicClip Name="Dan_-_Boss_Battle_Remix_Lo-Fi" ID="{BEB15845-3388-44A9-8585-FAC0F92AFF5F}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="86142.875"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="653.357531760434"/>
+													</PropertyList>
+													<AudioSourceRef Name="Dan_-_Boss_Battle_Remix_Lo-Fi" ID="{1E3B0BE3-4E29-4353-BE70-45BE1E7F6CE3}"/>
+												</MusicClip>
+											</ClipList>
 											<ReferenceList>
 												<Reference Name="TrackSequenceSwitch">
 													<ObjectRef Name="Boss_LofiJazz" ID="{EEF83132-7AD2-4E31-A6BB-6D252D3AC746}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>

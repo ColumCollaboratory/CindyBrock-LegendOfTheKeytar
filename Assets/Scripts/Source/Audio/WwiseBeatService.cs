@@ -45,9 +45,12 @@ namespace BattleRoyalRhythm.Audio
             currentInterpolant = ((playPosition + BeatOffset / 1000f) % millisPerBeat) / millisPerBeat;
 
 
-            // Check if a beat has elapsed.
-            if (currentInterpolant < lastInterpolant)
+            // Check if a beat has elapsed. An epsilon value
+            // is used here as a hotfix for some weird bug where
+            // an interpolant is calculated as slightly less than the prior frame.
+            if (lastInterpolant - currentInterpolant > 0.1f)
             {
+                CurrentBeatCount++;
                 // Increment the elapsed beat and
                 // notify listeners of the service.
                 BeatElapsed?.Invoke(Mathf.Lerp(lastFixedTime, Time.fixedTime,

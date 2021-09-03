@@ -11,6 +11,7 @@ namespace BattleRoyalRhythm.GridActors
 
     public delegate void SurfaceChangedHandler(Surface newSurface);
 
+    public delegate void ActorDestroyed(GridActor actor);
 
     /// <summary>
     /// Scene instance for the base class of grid actors.
@@ -56,14 +57,16 @@ namespace BattleRoyalRhythm.GridActors
 
         public void RefreshPosition()
         {
-            location.x = Mathf.Clamp(location.x, 0.5f, currentSurface.LengthX + 0.5f);
-            location.y = Mathf.Clamp(location.y, 0.5f, currentSurface.LengthY + 0.5f);
-
-            Vector2 newLoc = new Vector2(location.x - 0.5f, location.y - 0.5f);
-            currentPosition = currentSurface.GetLocation(newLoc);
-            currentRotation = Quaternion.LookRotation(currentSurface.GetRight(newLoc), currentSurface.GetUp(newLoc));
-            transform.position = currentPosition;
-            transform.rotation = currentRotation;
+            if (currentSurface != null)
+            {
+                location.x = Mathf.Clamp(location.x, 0.5f, currentSurface.LengthX + 0.5f);
+                location.y = Mathf.Clamp(location.y, 0.5f, currentSurface.LengthY + 0.5f);
+                Vector2 newLoc = new Vector2(location.x - 0.5f, location.y - 0.5f);
+                currentPosition = currentSurface.GetLocation(newLoc);
+                currentRotation = Quaternion.LookRotation(currentSurface.GetRight(newLoc), currentSurface.GetUp(newLoc));
+                transform.position = currentPosition;
+                transform.rotation = currentRotation;
+            }
         }
 
         protected virtual void OnValidate()
@@ -76,6 +79,9 @@ namespace BattleRoyalRhythm.GridActors
         protected virtual void OnValidate() { }
         protected virtual void Update() { }
 #endif
+
+
+        public virtual event ActorDestroyed Destroyed;
 
         protected virtual void Awake()
         {

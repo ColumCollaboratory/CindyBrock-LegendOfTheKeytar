@@ -75,6 +75,7 @@ namespace BattleRoyalRhythm.GridActors.Player
 
             if (Application.isPlaying)
             {
+                World.BeatService = beatService;
                 activeGenre = 0;
                 currentAnimations = new Queue<ActorAnimationPath>();
                 beatService.BeatOffset = -inputTolerance * 0.5f;

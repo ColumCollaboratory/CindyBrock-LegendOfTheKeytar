@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BattleRoyalRhythm.Surfaces;
 using System;
+using BattleRoyalRhythm.Audio;
 
 namespace BattleRoyalRhythm.GridActors
 {
@@ -55,6 +56,11 @@ namespace BattleRoyalRhythm.GridActors
         private Dictionary<Surface, SurfaceSeams> surfaceSeams;
         private Dictionary<Surface, bool[,]> surfaceColliders;
 
+        private List<GridActor> actors;
+
+        public IBeatService BeatService;
+
+        public List<GridActor> Actors => actors;
 
 
         /// <summary>
@@ -458,9 +464,13 @@ namespace BattleRoyalRhythm.GridActors
                         new bool[surface.LengthX, surface.LengthY]);
 #endregion
             }
-            // Give all actors a reference to this world.
+            // Orient all actors to this grid world.
+            actors = new List<GridActor>();
             foreach (GridActor actor in GetComponentsInChildren<GridActor>())
+            {
                 actor.World = this;
+                actors.Add(actor);
+            }
         }
 #endregion
 

@@ -18,9 +18,9 @@ namespace BattleRoyalRhythm.GridActors
     /// </summary>
     public abstract class ProjectileActor : GridActor
     {
-        [Header("Projectile Parameters")]
-        [Tooltip("Base damage multiplier for this projectile.")]
-        [SerializeField][Min(0f)] protected float damageFactor = 1f;
+        //[Header("Projectile Parameters")]
+        //[Tooltip("Base damage multiplier for this projectile.")]
+        //[SerializeField][Min(0f)] protected float damageFactor = 1f;
 
         protected override void Awake()
         {

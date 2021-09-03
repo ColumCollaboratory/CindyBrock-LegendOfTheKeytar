@@ -86,7 +86,10 @@ namespace BattleRoyalRhythm.GridActors
         [SerializeField] private Surface currentSurface = null;
         [Tooltip("The tile location of the actor on this surface.")]
         [SerializeField] private Vector2Int tile = Vector2Int.zero;
+        [Tooltip("The vertical height of this actor.")]
+        [SerializeField][Min(1)] private int tileHeight = 2;
 
+        public int TileHeight => tileHeight;
 
         public event SurfaceChangedHandler SurfaceChanged;
 
@@ -120,6 +123,23 @@ namespace BattleRoyalRhythm.GridActors
                 }
             }
         }
+
+        private bool isRightFacing;
+
+        public bool IsRightFacing
+        {
+            get => isRightFacing;
+            set
+            {
+                if (value != isRightFacing)
+                {
+                    isRightFacing = value;
+                    OnDirectionChanged(value);
+                }
+            }
+        }
+
+        protected virtual void OnDirectionChanged(bool isRightFacing) { }
 
         [HideInInspector] public GridWorld World;
     }

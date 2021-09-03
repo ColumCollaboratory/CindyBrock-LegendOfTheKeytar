@@ -1034,6 +1034,15 @@
 											<ObjectRef Name="Level_1" ID="{5B8DF43D-E33A-45CF-9570-11344F7BB92D}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Super Keytario Bros" ID="{67099BE7-2AB1-4043-8F05-306ED5B99BE9}">
+											<Language>SFX</Language>
+											<AudioFile>Super Keytario Bros.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="813663554"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
 									<TransitionList>
 										<MusicTransition Name="Root" ID="{2BCDD838-E1A7-43CA-BE99-52D2DAAAFF69}">
 											<PropertyList>
@@ -1089,6 +1098,15 @@
 											<ObjectRef Name="Level_1" ID="{5B8DF43D-E33A-45CF-9570-11344F7BB92D}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Super Keytario Bros" ID="{7F11FB03-B857-4EF6-8860-3971A6454EC4}">
+											<Language>SFX</Language>
+											<AudioFile>Super Keytario Bros.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="813663554"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
 									<TransitionList>
 										<MusicTransition Name="Root" ID="{72351FD0-626E-45BD-BDE5-3C3EB6D279F5}">
 											<PropertyList>

@@ -1,6 +1,7 @@
 using BattleRoyalRhythm.Audio;
 using BattleRoyalRhythm.GridActors;
 using BattleRoyalRhythm.Input;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,19 +11,12 @@ namespace BattleRoyalRhythm.GridActors.Player
     public sealed class PlayerActor : GridActor, IDamageable
     {
 
-        private bool isRightFacing;
-
-        private bool IsRightFacing
+        protected override void OnDirectionChanged(bool isRightFacing)
         {
-            get => isRightFacing;
-            set
-            {
-                isRightFacing = value;
-                playerMesh.localRotation = Quaternion.AngleAxis(value ? 0f : 180f, Vector3.up);
-            }
+            playerMesh.localRotation = Quaternion.AngleAxis(isRightFacing ? 0f : 180f, Vector3.up);
         }
 
-
+        private int activeGenre;
 
         private enum BeatAffordance : byte
         {
@@ -37,10 +31,10 @@ namespace BattleRoyalRhythm.GridActors.Player
 
         private Vector2 lastAnimationFrame;
 
-        private Queue<AnimationPath> currentAnimations;
+        private Queue<ActorAnimationPath> currentAnimations;
 
+        private bool abilityInUse = false;
 
-        [SerializeField][Min(1)] private int tileHeight = 2;
         [SerializeField][Min(1)] private int duckingTileHeight = 1;
         [SerializeField] private Transform playerMesh = null;
         [SerializeField][Min(0f)] private float inputTolerance = 0.1f;
@@ -53,7 +47,14 @@ namespace BattleRoyalRhythm.GridActors.Player
         [SerializeField] private PlayerController controller = null;
         [SerializeField] private WwiseBeatService beatService = null;
 
-        [SerializeField] private PlayerAbility[] abilities = null;
+        [SerializeField] private GenreAbilityPair[] genres = null;
+
+        [Serializable]
+        private sealed class GenreAbilityPair
+        {
+            [SerializeField] public string wwiseGenreTarget = "Wwise Target";
+            [SerializeField] public ActorAbility ability = null;
+        }
 
         [Header("Automatic Actions")]
         [SerializeField][Min(0)] private int jumpDistance = 3;
@@ -74,10 +75,16 @@ namespace BattleRoyalRhythm.GridActors.Player
 
             if (Application.isPlaying)
             {
-                currentAnimations = new Queue<AnimationPath>();
+                activeGenre = 0;
+                currentAnimations = new Queue<ActorAnimationPath>();
                 beatService.BeatOffset = -inputTolerance * 0.5f;
-                beatService.SetBeatFromEvent("Stage_1_Started", 140f);
                 beatService.BeatElapsed += OnBeatElapsed;
+                beatService.SetBeatFromEvent("Stage_1_Started", 140f);
+
+                if (genres != null)
+                    foreach (GenreAbilityPair pair in genres)
+                        if (pair.ability != null)
+                            pair.ability.UsingActor = this;
             }
         }
 
@@ -90,132 +97,6 @@ namespace BattleRoyalRhythm.GridActors.Player
         {
 
         }
-
-        delegate Vector2 AnimationPath(float t);
-
-
-
-
-
-        private Queue<AnimationPath> CreateWalkPath(int moveX, int moveY = 0)
-        {
-            // Store the start and end values for
-            // the animation to lerp between.
-            Vector2 end = new Vector2(moveX, moveY);
-            Queue<AnimationPath> animations = new Queue<AnimationPath>();
-            animations.Enqueue((float t) =>
-            {
-                // Apply walk curve, then lerp.
-                t = walkCurve.Evaluate(t);
-                return end * t;
-            });
-            return animations;
-        }
-        private Queue<AnimationPath> CreateJumpPaths(int jumpX, int jumpY)
-        {
-            // Precalculate variables for the curve.
-            // The curve is generated from left to right.
-            float midX = Mathf.Round(0.5f * Mathf.Abs(jumpX));
-            // Calculate the coefficiencts for both segments of the arc.
-            float coef1 = -jumpApex / (midX * midX);
-            float coef2 = (-jumpApex + jumpY) / ((Mathf.Abs(jumpX) - midX) * (Mathf.Abs(jumpX) - midX));
-            // Create the animation arc code.
-            Queue<AnimationPath> animations = new Queue<AnimationPath>();
-            animations.Enqueue((float t) =>
-            {
-                float x = midX * t;
-                return new Vector2(x * (jumpX > 0 ? 1f : -1f),
-                    coef1 * (x - midX) * (x - midX) + jumpApex
-                );
-            });
-            animations.Enqueue((float t) =>
-            {
-                float x = Mathf.Lerp(midX, Mathf.Abs(jumpX), t);
-                return new Vector2((x - midX) * (jumpX > 0 ? 1f : -1f),
-                    coef2 * (x - midX) * (x - midX)
-                );
-            });
-            return animations;
-        }
-        private Queue<AnimationPath> CreateInPlaceJumpPaths()
-        {
-            // Create the animation arc code.
-            Queue<AnimationPath> animations = new Queue<AnimationPath>();
-            // Left hand side of a scaled projectile motion arc.
-            animations.Enqueue((float t) =>
-                new Vector2(0f,
-                    jumpApex - jumpApex * (1f - t) * (1f - t)
-                ));
-            // Right hand side of a scaled projectile motion arc.
-            animations.Enqueue((float t) =>
-                new Vector2(0f, -jumpApex * t * t));
-            return animations;
-        }
-        private Queue<AnimationPath> CreatePullUpPaths(bool ledgeFacesRight)
-        {
-            // Store the start and end values for
-            // the animation to lerp between.
-            Vector2 segment1 = Vector2.up * tileHeight;
-            Vector2 segment2 = ledgeFacesRight ? Vector2.left : Vector2.right;
-            Queue<AnimationPath> animations = new Queue<AnimationPath>();
-
-            float pullUpSegment = tileHeight / (tileHeight + 1f);
-            animations.Enqueue((float t) =>
-            {
-                if (t < pullUpSegment)
-                {
-                    return segment1 * (t / pullUpSegment);
-                }
-                else
-                {
-                    return segment1 + segment2 * ((t - pullUpSegment) / (1f - pullUpSegment));
-                }
-            });
-            return animations;
-        }
-        private Queue<AnimationPath> CreateHangDownPaths(bool ledgeFacesRight)
-        {
-            // Store the start and end values for
-            // the animation to lerp between.
-            Vector2 segment1 = ledgeFacesRight ? Vector2.right : Vector2.left;
-            Vector2 segment2 = Vector2.down * tileHeight;
-            Queue<AnimationPath> animations = new Queue<AnimationPath>();
-
-            float slideOutSegment = 1f - tileHeight / (tileHeight + 1f);
-            animations.Enqueue((float t) =>
-            {
-                if (t < slideOutSegment)
-                {
-                    return segment1 * (t / slideOutSegment);
-                }
-                else
-                {
-                    return segment1 + segment2 * ((t - slideOutSegment) / (1f - slideOutSegment));
-                }
-            });
-            return animations;
-        }
-        private Queue<AnimationPath> CreateDropDownPaths(int moveY)
-        {
-            // Create the animation arc code.
-            Queue<AnimationPath> animations = new Queue<AnimationPath>();
-            // Right hand side of a scaled projectile motion arc.
-            animations.Enqueue((float t) =>
-                new Vector2(0f, moveY * t * t));
-            return animations;
-        }
-        private Queue<AnimationPath> CreateJumpUpPaths(int moveY)
-        {
-            // Create the animation arc code.
-            Queue<AnimationPath> animations = new Queue<AnimationPath>();
-            // Left hand side of a scaled projectile motion arc.
-            animations.Enqueue((float t) =>
-                new Vector2(0f,
-                    moveY - moveY * (1f - t) * (1f - t)
-                ));
-            return animations;
-        }
-
 
         private void OnBeatElapsed(float beatTime)
         {
@@ -236,20 +117,51 @@ namespace BattleRoyalRhythm.GridActors.Player
             NearbyColliderSet colliders = World.GetNearbyColliders(this, 9, 9);
             #endregion
             #region Process Input
-            // React to the latest input if it has
-            // been timed well enough.
-            if (Mathf.Abs(controller.LatestTimestamp - beatTime) < inputTolerance)
+
+            bool movementOverriden = false;
+            if (abilityInUse)
             {
-                switch (controller.LatestAction)
+                // Ability use has completed.
+                if (!genres[activeGenre].ability.InUse)
+                    abilityInUse = false;
+                else
                 {
-                    case PlayerAction.Jump: ProcessJump(); break;
-                    case PlayerAction.Duck: ProcessDuck(); break;
-                    case PlayerAction.MoveLeft:
-                        IsRightFacing = false;
-                        ProcessMoveLeft(); break;
-                    case PlayerAction.MoveRight:
-                        IsRightFacing = true;
-                        ProcessMoveRight(); break;
+                    ActorAnimationPath path = genres[activeGenre].ability.ElapseBeat();
+                    if (path != null)
+                    {
+                        currentAnimations.Enqueue(path);
+                        movementOverriden = true;
+                    }
+                }
+            }
+
+            if (!movementOverriden)
+            {
+                // React to the latest input if it has
+                // been timed well enough.
+                if (Mathf.Abs(controller.LatestTimestamp - beatTime) < inputTolerance)
+                {
+                    switch (controller.LatestAction)
+                    {
+                        case PlayerAction.Jump: ProcessJump(); break;
+                        case PlayerAction.Duck: ProcessDuck(); break;
+                        case PlayerAction.MoveLeft:
+                            IsRightFacing = false;
+                            ProcessMoveLeft(); break;
+                        case PlayerAction.MoveRight:
+                            IsRightFacing = true;
+                            ProcessMoveRight(); break;
+                        case PlayerAction.UseAbility:
+                            ProcessUseAbility(); break;
+                        case PlayerAction.SetGenre1:
+                            ProcessSetGenre(0); break;
+                        case PlayerAction.SetGenre2:
+                            ProcessSetGenre(1); break;
+                        case PlayerAction.SetGenre3:
+                            ProcessSetGenre(2); break;
+                        case PlayerAction.SetGenre4:
+                            ProcessSetGenre(3); break;
+                    }
                 }
             }
             // TODO this is needed to advance jump state.
@@ -354,16 +266,50 @@ namespace BattleRoyalRhythm.GridActors.Player
                         break;
                 }
             }
+            void ProcessUseAbility()
+            {
+                // Only use the ability if it is not
+                // in use already.
+                if (!genres[activeGenre].ability.InUse)
+                {
+                    if (genres[activeGenre].ability.IsUsable(beatService.CurrentBeatCount))
+                    {
+                        genres[activeGenre].ability.StartUsing(beatService.CurrentBeatCount);
+                        ActorAnimationPath path = genres[activeGenre].ability.ElapseBeat();
+                        if (path != null)
+                            currentAnimations.Enqueue(path);
+                        abilityInUse = true;
+                    }
+                }
+            }
+            void ProcessSetGenre(int genre)
+            {
+                // If a different genre is selected;
+                if (activeGenre != genre)
+                {
+                    // Interrupt the current ability if
+                    // it is in use.
+                    if (genres[activeGenre].ability.InUse)
+                        genres[activeGenre].ability.StopUsing();
+                    // Update the audio switch in Wwise.
+                    // TODO this should be abstracted to not
+                    // be wwise specific.
+                    AkSoundEngine.SetSwitch("Level_1", genres[genre].wwiseGenreTarget, beatService.gameObject);
+                    activeGenre = genre;
+                }
+            }
             #endregion
             #region State Changes
             void PullUpRight()
             {
-                currentAnimations = CreatePullUpPaths(true);
+                currentAnimations.Clear();
+                currentAnimations.Enqueue(ActorAnimationsGenerator.CreatePullUpPath(true, TileHeight));
                 affordance = BeatAffordance.Grounded;
             }
             void PullUpLeft()
             {
-                currentAnimations = CreatePullUpPaths(false);
+                currentAnimations.Clear();
+                currentAnimations.Enqueue(ActorAnimationsGenerator.CreatePullUpPath(false, TileHeight));
                 affordance = BeatAffordance.Grounded;
             }
             bool TryEnterDoor()
@@ -373,9 +319,10 @@ namespace BattleRoyalRhythm.GridActors.Player
             bool TryJumpUp()
             {
                 // Is there room to jump?
-                if (!colliders.AnyInside(0, 0, 0, tileHeight - 1 + jumpApex))
+                if (!colliders.AnyInside(0, 0, 0, TileHeight - 1 + jumpApex))
                 {
-                    currentAnimations = CreateInPlaceJumpPaths();
+                    currentAnimations.Clear();
+                    currentAnimations.Enqueue(ActorAnimationsGenerator.CreateJumpUpPath(jumpApex));
                     affordance = BeatAffordance.JumpApex;
                     return true;
                 }
@@ -387,7 +334,8 @@ namespace BattleRoyalRhythm.GridActors.Player
                 {
                     if (colliders[0, y])
                     {
-                        currentAnimations = CreateDropDownPaths(y + 1);
+                        currentAnimations.Clear();
+                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateDropDownPath(y + 1));
                         affordance = BeatAffordance.Grounded;
                         return true;
                     }
@@ -396,20 +344,22 @@ namespace BattleRoyalRhythm.GridActors.Player
             }
             bool TryHangRight()
             {
-                if (IsRightFacing && !colliders.AnyInside(1, tileHeight - 1, 1, -tileHeight))
+                if (IsRightFacing && !colliders.AnyInside(1, TileHeight - 1, 1, -TileHeight))
                 {
                     affordance = BeatAffordance.HangingRight;
-                    currentAnimations = CreateHangDownPaths(true);
+                    currentAnimations.Clear();
+                    currentAnimations.Enqueue(ActorAnimationsGenerator.CreateHangDownPath(true, TileHeight));
                     return true;
                 }
                 return false;
             }
             bool TryHangLeft()
             {
-                if (!IsRightFacing && !colliders.AnyInside(-1, tileHeight - 1, -1, -tileHeight))
+                if (!IsRightFacing && !colliders.AnyInside(-1, TileHeight - 1, -1, -TileHeight))
                 {
                     affordance = BeatAffordance.HangingLeft;
-                    currentAnimations = CreateHangDownPaths(false);
+                    currentAnimations.Clear();
+                    currentAnimations.Enqueue(ActorAnimationsGenerator.CreateHangDownPath(false, TileHeight));
                     return true;
                 }
                 return false;
@@ -417,12 +367,13 @@ namespace BattleRoyalRhythm.GridActors.Player
             bool TryWalkRight()
             {
                 // Is there a wall preventing right movement?
-                if (!colliders.AnyInside(1, 0, 1, tileHeight - 1) &&
+                if (!colliders.AnyInside(1, 0, 1, TileHeight - 1) &&
                     colliders[1, -1])
                 {
                     // Move to the right.
                     affordance = BeatAffordance.Grounded;
-                    currentAnimations = CreateWalkPath(1);
+                    currentAnimations.Clear();
+                    currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(1));
                     return true;
                 }
                 return false;
@@ -432,20 +383,21 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Attempt to do a step up.
                 for (int step = 1; step <= autoStepHeight; step++)
                 {
-                    if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + tileHeight - 1))
+                    if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1))
                     {
                         affordance = BeatAffordance.Grounded;
-                        currentAnimations = CreateWalkPath(1, step);
+                        currentAnimations.Clear();
+                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(1, step));
                         return true;
                     }
                 }
                 // Attempt to do a step down.
                 for (int step = -1; step >= -autoStepHeight; step--)
                 {
-                    if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + tileHeight - 1))
+                    if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1))
                     {
-                        affordance = BeatAffordance.Grounded;
-                        currentAnimations = CreateWalkPath(1, step);
+                        currentAnimations.Clear();
+                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(1, step));
                         return true;
                     }
                 }
@@ -463,7 +415,9 @@ namespace BattleRoyalRhythm.GridActors.Player
                         // Is there a place to land on?
                         if (x >= 3 && colliders[x, y - 1])
                         {
-                            currentAnimations = CreateJumpPaths(x, y);
+                            currentAnimations.Clear();
+                            foreach (ActorAnimationPath path in ActorAnimationsGenerator.CreateJumpPaths(x, y, jumpApex))
+                                currentAnimations.Enqueue(path);
                             affordance = BeatAffordance.JumpApex;
                             return true;
                         }
@@ -474,19 +428,20 @@ namespace BattleRoyalRhythm.GridActors.Player
             bool TryJumpGrabRight()
             {
                 // Attempt to do an instant grab up.
-                if (colliders[1, tileHeight - 1] && !colliders.AnyInside(1, tileHeight, 1, tileHeight + tileHeight - 1))
+                if (colliders[1, TileHeight - 1] && !colliders.AnyInside(1, TileHeight, 1, 2 * TileHeight - 1))
                 {
                     PullUpLeft();
                     affordance = BeatAffordance.Grounded;
                     return true;
                 }
                 // Attempt to jump into a grab.
-                for (int step = tileHeight + 1; step <= maxPullupHeight; step++)
+                for (int step = TileHeight + 1; step <= maxPullupHeight; step++)
                 {
-                    if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + tileHeight - 1))
+                    if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1))
                     {
                         affordance = BeatAffordance.HangingLeft;
-                        currentAnimations = CreateJumpUpPaths(step - tileHeight);
+                        currentAnimations.Clear();
+                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateJumpUpPath(step - TileHeight));
                         return true;
                     }
                 }
@@ -495,12 +450,13 @@ namespace BattleRoyalRhythm.GridActors.Player
             bool TryWalkLeft()
             {
                 // Is there a wall preventing left movement?
-                if (!colliders.AnyInside(-1, 0, -1, tileHeight - 1) &&
+                if (!colliders.AnyInside(-1, 0, -1, TileHeight - 1) &&
                     colliders[-1, -1])
                 {
                     // Move to the left.
                     affordance = BeatAffordance.Grounded;
-                    currentAnimations = CreateWalkPath(-1);
+                    currentAnimations.Clear();
+                    currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(-1));
                     return true;
                 }
                 return false;
@@ -510,20 +466,22 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Attempt to do a step up.
                 for (int step = 1; step <= autoStepHeight; step++)
                 {
-                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + tileHeight - 1))
+                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
                     {
                         affordance = BeatAffordance.Grounded;
-                        currentAnimations = CreateWalkPath(-1, step);
+                        currentAnimations.Clear();
+                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(-1, step));
                         return true;
                     }
                 }
                 // Attempt to do a step down.
                 for (int step = -1; step >= -autoStepHeight; step--)
                 {
-                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + tileHeight - 1))
+                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
                     {
                         affordance = BeatAffordance.Grounded;
-                        currentAnimations = CreateWalkPath(-1, step);
+                        currentAnimations.Clear();
+                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(-1, step));
                         return true;
                     }
                 }
@@ -541,7 +499,9 @@ namespace BattleRoyalRhythm.GridActors.Player
                         // Is there a place to land on?
                         if (x <= -3 && colliders[x, y - 1])
                         {
-                            currentAnimations = CreateJumpPaths(x, y);
+                            currentAnimations.Clear();
+                            foreach (ActorAnimationPath path in ActorAnimationsGenerator.CreateJumpPaths(x, y, jumpApex))
+                                currentAnimations.Enqueue(path);
                             affordance = BeatAffordance.JumpApex;
                             return true;
                         }
@@ -552,19 +512,20 @@ namespace BattleRoyalRhythm.GridActors.Player
             bool TryJumpGrabLeft()
             {
                 // Attempt to do an instant grab up.
-                if (colliders[-1, tileHeight - 1] && !colliders.AnyInside(-1, tileHeight, -1, tileHeight + tileHeight - 1))
+                if (colliders[-1, TileHeight - 1] && !colliders.AnyInside(-1, TileHeight, -1, 2 * TileHeight - 1))
                 {
                     PullUpRight();
                     affordance = BeatAffordance.Grounded;
                     return true;
                 }
                 // Attempt to jump into a grab.
-                for (int step = tileHeight + 1; step <= maxPullupHeight; step++)
+                for (int step = TileHeight + 1; step <= maxPullupHeight; step++)
                 {
-                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + tileHeight - 1))
+                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
                     {
                         affordance = BeatAffordance.HangingRight;
-                        currentAnimations = CreateJumpUpPaths(step - tileHeight);
+                        currentAnimations.Clear();
+                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateJumpUpPath(step - TileHeight));
                         return true;
                     }
                 }

@@ -671,6 +671,15 @@
 											<ObjectRef Name="Boss_Music" ID="{40BF78E9-8001-4A45-9346-93FE860BDDE8}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Oh Yeah, Great Name - EDM" ID="{B30A338D-FDAE-4346-94CF-7AE0F07C1E25}">
+											<Language>SFX</Language>
+											<AudioFile>Oh Yeah, Great Name - EDM.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="737322985"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
 									<TransitionList>
 										<MusicTransition Name="Root" ID="{CE43215D-89AF-4364-AB80-E3CBE7E8899D}">
 											<PropertyList>
@@ -678,7 +687,21 @@
 											</PropertyList>
 											<ChildrenList>
 												<MusicTransition Name="Transition" ID="{20EFC0D0-A68C-41C2-A1C3-58262D0BF32F}">
-													<TransitionInfo/>
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{E785FDA6-7A0B-440B-B31F-175F6A1B0D66}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="3"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
 												</MusicTransition>
 											</ChildrenList>
 											<TransitionInfo/>
@@ -686,6 +709,16 @@
 									</TransitionList>
 									<SequenceList>
 										<MusicTrackSequence Name="" ID="{16517766-7000-438C-A661-0172933867EA}">
+											<ClipList>
+												<MusicClip Name="Oh Yeah, Great Name - EDM" ID="{2CE0F55C-71BD-4316-B0A7-3B8C62C0CBA9}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="85714.2857142857"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="490.018148820323"/>
+													</PropertyList>
+													<AudioSourceRef Name="Oh Yeah, Great Name - EDM" ID="{B30A338D-FDAE-4346-94CF-7AE0F07C1E25}"/>
+												</MusicClip>
+											</ClipList>
 											<ReferenceList>
 												<Reference Name="TrackSequenceSwitch">
 													<ObjectRef Name="Boss_Dubstep" ID="{B7AE7BF8-F088-4AF2-BA99-9A54DBB9B07C}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
@@ -850,6 +883,15 @@
 											<ObjectRef Name="Boss_Music" ID="{40BF78E9-8001-4A45-9346-93FE860BDDE8}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Dan_-_Boss_Battle_Remix_Lo-Fi" ID="{1E3B0BE3-4E29-4353-BE70-45BE1E7F6CE3}">
+											<Language>SFX</Language>
+											<AudioFile>Dan_-_Boss_Battle_Remix_Lo-Fi.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="616268771"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
 									<TransitionList>
 										<MusicTransition Name="Root" ID="{7E41A11E-1ED7-4C3A-9B01-24E8226841BD}">
 											<PropertyList>
@@ -865,6 +907,16 @@
 									</TransitionList>
 									<SequenceList>
 										<MusicTrackSequence Name="" ID="{95836822-AD2F-4ADB-AA48-8D52F4B3DD65}">
+											<ClipList>
+												<MusicClip Name="Dan_-_Boss_Battle_Remix_Lo-Fi" ID="{BEB15845-3388-44A9-8585-FAC0F92AFF5F}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="86142.875"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="653.357531760434"/>
+													</PropertyList>
+													<AudioSourceRef Name="Dan_-_Boss_Battle_Remix_Lo-Fi" ID="{1E3B0BE3-4E29-4353-BE70-45BE1E7F6CE3}"/>
+												</MusicClip>
+											</ClipList>
 											<ReferenceList>
 												<Reference Name="TrackSequenceSwitch">
 													<ObjectRef Name="Boss_LofiJazz" ID="{EEF83132-7AD2-4E31-A6BB-6D252D3AC746}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
@@ -945,7 +997,7 @@
 										<Property Name="MusicTrackType" Type="int16" Value="3"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>3</Value>
+												<Value>6</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -1019,6 +1071,11 @@
 								<MusicTrack Name="Level1_Folk" ID="{020083FC-D02E-4B4D-85C7-422D81CD6EFD}" ShortID="468686023">
 									<PropertyList>
 										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>9</Value>
+											</ValueList>
+										</Property>
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
@@ -1034,6 +1091,15 @@
 											<ObjectRef Name="Level_1" ID="{5B8DF43D-E33A-45CF-9570-11344F7BB92D}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Folk_Country Level 1 Remix" ID="{64F41316-225D-4EF1-83E1-1DF1023F92A5}">
+											<Language>SFX</Language>
+											<AudioFile>Folk_Country Level 1 Remix.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="442896284"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
 									<TransitionList>
 										<MusicTransition Name="Root" ID="{2BCDD838-E1A7-43CA-BE99-52D2DAAAFF69}">
 											<PropertyList>
@@ -1063,6 +1129,16 @@
 									</TransitionList>
 									<SequenceList>
 										<MusicTrackSequence Name="" ID="{2FE420AA-5021-4A31-BDB1-C16A6D168C48}">
+											<ClipList>
+												<MusicClip Name="Folk_Country Level 1 Remix" ID="{70887527-FE2A-4295-B562-E5817A1A9329}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="137142.854166667"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="254.913851025209"/>
+													</PropertyList>
+													<AudioSourceRef Name="Folk_Country Level 1 Remix" ID="{64F41316-225D-4EF1-83E1-1DF1023F92A5}"/>
+												</MusicClip>
+											</ClipList>
 											<ReferenceList>
 												<Reference Name="TrackSequenceSwitch">
 													<ObjectRef Name="Level_1_Folk" ID="{83BCB260-AAD5-4F5C-A912-4C1DC7718089}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
@@ -1089,6 +1165,15 @@
 											<ObjectRef Name="Level_1" ID="{5B8DF43D-E33A-45CF-9570-11344F7BB92D}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Dan - Super Keytario Bros - LoFi" ID="{9045FF20-18A2-485B-8A46-845C61881EA7}">
+											<Language>SFX</Language>
+											<AudioFile>Dan - Super Keytario Bros - LoFi.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="772760074"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
 									<TransitionList>
 										<MusicTransition Name="Root" ID="{72351FD0-626E-45BD-BDE5-3C3EB6D279F5}">
 											<PropertyList>
@@ -1118,6 +1203,16 @@
 									</TransitionList>
 									<SequenceList>
 										<MusicTrackSequence Name="" ID="{1C77F425-37CE-4744-B4BD-8E2217F687F7}">
+											<ClipList>
+												<MusicClip Name="Dan - Super Keytario Bros - LoFi" ID="{5A0FE0BB-BA47-42EF-B3AD-BAFA91949BE5}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="137142.875"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="254.913851025223"/>
+													</PropertyList>
+													<AudioSourceRef Name="Dan - Super Keytario Bros - LoFi" ID="{9045FF20-18A2-485B-8A46-845C61881EA7}"/>
+												</MusicClip>
+											</ClipList>
 											<ReferenceList>
 												<Reference Name="TrackSequenceSwitch">
 													<ObjectRef Name="Level_1_LofiJazz" ID="{5742BBEE-825B-4C21-9A48-E1200ACF686E}" WorkUnitID="{B25FAE66-B0DD-45E2-AB94-13827B99E506}"/>

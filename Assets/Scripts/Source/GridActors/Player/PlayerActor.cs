@@ -11,6 +11,9 @@ namespace BattleRoyalRhythm.GridActors.Player
     public sealed class PlayerActor : GridActor, IDamageable, IKnockbackable
     {
 
+        public event Action BeatEarly;
+        public event Action BeatLate;
+
         protected override void OnDirectionChanged(bool isRightFacing)
         {
             playerMesh.localRotation = Quaternion.AngleAxis(isRightFacing ? 0f : 180f, Vector3.up);
@@ -55,6 +58,13 @@ namespace BattleRoyalRhythm.GridActors.Player
             [SerializeField] public string wwiseGenreTarget = "Wwise Target";
             [SerializeField] public ActorAbility ability = null;
         }
+
+        [SerializeField][Min(0f)] private float maxHealth = 100f;
+        [SerializeField][Min(0f)] private float health = 100f;
+
+        public float Health => health;
+
+        public float MaxHealth => maxHealth;
 
         [Header("Automatic Actions")]
         [SerializeField][Min(0)] private int jumpDistance = 3;
@@ -102,6 +112,8 @@ namespace BattleRoyalRhythm.GridActors.Player
 
         }
 
+        private bool wasInputLastBeat;
+
         private void OnBeatElapsed(float beatTime)
         {
             #region Finalize Last Beat Animations
@@ -141,6 +153,8 @@ namespace BattleRoyalRhythm.GridActors.Player
 
             if (!movementOverriden)
             {
+
+
                 // React to the latest input if it has
                 // been timed well enough.
                 if (Mathf.Abs(controller.LatestTimestamp - beatTime) < inputTolerance)
@@ -165,6 +179,18 @@ namespace BattleRoyalRhythm.GridActors.Player
                             ProcessSetGenre(2); break;
                         case PlayerAction.SetGenre4:
                             ProcessSetGenre(3); break;
+                    }
+                    wasInputLastBeat = true;
+                }
+                else
+                {
+                    if (wasInputLastBeat)
+                    {
+                        if (controller.LatestTimestamp - beatTime > 0f)
+                            BeatLate?.Invoke();
+                        else
+                            BeatEarly?.Invoke();
+                        wasInputLastBeat = false;
                     }
                 }
             }
@@ -583,7 +609,7 @@ namespace BattleRoyalRhythm.GridActors.Player
 
         public void ApplyDamage(float amount)
         {
-            
+            health -= amount;
         }
 
         public void ApplyKnockback(int knockbackX, int knockbackY)

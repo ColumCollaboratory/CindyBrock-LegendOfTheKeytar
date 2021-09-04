@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace BattleRoyalRhythm.GridActors.Player
 {
-    public sealed class PlayerActor : GridActor, IDamageable
+    public sealed class PlayerActor : GridActor, IDamageable, IKnockbackable
     {
 
         protected override void OnDirectionChanged(bool isRightFacing)
@@ -563,6 +563,11 @@ namespace BattleRoyalRhythm.GridActors.Player
         public void ApplyDamage(float amount)
         {
             
+        }
+
+        public void ApplyKnockback(int knockbackX, int knockbackY)
+        {
+            //throw new NotImplementedException();
         }
     }
 

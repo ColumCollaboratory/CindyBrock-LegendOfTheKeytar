@@ -187,7 +187,7 @@ namespace BattleRoyalRhythm.GridActors
             List<GridActor> intersectingActors = new List<GridActor>();
             foreach (GridActor actor in Actors)
             {
-                if (!ignoredActors.Contains(actor))
+                if (ignoredActors == null || !ignoredActors.Contains(actor))
                 {
                     if (actor.CurrentSurface == surface)
                     {

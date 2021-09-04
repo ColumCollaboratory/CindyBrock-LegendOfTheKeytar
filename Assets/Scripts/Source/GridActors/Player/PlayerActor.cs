@@ -64,6 +64,9 @@ namespace BattleRoyalRhythm.GridActors.Player
         [SerializeField][Min(0)] private int autoStepHeight = 1;
 
 
+        [Header("Animation")]
+        [SerializeField] private Animator animator = null;
+
         protected override void OnValidate()
         {
             base.OnValidate();
@@ -306,12 +309,14 @@ namespace BattleRoyalRhythm.GridActors.Player
                 currentAnimations.Clear();
                 currentAnimations.Enqueue(ActorAnimationsGenerator.CreatePullUpPath(true, TileHeight));
                 affordance = BeatAffordance.Grounded;
+                animator.SetTrigger("HangClimbUp");
             }
             void PullUpLeft()
             {
                 currentAnimations.Clear();
                 currentAnimations.Enqueue(ActorAnimationsGenerator.CreatePullUpPath(false, TileHeight));
                 affordance = BeatAffordance.Grounded;
+                animator.SetTrigger("HangClimbUp");
             }
             bool TryEnterDoor()
             {
@@ -326,6 +331,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                     currentAnimations.Enqueue(ActorAnimationsGenerator.CreateJumpUpPath(jumpApex));
                     currentAnimations.Enqueue(ActorAnimationsGenerator.CreateDropDownPath(-jumpApex));
                     affordance = BeatAffordance.JumpApex;
+                    animator.SetTrigger("Jump");
                     return true;
                 }
                 return false;
@@ -339,6 +345,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                         currentAnimations.Clear();
                         currentAnimations.Enqueue(ActorAnimationsGenerator.CreateDropDownPath(y + 1));
                         affordance = BeatAffordance.Grounded;
+                        animator.SetTrigger("Drop");
                         return true;
                     }
                 }
@@ -351,6 +358,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                     affordance = BeatAffordance.HangingRight;
                     currentAnimations.Clear();
                     currentAnimations.Enqueue(ActorAnimationsGenerator.CreateHangDownPath(true, TileHeight));
+                    animator.SetTrigger("DropToHang");
                     return true;
                 }
                 return false;
@@ -362,6 +370,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                     affordance = BeatAffordance.HangingLeft;
                     currentAnimations.Clear();
                     currentAnimations.Enqueue(ActorAnimationsGenerator.CreateHangDownPath(false, TileHeight));
+                    animator.SetTrigger("DropToHang");
                     return true;
                 }
                 return false;
@@ -376,6 +385,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                     affordance = BeatAffordance.Grounded;
                     currentAnimations.Clear();
                     currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(1));
+                    animator.SetTrigger("Walk");
                     return true;
                 }
                 return false;
@@ -390,6 +400,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                         affordance = BeatAffordance.Grounded;
                         currentAnimations.Clear();
                         currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(1, step));
+                        animator.SetTrigger("Walk");
                         return true;
                     }
                 }
@@ -400,6 +411,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                     {
                         currentAnimations.Clear();
                         currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(1, step));
+                        animator.SetTrigger("Walk");
                         return true;
                     }
                 }
@@ -421,6 +433,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                             foreach (ActorAnimationPath path in ActorAnimationsGenerator.CreateJumpPaths(x, y, jumpApex))
                                 currentAnimations.Enqueue(path);
                             affordance = BeatAffordance.JumpApex;
+                            animator.SetTrigger("Jump");
                             return true;
                         }
                     }
@@ -435,6 +448,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 {
                     PullUpLeft();
                     affordance = BeatAffordance.Grounded;
+                    animator.SetTrigger("DropToHang");
                     return true;
                 }
                 // Attempt to jump into a grab.
@@ -446,6 +460,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                         affordance = BeatAffordance.HangingLeft;
                         currentAnimations.Clear();
                         currentAnimations.Enqueue(ActorAnimationsGenerator.CreateJumpUpPath(step - TileHeight));
+                        animator.SetTrigger("DropToHang");
                         return true;
                     }
                 }
@@ -461,6 +476,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                     affordance = BeatAffordance.Grounded;
                     currentAnimations.Clear();
                     currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(-1));
+                    animator.SetTrigger("Walk");
                     return true;
                 }
                 return false;
@@ -475,6 +491,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                         affordance = BeatAffordance.Grounded;
                         currentAnimations.Clear();
                         currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(-1, step));
+                        animator.SetTrigger("Walk");
                         return true;
                     }
                 }
@@ -486,6 +503,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                         affordance = BeatAffordance.Grounded;
                         currentAnimations.Clear();
                         currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(-1, step));
+                        animator.SetTrigger("Walk");
                         return true;
                     }
                 }
@@ -507,6 +525,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                             foreach (ActorAnimationPath path in ActorAnimationsGenerator.CreateJumpPaths(x, y, jumpApex))
                                 currentAnimations.Enqueue(path);
                             affordance = BeatAffordance.JumpApex;
+                            animator.SetTrigger("Jump");
                             return true;
                         }
                     }
@@ -521,6 +540,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 {
                     PullUpRight();
                     affordance = BeatAffordance.Grounded;
+                    animator.SetTrigger("DropToHang");
                     return true;
                 }
                 // Attempt to jump into a grab.
@@ -532,6 +552,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                         affordance = BeatAffordance.HangingRight;
                         currentAnimations.Clear();
                         currentAnimations.Enqueue(ActorAnimationsGenerator.CreateJumpUpPath(step - TileHeight));
+                        animator.SetTrigger("DropToHang");
                         return true;
                     }
                 }

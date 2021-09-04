@@ -76,9 +76,10 @@ namespace BattleRoyalRhythm.GridActors
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when tile values are negative.</exception>
         public NearbyColliderSet GetNearbyColliders(GridActor actor,
-            int tilesHorizontal, int tilesVertical)
+            int tilesHorizontal, int tilesVertical, List<GridActor> ignoredActors = null)
         {
-            return GetNearbyColliders(actor, tilesHorizontal, tilesHorizontal, tilesVertical, tilesVertical);
+            return GetNearbyColliders(actor,
+                tilesHorizontal, tilesHorizontal, tilesVertical, tilesVertical, ignoredActors);
         }
 
         /// <summary>
@@ -96,7 +97,7 @@ namespace BattleRoyalRhythm.GridActors
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when tile values are negative.</exception>
         public NearbyColliderSet GetNearbyColliders(GridActor actor,
-            int tilesLeft, int tilesRight, int tilesUp, int tilesDown)
+            int tilesLeft, int tilesRight, int tilesUp, int tilesDown, List<GridActor> ignoredActors = null)
         {
             #region Error Checking
             if (tilesLeft < 0)
@@ -144,6 +145,15 @@ namespace BattleRoyalRhythm.GridActors
                     // Otherwise sample the collider on the surface.
                     else
                         nearbyColliders[tilesLeft + dX, tilesDown + dY] = colliders[x - 1, y - 1];
+                    // Check if any actors are blocking this tile.
+                    if (ignoredActors == null)
+                        ignoredActors = new List<GridActor>();
+                    if (!nearbyColliders[tilesLeft + dX, tilesDown + dY])
+                        foreach (GridActor actor in Actors)
+                            if (!ignoredActors.Contains(actor))
+                                if (actor.CurrentSurface == surface)
+                                    if (actor.IsIntersecting(new Vector2Int(x, y)))
+                                        nearbyColliders[tilesLeft + dX, tilesDown + dY] = true;
                 }
             }
             // Sweep at the actor elevation towards the right
@@ -169,6 +179,33 @@ namespace BattleRoyalRhythm.GridActors
             #endregion
             // Compile and return the results.
             return new NearbyColliderSet(nearbyColliders, tilesLeft, tilesDown);
+        }
+
+
+        public List<GridActor> GetIntersectingActors(Surface surface, int x1, int y1, int x2, int y2, List<GridActor> ignoredActors = null)
+        {
+            List<GridActor> intersectingActors = new List<GridActor>();
+            foreach (GridActor actor in Actors)
+            {
+                if (!ignoredActors.Contains(actor))
+                {
+                    if (actor.CurrentSurface == surface)
+                    {
+                        for (int x = x1; x <= x2; x++)
+                        {
+                            for (int y = y1; y <= y2; y++)
+                            {
+                                if (actor.IsIntersecting(new Vector2Int(x, y)))
+                                {
+                                    intersectingActors.Add(actor);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return intersectingActors;
         }
 
 

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace BattleRoyalRhythm.GridActors.Player
 {
-    public sealed class PlayerActor : GridActor, IDamageable
+    public sealed class PlayerActor : GridActor, IDamageable, IKnockbackable
     {
 
         protected override void OnDirectionChanged(bool isRightFacing)
@@ -115,7 +115,7 @@ namespace BattleRoyalRhythm.GridActors.Player
             #region Query World State
             // Query the world for the surrounding colliders.
             // These will be used for movement logic.
-            NearbyColliderSet colliders = World.GetNearbyColliders(this, 9, 9);
+            NearbyColliderSet colliders = World.GetNearbyColliders(this, 9, 9, new List<GridActor>() { this });
             #endregion
             #region Process Input
 
@@ -324,6 +324,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 {
                     currentAnimations.Clear();
                     currentAnimations.Enqueue(ActorAnimationsGenerator.CreateJumpUpPath(jumpApex));
+                    currentAnimations.Enqueue(ActorAnimationsGenerator.CreateDropDownPath(-jumpApex));
                     affordance = BeatAffordance.JumpApex;
                     return true;
                 }
@@ -429,7 +430,8 @@ namespace BattleRoyalRhythm.GridActors.Player
             bool TryJumpGrabRight()
             {
                 // Attempt to do an instant grab up.
-                if (colliders[1, TileHeight - 1] && !colliders.AnyInside(1, TileHeight, 1, 2 * TileHeight - 1))
+                if (colliders[1, TileHeight - 1] && !colliders.AnyInside(1, TileHeight, 1, 2 * TileHeight - 1)
+                    && !colliders.AnyInside(0, TileHeight - 1, 0, 2 * TileHeight - 1))
                 {
                     PullUpLeft();
                     affordance = BeatAffordance.Grounded;
@@ -438,7 +440,8 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Attempt to jump into a grab.
                 for (int step = TileHeight + 1; step <= maxPullupHeight; step++)
                 {
-                    if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1))
+                    if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1)
+                        && !colliders.AnyInside(0, TileHeight - 1, 0, step + TileHeight - 1))
                     {
                         affordance = BeatAffordance.HangingLeft;
                         currentAnimations.Clear();
@@ -513,7 +516,8 @@ namespace BattleRoyalRhythm.GridActors.Player
             bool TryJumpGrabLeft()
             {
                 // Attempt to do an instant grab up.
-                if (colliders[-1, TileHeight - 1] && !colliders.AnyInside(-1, TileHeight, -1, 2 * TileHeight - 1))
+                if (colliders[-1, TileHeight - 1] && !colliders.AnyInside(-1, TileHeight, -1, 2 * TileHeight - 1)
+                    && !colliders.AnyInside(0, TileHeight - 1, 0, 2 * TileHeight - 1))
                 {
                     PullUpRight();
                     affordance = BeatAffordance.Grounded;
@@ -522,7 +526,8 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Attempt to jump into a grab.
                 for (int step = TileHeight + 1; step <= maxPullupHeight; step++)
                 {
-                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
+                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1)
+                        && !colliders.AnyInside(0, TileHeight - 1, 0, step + TileHeight - 1))
                     {
                         affordance = BeatAffordance.HangingRight;
                         currentAnimations.Clear();
@@ -558,6 +563,11 @@ namespace BattleRoyalRhythm.GridActors.Player
         public void ApplyDamage(float amount)
         {
             
+        }
+
+        public void ApplyKnockback(int knockbackX, int knockbackY)
+        {
+            //throw new NotImplementedException();
         }
     }
 

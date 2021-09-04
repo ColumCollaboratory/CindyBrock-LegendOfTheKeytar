@@ -1,4 +1,5 @@
 ﻿using BattleRoyalRhythm.Audio;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BattleRoyalRhythm.GridActors
@@ -33,6 +34,17 @@ namespace BattleRoyalRhythm.GridActors
             beatsUntilExplosion--;
             if (beatsUntilExplosion == 0)
             {
+                // Check for stuff to damage.
+                int x1 = Mathf.Max(0, Tile.x - explosionRadius);
+                int x2 = Mathf.Min(CurrentSurface.LengthX, Tile.x + explosionRadius);
+                int y1 = Mathf.Max(0, Tile.y - explosionRadius);
+                int y2 = Mathf.Min(CurrentSurface.LengthY, Tile.y + explosionRadius);
+                List<GridActor> actorsHit = World.GetIntersectingActors(CurrentSurface, x1, y1, x2, y2, new List<GridActor>() { this });
+
+
+                foreach (IDamageable actor in actorsHit)
+                    actor.ApplyDamage(enemyDamage);
+
                 Destroyed?.Invoke(this);
                 World.Actors.Remove(this);
                 Destroy(gameObject);

@@ -99,6 +99,14 @@ namespace BattleRoyalRhythm.GridActors
 
         public event SurfaceChangedHandler SurfaceChanged;
 
+        public virtual bool IsIntersecting(Vector2Int checkTile)
+        {
+            return
+                checkTile.x == tile.x &&
+                checkTile.y >= tile.y &&
+                checkTile.y <= tile.y + tileHeight - 1;
+        }
+
         public Surface CurrentSurface
         {
             get => currentSurface;

@@ -17,6 +17,8 @@ namespace BattleRoyalRhythm.GridActors
         #region Inspector Fields
         [Tooltip("The first surface centered at local zero which other surfaces will be solved from.")]
         [SerializeField] private Surface rootSurface = null;
+        [Tooltip("Removes all guides from the scene when in play mode.")]
+        [SerializeField] private bool hideGuides = true;
         #endregion
 
         #region Compiled Surface Data Structures
@@ -494,7 +496,11 @@ namespace BattleRoyalRhythm.GridActors
                 StaticBlockLayout layout =
                     surface.gameObject.GetComponent<StaticBlockLayout>();
                 if (layout != null)
+                {
                     surfaceColliders.Add(surface, layout.Layout);
+                    if (hideGuides)
+                        layout.GetComponent<MeshRenderer>().enabled = false;
+                }
                 // If not assign an empty layout by default.
                 else
                     surfaceColliders.Add(surface,

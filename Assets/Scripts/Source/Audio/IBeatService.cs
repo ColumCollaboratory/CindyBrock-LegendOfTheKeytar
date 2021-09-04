@@ -24,6 +24,11 @@
         /// The current 0-1 interpolant between beats.
         /// </summary>
         float CurrentInterpolant { get; }
+        // TODO this is not soak-proof.
+        /// <summary>
+        /// The current beat that this service is on since starting.
+        /// </summary>
+        int CurrentBeatCount { get; }
         #endregion
     }
 }

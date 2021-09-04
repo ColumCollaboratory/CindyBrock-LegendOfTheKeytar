@@ -11,7 +11,7 @@
 	<StreamedFiles/>
 	<MediaFilesNotInAnyBank/>
 	<SoundBanks>
-		<SoundBank Id="1290008369" Language="SFX" Hash="4117199835">
+		<SoundBank Id="1290008369" Language="SFX" Hash="1840667444">
 			<ObjectPath>\SoundBanks\Default Work Unit\Level_1</ObjectPath>
 			<ShortName>Level_1</ShortName>
 			<Path>Level_1.bnk</Path>

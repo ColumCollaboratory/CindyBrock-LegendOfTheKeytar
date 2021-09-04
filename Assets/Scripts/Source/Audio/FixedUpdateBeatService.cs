@@ -28,6 +28,7 @@ namespace BattleRoyalRhythm.Audio
             // Check if a beat has elapsed.
             if (CurrentInterpolant >= 1f)
             {
+                CurrentBeatCount++;
                 // Increment the elapsed beat and
                 // notify listeners of the service.
                 lastBeatTime += 60f / beatsPerMinute;

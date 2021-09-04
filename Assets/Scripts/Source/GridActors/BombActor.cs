@@ -42,8 +42,11 @@ namespace BattleRoyalRhythm.GridActors
                 List<GridActor> actorsHit = World.GetIntersectingActors(CurrentSurface, x1, y1, x2, y2, new List<GridActor>() { this });
 
 
-                foreach (IDamageable actor in actorsHit)
-                    actor.ApplyDamage(enemyDamage);
+                foreach (GridActor actor in actorsHit)
+                    if(actor is IDamageable damageActor)
+                    {
+                        damageActor.ApplyDamage(enemyDamage);
+                    }
 
                 Destroyed?.Invoke(this);
                 World.Actors.Remove(this);

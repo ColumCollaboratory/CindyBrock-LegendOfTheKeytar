@@ -77,6 +77,10 @@ namespace BattleRoyalRhythm.GridActors.Player
         [Header("Animation")]
         [SerializeField] private Animator animator = null;
 
+
+        [SerializeField] private Transform cameraPivot = null;
+        [SerializeField][Min(0f)] private float cameraDegreesPerSecond = 5f;
+
         protected override void OnValidate()
         {
             base.OnValidate();
@@ -611,6 +615,9 @@ namespace BattleRoyalRhythm.GridActors.Player
                     World.TranslateActor(this, toLocation - lastAnimationFrame);
                     lastAnimationFrame = toLocation;
                 }
+                // Update the camera.
+                cameraPivot.transform.position = transform.position;
+                cameraPivot.rotation = Quaternion.RotateTowards(cameraPivot.rotation, transform.rotation, cameraDegreesPerSecond * Time.deltaTime);
             }
         }
 

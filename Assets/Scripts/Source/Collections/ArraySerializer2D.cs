@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor.SceneManagement;
+#endif
 
 // NOTE this class would become obsolete if Unity comes to
 // support multi-dim array serialization.
@@ -60,11 +62,13 @@ namespace BattleRoyalRhythm.Collections
             for (int y = 0; y < lengthY; y++)
                 for (int x = 0; x < lengthX; x++)
                     values[y * lengthX + x] = saveFrom[x, y];
+#if UNITY_EDITOR
             // Mark scene dirty to ensure that serialized changes
             // are to be saved. Otherwise the designer might mistakenly
             // close the scene without being prompted to save.
             if (!Application.isPlaying)
                 EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+#endif
         }
         #endregion
     }

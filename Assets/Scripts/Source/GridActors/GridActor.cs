@@ -21,12 +21,25 @@ namespace BattleRoyalRhythm.GridActors
 #endif
     public abstract class GridActor : MonoBehaviour
     {
-#if UNITY_EDITOR
         #region Scene Editing State
         // Store the locked transform values.
         private Vector3 currentPosition;
         private Quaternion currentRotation;
         #endregion
+        public void RefreshPosition()
+        {
+            if (currentSurface != null)
+            {
+                location.x = Mathf.Clamp(location.x, 0.5f, currentSurface.LengthX + 0.5f);
+                location.y = Mathf.Clamp(location.y, 0.5f, currentSurface.LengthY + 0.5f);
+                Vector2 newLoc = new Vector2(location.x - 0.5f, location.y - 0.5f);
+                currentPosition = currentSurface.GetLocation(newLoc);
+                currentRotation = Quaternion.LookRotation(currentSurface.GetRight(newLoc), currentSurface.GetUp(newLoc));
+                transform.position = currentPosition;
+                transform.rotation = currentRotation;
+            }
+        }
+#if UNITY_EDITOR
         #region Enforced Transform Lock
         private void OnEnable()
         {
@@ -55,19 +68,6 @@ namespace BattleRoyalRhythm.GridActors
         }
         #endregion
 
-        public void RefreshPosition()
-        {
-            if (currentSurface != null)
-            {
-                location.x = Mathf.Clamp(location.x, 0.5f, currentSurface.LengthX + 0.5f);
-                location.y = Mathf.Clamp(location.y, 0.5f, currentSurface.LengthY + 0.5f);
-                Vector2 newLoc = new Vector2(location.x - 0.5f, location.y - 0.5f);
-                currentPosition = currentSurface.GetLocation(newLoc);
-                currentRotation = Quaternion.LookRotation(currentSurface.GetRight(newLoc), currentSurface.GetUp(newLoc));
-                transform.position = currentPosition;
-                transform.rotation = currentRotation;
-            }
-        }
 
         protected virtual void OnValidate()
         {

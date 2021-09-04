@@ -184,6 +184,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 }
                 else
                 {
+                    animator.SetTrigger("Idle");
                     if (wasInputLastBeat)
                     {
                         if (controller.LatestTimestamp - beatTime > 0f)
@@ -304,6 +305,12 @@ namespace BattleRoyalRhythm.GridActors.Player
                 {
                     if (genres[activeGenre].ability.IsUsable(beatService.CurrentBeatCount))
                     {
+                        if (genres[activeGenre].ability is AbilityGrenade)
+                        {
+                            animator.SetTrigger("Bomb");
+                        }
+
+
                         genres[activeGenre].ability.StartUsing(beatService.CurrentBeatCount);
                         ActorAnimationPath path = genres[activeGenre].ability.ElapseBeat();
                         if (path != null)

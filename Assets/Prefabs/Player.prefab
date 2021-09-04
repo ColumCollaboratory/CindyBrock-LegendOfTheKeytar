@@ -139,7 +139,7 @@ Transform:
   m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1468385351464745690}
+  - {fileID: 8666471405568954180}
   m_Father: {fileID: 1435093365478752556}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -237,11 +237,13 @@ MonoBehaviour:
     ability: {fileID: 1435093365478752558}
   - wwiseGenreTarget: Level_1_Metal
     ability: {fileID: 1435093365478752559}
+  maxHealth: 100
+  health: 100
   jumpDistance: 4
   maxDropDistance: 3
   maxPullupHeight: 4
   autoStepHeight: 1
-  animator: {fileID: 1435093365494127924}
+  animator: {fileID: 4126061027125626384}
 --- !u!114 &1435093365478752560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,14 +326,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownBeats: 1
---- !u!95 &1435093365494127924
+--- !u!95 &4126061027125626384
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2245906560641474656}
+  m_GameObject: {fileID: 8290754725204514302}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 46823d63d5579944eb1bc9cd9b48c2d7, type: 2}
@@ -343,70 +345,70 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!1001 &1435093365494127921
+--- !u!1001 &9209796018621245615
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 1435093365417062584}
     m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
+    - target: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
+    - target: {fileID: 919132149155446097, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_Name
-      value: rock_hero_anims_test_01
+      value: rock_hero_anims_v2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
---- !u!1 &2245906560641474656 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
+--- !u!1 &8290754725204514302 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
-  m_PrefabInstance: {fileID: 1435093365494127921}
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
+  m_PrefabInstance: {fileID: 9209796018621245615}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1468385351464745690 stripped
+--- !u!4 &8666471405568954180 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4dd77ad00bdfff34e89a2cde3fe4e995, type: 3}
-  m_PrefabInstance: {fileID: 1435093365494127921}
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
+  m_PrefabInstance: {fileID: 9209796018621245615}
   m_PrefabAsset: {fileID: 0}

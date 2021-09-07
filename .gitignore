@@ -63,6 +63,9 @@ crashlytics-build.properties
 ##   WWise stuff    ##
 ## ---------------- ##
 
+# generated sound banks (too big, would require LFS to commit)
+BattleRoyalRhythm_WwiseProject/GeneratedSoundBanks
+
 # project stuff
 BattleRoyalRhythm_WwiseProject/.cache/
 BattleRoyalRhythm_WwiseProject/*.prof

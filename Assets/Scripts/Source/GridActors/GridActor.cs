@@ -26,12 +26,14 @@ namespace BattleRoyalRhythm.GridActors
         private Vector3 currentPosition;
         private Quaternion currentRotation;
         #endregion
+
         public void RefreshPosition()
         {
             if (currentSurface != null)
             {
-                location.x = Mathf.Clamp(location.x, 0.5f, currentSurface.LengthX + 0.5f);
-                location.y = Mathf.Clamp(location.y, 0.5f, currentSurface.LengthY + 0.5f);
+                Location = new Vector2(
+                    Mathf.Clamp(location.x, 0.5f, currentSurface.LengthX + 0.5f),
+                    Mathf.Clamp(location.y, 0.5f, currentSurface.LengthY + 0.5f));
                 Vector2 newLoc = new Vector2(location.x - 0.5f, location.y - 0.5f);
                 currentPosition = currentSurface.GetLocation(newLoc);
                 currentRotation = Quaternion.LookRotation(currentSurface.GetRight(newLoc), currentSurface.GetUp(newLoc));
@@ -39,6 +41,7 @@ namespace BattleRoyalRhythm.GridActors
                 transform.rotation = currentRotation;
             }
         }
+
 #if UNITY_EDITOR
         #region Enforced Transform Lock
         private void OnEnable()
@@ -73,7 +76,12 @@ namespace BattleRoyalRhythm.GridActors
         {
             location = Tile;
             if (currentSurface != null)
+            {
+                Location = new Vector2(
+                    Mathf.Clamp(location.x, 1f, currentSurface.LengthX),
+                    Mathf.Clamp(location.y, 1f, currentSurface.LengthY));
                 RefreshPosition();
+            }
         }
 #else
         protected virtual void OnValidate() { }
@@ -115,6 +123,7 @@ namespace BattleRoyalRhythm.GridActors
                 if (value != currentSurface)
                 {
                     currentSurface = value;
+                    RefreshPosition();
                     SurfaceChanged?.Invoke(value);
                 }
             }

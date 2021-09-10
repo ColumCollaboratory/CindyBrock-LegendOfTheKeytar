@@ -17,6 +17,17 @@ namespace BattleRoyalRhythm.Surfaces
     {
 #if UNITY_EDITOR
         #region Scene Editing State
+        [SerializeField][HideInInspector] private Color fillColor = Color.magenta;
+        public Color FillColor
+        {
+            get => fillColor;
+            set
+            {
+                fillColor = value;
+                RegenerateColors();
+            }
+        }
+
         // Prior field values, for expensive operations
         // not to be invoked every OnValidate call.
         private Surface priorTargetSurface;
@@ -159,7 +170,7 @@ namespace BattleRoyalRhythm.Surfaces
             for (int y = 0; y < layout.GetLength(1); y++)
                 for (int x = 0; x < layout.GetLength(0); x++)
                     colors[y * targetSurface.UVUnit + x] =
-                        layout[x, y] ? Color.magenta : Color.clear;
+                        layout[x, y] ? FillColor : Color.clear;
             // Apply the color changes.
             meshTexture.SetPixels(colors);
             meshTexture.Apply();

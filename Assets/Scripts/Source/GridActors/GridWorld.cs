@@ -1,24 +1,23 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using BattleRoyalRhythm.Surfaces;
-using System;
 using BattleRoyalRhythm.Audio;
+using BattleRoyalRhythm.Surfaces;
 
 namespace BattleRoyalRhythm.GridActors
 {
+    // Core implementation for the grid world.
     /// <summary>
     /// Holds a collection of surfaces and actors that move on those
     /// surfaces. Actors can see other actors in the same Grid World.
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class GridWorld : MonoBehaviour
+    public sealed partial class GridWorld : MonoBehaviour
     {
 
         #region Inspector Fields
         [Tooltip("The first surface centered at local zero which other surfaces will be solved from.")]
         [SerializeField] private Surface rootSurface = null;
-        [Tooltip("Removes all guides from the scene when in play mode.")]
-        [SerializeField] private bool hideGuides = true;
         #endregion
 
         #region Compiled Surface Data Structures
@@ -354,7 +353,7 @@ namespace BattleRoyalRhythm.GridActors
             return false;
         }
 
-#region Surfaces Initialization
+        #region Surfaces Initialization
         private void Awake()
         {
             // Compile the designer data down to a more graph
@@ -364,7 +363,7 @@ namespace BattleRoyalRhythm.GridActors
             Surface[] surfaces = GetComponentsInChildren<Surface>();
             foreach (Surface surface in surfaces)
             {
-#region Process Seams
+                #region Process Seams
                 // These lists will accumulate seams extracted
                 // from the constraints processed from the scene.
                 List<Seam> leftSeams = new List<Seam>();
@@ -490,22 +489,18 @@ namespace BattleRoyalRhythm.GridActors
                 // Document all seams for this surface.
                 surfaceSeams.Add(surface, new SurfaceSeams(
                     leftSeams.ToArray(), rightSeams.ToArray(), doorSeams.ToArray()));
-#endregion
-#region Process Static Colliders
+                #endregion
+                #region Process Static Colliders
                 // Is there a designer specified layout?
                 StaticBlockLayout layout =
                     surface.gameObject.GetComponent<StaticBlockLayout>();
                 if (layout != null)
-                {
                     surfaceColliders.Add(surface, layout.Layout);
-                    if (hideGuides)
-                        layout.GetComponent<MeshRenderer>().enabled = false;
-                }
                 // If not assign an empty layout by default.
                 else
                     surfaceColliders.Add(surface,
                         new bool[surface.LengthX, surface.LengthY]);
-#endregion
+                #endregion
             }
             // Orient all actors to this grid world.
             actors = new List<GridActor>();
@@ -515,26 +510,74 @@ namespace BattleRoyalRhythm.GridActors
                 actors.Add(actor);
             }
         }
-#endregion
+        #endregion
 
+
+
+    }
 
 #if UNITY_EDITOR
-#region Gizmos Drawing
+    /// <summary>
+    /// Describes preferences for the displaying the grid world
+    /// inside the Unity Editor.
+    /// </summary>
+    public interface IGridWorldPreferences
+    {
+        #region Style Properties
+        /// <summary>
+        /// When true grid gizmos and meshes should be drawn
+        /// to assist the designer.
+        /// </summary>
+        bool ShowGuidesInSceneView { get; }
+        /// <summary>
+        /// When true grid gizmos and meshes should persist
+        /// during play mode.
+        /// </summary>
+        bool ShowGuidesInPlayMode { get; }
+        /// <summary>
+        /// The color preference for the grid wireframe.
+        /// </summary>
+        Color WireColor { get; }
+        /// <summary>
+        /// The color preference for the grid fill.
+        /// </summary>
+        Color FillColor { get; }
+        #endregion
+    }
+    // Editor specific implementation for the grid world.
+    public sealed partial class GridWorld
+    {
+        #region Editor State
+        [SerializeField][HideInInspector] private GridWorldInspectorState editorPreferences;
+        /// <summary>
+        /// The editor preferences for this grid world.
+        /// </summary>
+        public IGridWorldPreferences EditorPreferences
+        {
+            get => editorPreferences;
+            set => editorPreferences = value as GridWorldInspectorState;
+        }
+        #endregion
+        #region Gizmos Drawing
         private List<Vector3[]> stitchArrowPolylines;
         private void OnDrawGizmos()
         {
-            // Draw the stitching arrows if they have
-            // been generated.
-            if (stitchArrowPolylines != null)
+            if ((Application.isPlaying && EditorPreferences.ShowGuidesInPlayMode) ||
+                (!Application.isPlaying && EditorPreferences.ShowGuidesInSceneView))
             {
-                Gizmos.color = Color.green;
-                foreach (Vector3[] polyline in stitchArrowPolylines)
-                    for (int i = 1; i < polyline.Length; i++)
-                        Gizmos.DrawLine(polyline[i - 1], polyline[i]);
+                // Draw the stitching arrows if they have
+                // been generated.
+                if (stitchArrowPolylines != null)
+                {
+                    Gizmos.color = Color.green;
+                    foreach (Vector3[] polyline in stitchArrowPolylines)
+                        for (int i = 1; i < polyline.Length; i++)
+                            Gizmos.DrawLine(polyline[i - 1], polyline[i]);
+                }
             }
         }
-#endregion
-#region Editor Surface Constraints
+        #endregion
+        #region Editor Surface Constraints
         /// <summary>
         /// Starting from the root surface, resolves the transform
         /// layout of all surfaces in the scene. Should be called
@@ -565,21 +608,21 @@ namespace BattleRoyalRhythm.GridActors
             // just clutter the scope.
             void ProcessConstraint(Surface from, Surface to, StitchingConstraint constraint)
             {
-#region Invalid Cases Check
+                #region Invalid Cases Check
                 // Break the recursive function if this surface links
                 // to itself (stack overflow), or if the specified
                 // surface is null (not yet specified).
                 if (constraint.other == null || from == constraint.other)
                     return;
-#endregion
-#region Circular Constraint Setup
+                #endregion
+                #region Circular Constraint Setup
                 // Grab the initial state of the transform
                 // to solve so we can check if it matches previously
                 // solved constraints in a circular loop.
                 Vector3 expectedPosition = to.transform.position;
                 Quaternion expectedRotation = to.transform.rotation;
-#endregion
-#region Direction Conditions Setup
+                #endregion
+                #region Direction Conditions Setup
                 // Get the sampling points for merging these two
                 // surfaces together, as well as an angle offset and
                 // added translation for the link type.
@@ -620,8 +663,8 @@ namespace BattleRoyalRhythm.GridActors
                         addedAngle = -90.0f;
                         break;
                 }
-#endregion
-#region Solve Constraint Transform
+                #endregion
+                #region Solve Constraint Transform
                 // Zero out the transform that we will snap, so
                 // that we don't have to deal with offsets.
                 to.SetTransform(Vector3.zero, Quaternion.identity);
@@ -643,8 +686,8 @@ namespace BattleRoyalRhythm.GridActors
                     from.GetLocation(fromSample) - to.GetLocation(toSample)
                         + fromUp * constraint.yStep,
                     to.transform.rotation);
-#endregion
-#region Circular Constraint Check
+                #endregion
+                #region Circular Constraint Check
                 // If this surface has already been locked
                 // by another constraint, compare the outcome
                 // of the two constraints.
@@ -673,8 +716,8 @@ namespace BattleRoyalRhythm.GridActors
                         foreach (StitchingConstraint link in to.surfaceLinks)
                             ProcessConstraint(to, link.other, link);
                 }
-#endregion
-#region Generate Gizmo Arrows
+                #endregion
+                #region Generate Gizmo Arrows
                 float ARROW_SIZE = 0.25f;
                 // Get the range to draw the arrows in,
                 // accounting for the y shift.
@@ -888,7 +931,7 @@ namespace BattleRoyalRhythm.GridActors
                             break;
                     }
                 }
-#endregion
+                #endregion
             }
             // Finally update the position and orientation of
             // any grid actors in the editor, to match the new
@@ -925,7 +968,40 @@ namespace BattleRoyalRhythm.GridActors
             // Finally revalidate the calling surface.
             changedSurface.ValidateConstraints();
         }
-#endregion
-#endif
+        #endregion
     }
+
+    /// <summary>
+    /// POCO class that stores the inspector state for
+    /// the grid world.
+    /// </summary>
+    [Serializable]
+    public sealed class GridWorldInspectorState : IGridWorldPreferences
+    {
+        #region State Fields
+        public bool showEditorProperties;
+        public bool showGuidesInSceneView;
+        public bool showGuidesInPlayMode;
+        public Color wireColor;
+        public Color fillColor;
+        // Accessors for other inspectors.
+        public bool ShowGuidesInSceneView => showGuidesInSceneView;
+        public bool ShowGuidesInPlayMode => showGuidesInPlayMode;
+        public Color WireColor => wireColor;
+        public Color FillColor => fillColor;
+        #endregion
+        #region Constructor / Default Values
+        public GridWorldInspectorState()
+        {
+            // Set the default foldout state.
+            showEditorProperties = false;
+            // Set default editor preferences.
+            showGuidesInSceneView = true;
+            showGuidesInPlayMode = true;
+            wireColor = Color.gray;
+            fillColor = Color.magenta;
+        }
+        #endregion
+    }
+#endif
 }

@@ -142,21 +142,28 @@ namespace BattleRoyalRhythm.Surfaces
         // Handle the gizmo drawing for surfaces.
         private void OnDrawGizmos()
         {
-            // Set the color for the wireframe
-            // based on if it is selected.
-            bool isSelected = Selection.Contains(transform.gameObject);
-            Gizmos.color = (isSelected ? Color.yellow : Color.gray);
-            // Draw the wireframe.
-            if (localWireframe != null)
+            GridWorld world = GetComponentInParent<GridWorld>();
+            if (world != null)
             {
-                for (int i = 0; i < localWireframe.Length; i++)
+                IGridWorldPreferences preferences = world.EditorPreferences;
+
+                if ((!Application.isPlaying && preferences.ShowGuidesInSceneView) ||
+                    (Application.isPlaying && preferences.ShowGuidesInPlayMode))
                 {
-                    Vector3 previousPoint = transform.TransformPoint(localWireframe[i][0]);
-                    for (int j = 1; j < localWireframe[i].Length; j++)
+                    Gizmos.color = preferences.WireColor;
+                    // Draw the wireframe.
+                    if (localWireframe != null)
                     {
-                        Vector3 nextPoint = transform.TransformPoint(localWireframe[i][j]);
-                        Gizmos.DrawLine(previousPoint, nextPoint);
-                        previousPoint = nextPoint;
+                        for (int i = 0; i < localWireframe.Length; i++)
+                        {
+                            Vector3 previousPoint = transform.TransformPoint(localWireframe[i][0]);
+                            for (int j = 1; j < localWireframe[i].Length; j++)
+                            {
+                                Vector3 nextPoint = transform.TransformPoint(localWireframe[i][j]);
+                                Gizmos.DrawLine(previousPoint, nextPoint);
+                                previousPoint = nextPoint;
+                            }
+                        }
                     }
                 }
             }

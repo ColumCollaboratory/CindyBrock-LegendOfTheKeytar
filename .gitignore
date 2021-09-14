@@ -65,6 +65,8 @@ crashlytics-build.properties
 
 # generated sound banks (too big, would require LFS to commit)
 BattleRoyalRhythm_WwiseProject/GeneratedSoundBanks/
+Assets/StreamingAssets/Audio/GeneratedSoundBanks/
+Assets/StreamingAssets/Audio/GeneratedSoundBanks.meta
 
 # project stuff
 BattleRoyalRhythm_WwiseProject/.cache/

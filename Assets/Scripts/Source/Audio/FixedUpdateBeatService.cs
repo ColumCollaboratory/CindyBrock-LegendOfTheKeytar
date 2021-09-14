@@ -8,11 +8,9 @@ namespace BattleRoyalRhythm.Audio
     /// </summary>
     public sealed class FixedUpdateBeatService : BeatService
     {
-        #region Inspector Fields
-        [Tooltip("The BPM the beat service is timed to.")]
-        [SerializeField][Min(1f)] private float beatsPerMinute = 60f;
-        #endregion
         #region Beat Interval State
+        private float beatsPerMinute;
+        private bool isRunning = false;
         private float lastBeatTime = 0f;
         #endregion
         #region Beat Service Events
@@ -25,16 +23,32 @@ namespace BattleRoyalRhythm.Audio
         #region Fixed Update Cycle
         private void FixedUpdate()
         {
-            // Check if a beat has elapsed.
-            if (CurrentInterpolant >= 1f)
+            // TODO bad use of bool check in update cycle;
+            // Use a coroutine instead.
+            if (isRunning)
             {
-                CurrentBeatCount++;
-                // Increment the elapsed beat and
-                // notify listeners of the service.
-                lastBeatTime += 60f / beatsPerMinute;
-                BeatElapsed?.Invoke(lastBeatTime);
+                // Check if a beat has elapsed.
+                if (CurrentInterpolant >= 1f)
+                {
+                    CurrentBeatCount++;
+                    // Increment the elapsed beat and
+                    // notify listeners of the service.
+                    lastBeatTime += 60f / beatsPerMinute;
+                    BeatElapsed?.Invoke(lastBeatTime);
+                }
             }
         }
         #endregion
+
+        /// <summary>
+        /// Sets the beat soundtrack (only used the BPM).
+        /// </summary>
+        /// <param name="set">The soundtrack set containing the target BPM.</param>
+        public override sealed void SetBeatSoundtrack(SoundtrackSet set)
+        {
+            beatsPerMinute = set.BeatsPerMinute;
+            lastBeatTime = Time.fixedTime;
+            isRunning = true;
+        }
     }
 }

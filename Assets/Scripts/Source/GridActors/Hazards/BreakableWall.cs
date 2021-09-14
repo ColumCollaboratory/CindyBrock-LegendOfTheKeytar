@@ -11,6 +11,7 @@ namespace BattleRoyalRhythm.GridActors.Hazards
 
         public override event ActorDestroyed Destroyed;
 
+
         public void ApplyDamage(float amount)
         {
             health -= amount;

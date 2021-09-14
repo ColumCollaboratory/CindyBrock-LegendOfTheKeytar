@@ -11,6 +11,9 @@ namespace BattleRoyalRhythm.GridActors.Player
     public sealed class PlayerActor : GridActor, IDamageable, IKnockbackable
     {
 
+        [SerializeField][SoundtrackID] private int soundtrackSet = 0;
+
+
         public event Action BeatEarly;
         public event Action BeatLate;
 
@@ -48,7 +51,7 @@ namespace BattleRoyalRhythm.GridActors.Player
         [SerializeField][Min(1)] private int jumpApex = 2;
 
         [SerializeField] private PlayerController controller = null;
-        [SerializeField] private WwiseBeatService beatService = null;
+        [SerializeField] private BeatService beatService = null;
 
         [SerializeField] private GenreAbilityPair[] genres = null;
 
@@ -97,7 +100,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 currentAnimations = new Queue<ActorAnimationPath>();
                 beatService.BeatOffset = -inputTolerance * 0.5f;
                 beatService.BeatElapsed += OnBeatElapsed;
-                beatService.SetBeatFromEvent("Stage_1_Started", 140f);
+                beatService.SetBeatSoundtrack(SoundtrackSettings.Load().GetSetByID(soundtrackSet));
 
                 if (genres != null)
                     foreach (GenreAbilityPair pair in genres)

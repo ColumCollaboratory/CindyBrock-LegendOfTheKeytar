@@ -31,7 +31,7 @@ namespace BattleRoyalRhythm.GridActors
         {
             if (currentSurface != null)
             {
-                Location = new Vector2(
+                location = new Vector2(
                     Mathf.Clamp(location.x, 0.5f, currentSurface.LengthX + 0.5f),
                     Mathf.Clamp(location.y, 0.5f, currentSurface.LengthY + 0.5f));
                 Vector2 newLoc = new Vector2(location.x - 0.5f, location.y - 0.5f);
@@ -88,13 +88,8 @@ namespace BattleRoyalRhythm.GridActors
         protected virtual void Update() { }
 #endif
 
-
         public virtual event ActorDestroyed Destroyed;
 
-        protected virtual void Awake()
-        {
-            Location = tile;
-        }
 
         [Tooltip("The current surface that this actor is on.")]
         [SerializeField] private Surface currentSurface = null;
@@ -138,12 +133,9 @@ namespace BattleRoyalRhythm.GridActors
             get => location;
             set
             {
-                if (location != value)
-                {
-                    location = value;
-                    tile = new Vector2Int(Mathf.RoundToInt(location.x), Mathf.RoundToInt(location.y));
-                    RefreshPosition();
-                }
+                location = value;
+                tile = new Vector2Int(Mathf.RoundToInt(location.x), Mathf.RoundToInt(location.y));
+                RefreshPosition();
             }
         }
 

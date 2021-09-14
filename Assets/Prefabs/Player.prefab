@@ -84,6 +84,7 @@ MonoBehaviour:
   tile: {x: 3, y: 7}
   tileHeight: 2
   World: {fileID: 0}
+  soundtrackSet: 3
   affordance: 0
   duckingTileHeight: 1
   playerMesh: {fileID: 1435093365417062584}

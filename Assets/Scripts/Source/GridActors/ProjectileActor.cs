@@ -22,9 +22,8 @@ namespace BattleRoyalRhythm.GridActors
         //[Tooltip("Base damage multiplier for this projectile.")]
         //[SerializeField][Min(0f)] protected float damageFactor = 1f;
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
             IgnoredActors = new List<GridActor>();
         }
 

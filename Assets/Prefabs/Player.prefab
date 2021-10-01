@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1435093365417062583}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8666471405568954180}
@@ -84,56 +84,38 @@ MonoBehaviour:
   tile: {x: 3, y: 7}
   tileHeight: 2
   World: {fileID: 0}
-  soundtrackSet: 3
-  affordance: 0
   duckingTileHeight: 1
-  playerMesh: {fileID: 1435093365417062584}
-  inputTolerance: 0.3
-  walkCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  jumpApex: 2
+  maxHealth: 100
+  health: 100
   controller: {fileID: 1435093365478752560}
+  inputTolerance: 0.3
+  cameraPivot: {fileID: 0}
+  cameraDegreesPerSecond: 110
+  jumpApex: 2
+  meshContainer: {fileID: 1435093365417062584}
+  animator: {fileID: 4126061027125626384}
+  animatorMovementModeName: MovementMode
   beatService: {fileID: 0}
+  soundtrackSet: 3
   genres:
   - wwiseGenreTarget: _Level_1_Chiptune
     ability: {fileID: 1435093365478752562}
+    abilityUsedName: BombUsed
   - wwiseGenreTarget: Level_1_Folk
     ability: {fileID: 1435093365478752561}
+    abilityUsedName: RepulsorUsed
   - wwiseGenreTarget: Level_1_LofiJazz
     ability: {fileID: 1435093365478752558}
+    abilityUsedName: DashUsed
   - wwiseGenreTarget: Level_1_Metal
     ability: {fileID: 1435093365478752559}
-  maxHealth: 100
-  health: 100
-  jumpDistance: 4
+    abilityUsedName: TetherUsed
+  minJumpX: 3
+  maxJumpX: 3
   maxDropDistance: 3
   maxPullupHeight: 4
   autoStepHeight: 1
-  animator: {fileID: 4126061027125626384}
-  cameraPivot: {fileID: 0}
-  cameraDegreesPerSecond: 110
+  mode: 0
 --- !u!114 &1435093365478752560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,7 +234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ffbad53089a223f4ea204ab84d1988fc, type: 3}
       propertyPath: m_LocalPosition.z

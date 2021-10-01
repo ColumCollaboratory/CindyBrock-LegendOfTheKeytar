@@ -1,17 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using BattleRoyalRhythm.Surfaces;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace BattleRoyalRhythm.GridActors
 {
 
-    public delegate void SurfaceChangedHandler(Surface newSurface);
+    public enum Direction : byte
+    {
+        Left,
+        Right
+    }
 
-    public delegate void ActorDestroyed(GridActor actor);
+    /// <summary>
+    /// Called whenever this actor's surface changes.
+    /// </summary>
+    /// <param name="newSurface"></param>
+    public delegate void SurfaceChangedHandler(Surface newSurface);
+    /// <summary>
+    /// Called when this grid actor has been removed from
+    /// interactions on the grid.
+    /// </summary>
+    /// <param name="actor"></param>
+    public delegate void ActorRemoved(GridActor actor);
 
     /// <summary>
     /// Scene instance for the base class of grid actors.
@@ -44,12 +53,12 @@ namespace BattleRoyalRhythm.GridActors
 
 #if UNITY_EDITOR
         #region Enforced Transform Lock
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             // Conceal the transform.
             transform.hideFlags = HideFlags.HideInInspector;
         }
-        private void Reset()
+        protected virtual void Reset()
         {
             // Conceal the transform.
             transform.hideFlags = HideFlags.HideInInspector;
@@ -88,9 +97,9 @@ namespace BattleRoyalRhythm.GridActors
         protected virtual void Update() { }
 #endif
 
-        public virtual event ActorDestroyed Destroyed;
+        public virtual event ActorRemoved Destroyed;
 
-
+        [Header("Surface Positioning")]
         [Tooltip("The current surface that this actor is on.")]
         [SerializeField] private Surface currentSurface = null;
         [Tooltip("The tile location of the actor on this surface.")]
@@ -139,22 +148,22 @@ namespace BattleRoyalRhythm.GridActors
             }
         }
 
-        private bool isRightFacing;
+        private Direction direction;
 
-        public bool IsRightFacing
+        public Direction Direction
         {
-            get => isRightFacing;
+            get => direction;
             set
             {
-                if (value != isRightFacing)
+                if (value != direction)
                 {
-                    isRightFacing = value;
+                    direction = value;
                     OnDirectionChanged(value);
                 }
             }
         }
 
-        protected virtual void OnDirectionChanged(bool isRightFacing) { }
+        protected virtual void OnDirectionChanged(Direction direction) { }
 
         [HideInInspector] public GridWorld World;
     }

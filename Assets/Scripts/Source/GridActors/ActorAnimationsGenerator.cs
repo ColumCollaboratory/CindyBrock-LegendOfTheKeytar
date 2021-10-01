@@ -138,16 +138,10 @@ namespace BattleRoyalRhythm.GridActors
             float pullUpSegment = pullHeight / (pullHeight + 1f);
             return (float t) =>
             {
-                if (t == 1f)
-                    return segment1 + segment2 * ((t - pullUpSegment) / (1f - pullUpSegment));
-                else
-                    return Vector2.zero;
-                /*
                 if (t < pullUpSegment)
                     return segment1 * (t / pullUpSegment);
                 else
                     return segment1 + segment2 * ((t - pullUpSegment) / (1f - pullUpSegment));
-                */
             };
         }
         /// <summary>

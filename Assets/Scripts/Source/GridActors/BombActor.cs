@@ -10,7 +10,7 @@ namespace BattleRoyalRhythm.GridActors
     {
 
 
-        public override sealed event ActorDestroyed Destroyed;
+        public override sealed event ActorRemoved Destroyed;
 
         [HideInInspector] public int explosionRadius;
         [HideInInspector] public int enemyDamage;

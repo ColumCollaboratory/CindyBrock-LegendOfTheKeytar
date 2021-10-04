@@ -4,6 +4,7 @@ using BattleRoyalRhythm.Input;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Tools;
 using UnityEngine;
 
 namespace BattleRoyalRhythm.GridActors.Player
@@ -712,10 +713,8 @@ namespace BattleRoyalRhythm.GridActors.Player
             #endregion
         }
 
-        protected override sealed void Update()
+        private void Update()
         {
-            base.Update();
-
             if (Application.isPlaying)
             {
                 // Are there animations to execute

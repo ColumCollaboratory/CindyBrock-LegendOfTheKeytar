@@ -68,10 +68,8 @@ namespace BattleRoyalRhythm.GridActors.Hazards
             repulsedPath = null;
         }
 
-        protected override void Update()
+        protected virtual void Update()
         {
-            base.Update();
-
             if (repulsedPath != null)
             {
                 Vector2 targetLocation = repulsedPath(World.BeatService.CurrentInterpolant);

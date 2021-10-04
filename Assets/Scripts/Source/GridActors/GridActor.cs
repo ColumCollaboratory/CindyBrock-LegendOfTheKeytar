@@ -1,5 +1,6 @@
 using UnityEngine;
 using BattleRoyalRhythm.Surfaces;
+using Tools;
 
 namespace BattleRoyalRhythm.GridActors
 {
@@ -32,8 +33,7 @@ namespace BattleRoyalRhythm.GridActors
     {
         #region Scene Editing State
         // Store the locked transform values.
-        private Vector3 currentPosition;
-        private Quaternion currentRotation;
+        private ProgrammedTransform programmedTransform;
         #endregion
 
         public void RefreshPosition()
@@ -44,39 +44,27 @@ namespace BattleRoyalRhythm.GridActors
                     Mathf.Clamp(location.x, 0.5f, currentSurface.LengthX + 0.5f),
                     Mathf.Clamp(location.y, 0.5f, currentSurface.LengthY + 0.5f));
                 Vector2 newLoc = new Vector2(location.x - 0.5f, location.y - 0.5f);
-                currentPosition = currentSurface.GetLocation(newLoc);
-                currentRotation = Quaternion.LookRotation(currentSurface.GetRight(newLoc), currentSurface.GetUp(newLoc));
-                transform.position = currentPosition;
-                transform.rotation = currentRotation;
+                if (programmedTransform == null)
+                    Initialize();
+                programmedTransform.Position = currentSurface.GetLocation(newLoc);
+                programmedTransform.Rotation = Quaternion.LookRotation(currentSurface.GetRight(newLoc), currentSurface.GetUp(newLoc));
             }
         }
 
 #if UNITY_EDITOR
         #region Enforced Transform Lock
-        protected virtual void OnEnable()
+        protected virtual void OnEnable() => Initialize();
+        protected virtual void Reset() => Initialize();
+        private void Initialize()
         {
-            // Conceal the transform.
-            transform.hideFlags = HideFlags.HideInInspector;
+            programmedTransform = GetComponent<ProgrammedTransform>();
+            if (programmedTransform == null)
+                programmedTransform = gameObject.AddComponent<ProgrammedTransform>();
+            programmedTransform.CurrentVisibility = ProgrammedTransform.Visibility.Hidden;
         }
-        protected virtual void Reset()
+        protected virtual void OnDestroy()
         {
-            // Conceal the transform.
-            transform.hideFlags = HideFlags.HideInInspector;
-        }
-        protected virtual void Update()
-        {
-            // Lock out any value changes.
-            if (transform.position != currentPosition)
-                transform.position = currentPosition;
-            if (transform.rotation != currentRotation)
-                transform.rotation = currentRotation;
-            if (transform.localScale != Vector3.one)
-                transform.localScale = Vector3.one;
-        }
-        private void OnDisable()
-        {
-            // Reveal the transform.
-            transform.hideFlags = HideFlags.None;
+            DestroyImmediate(programmedTransform);
         }
         #endregion
 
@@ -94,7 +82,6 @@ namespace BattleRoyalRhythm.GridActors
         }
 #else
         protected virtual void OnValidate() { }
-        protected virtual void Update() { }
 #endif
 
         public virtual event ActorRemoved Destroyed;

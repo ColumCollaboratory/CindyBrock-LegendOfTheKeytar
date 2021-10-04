@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace BattleRoyalRhythm
+namespace Tools
 {
     /// <summary>
     /// Marks an inspector field as readonly, disabling

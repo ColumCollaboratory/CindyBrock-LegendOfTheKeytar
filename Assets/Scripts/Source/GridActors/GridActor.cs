@@ -4,41 +4,70 @@ using Tools;
 
 namespace BattleRoyalRhythm.GridActors
 {
-
+    #region Actor State Enums
+    /// <summary>
+    /// Represents an actor's facing direction relative
+    /// to the screen scroll.
+    /// </summary>
     public enum Direction : byte
     {
+        /// <summary>
+        /// Actor is looking towards the left.
+        /// </summary>
         Left,
-        Right
+        /// <summary>
+        /// Actor is looking towards the right.
+        /// </summary>
+        Right,
+        /// <summary>
+        /// Actor is looking towards the screen.
+        /// </summary>
+        Neutral
     }
-
+    #endregion
+    #region Actor State Change Handlers
     /// <summary>
-    /// Called whenever this actor's surface changes.
+    /// Called when this actor's surface changes.
     /// </summary>
-    /// <param name="newSurface"></param>
+    /// <param name="newSurface">The new surface that the actor has moved to.</param>
     public delegate void SurfaceChangedHandler(Surface newSurface);
-    /// <summary>
-    /// Called when this grid actor has been removed from
-    /// interactions on the grid.
-    /// </summary>
-    /// <param name="actor"></param>
-    public delegate void ActorRemoved(GridActor actor);
+    #endregion
 
     /// <summary>
     /// Scene instance for the base class of grid actors.
     /// </summary>
-#if UNITY_EDITOR
-    [ExecuteInEditMode]
-#endif
     public abstract class GridActor : MonoBehaviour
     {
+        #region Base Grid Actor Inspector Fields
+        [Header("Surface Positioning")]
+        [Tooltip("The current surface that this actor is on.")]
+        [SerializeField] private Surface currentSurface = null;
+        [Tooltip("The tile location of the actor on this surface.")]
+        [SerializeField] private Vector2Int tile = Vector2Int.zero;
+        [Tooltip("The vertical height of this actor.")]
+        [SerializeField][Min(1)] private int tileHeight = 2;
+        #endregion
+
+
+        public GridWorld World { get; set; }
+
+
         #region Scene Editing State
         // Store the locked transform values.
         private ProgrammedTransform programmedTransform;
         #endregion
 
+        /// <summary>
+        /// Refreshed the position of the transform relative to
+        /// the grid that this Grid Actor is on.
+        /// </summary>
         public void RefreshPosition()
         {
-            if (currentSurface != null)
+            if (currentSurface == null)
+            {
+                
+            }
+            else
             {
                 location = new Vector2(
                     Mathf.Clamp(location.x, 0.5f, currentSurface.LengthX + 0.5f),
@@ -84,15 +113,7 @@ namespace BattleRoyalRhythm.GridActors
         protected virtual void OnValidate() { }
 #endif
 
-        public virtual event ActorRemoved Destroyed;
-
-        [Header("Surface Positioning")]
-        [Tooltip("The current surface that this actor is on.")]
-        [SerializeField] private Surface currentSurface = null;
-        [Tooltip("The tile location of the actor on this surface.")]
-        [SerializeField] private Vector2Int tile = Vector2Int.zero;
-        [Tooltip("The vertical height of this actor.")]
-        [SerializeField][Min(1)] private int tileHeight = 2;
+        public virtual event ActorRemovedHandler Destroyed;
 
         public int TileHeight => tileHeight;
 
@@ -137,6 +158,9 @@ namespace BattleRoyalRhythm.GridActors
 
         private Direction direction;
 
+        /// <summary>
+        /// The direction that the actor is facing relative to the grid.
+        /// </summary>
         public Direction Direction
         {
             get => direction;
@@ -150,8 +174,10 @@ namespace BattleRoyalRhythm.GridActors
             }
         }
 
+        /// <summary>
+        /// Override this method to respond to a change in actor orientation.
+        /// </summary>
+        /// <param name="direction">The new direction.</param>
         protected virtual void OnDirectionChanged(Direction direction) { }
-
-        [HideInInspector] public GridWorld World;
     }
 }

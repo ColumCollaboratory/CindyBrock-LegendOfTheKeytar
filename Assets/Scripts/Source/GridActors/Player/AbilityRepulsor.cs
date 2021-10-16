@@ -23,7 +23,7 @@ namespace BattleRoyalRhythm.GridActors.Player
         protected override ActorAnimationPath UsingBeatElapsed()
         {
             StopUsing();
-            NearbyColliderSet colliders = UsingActor.World.GetNearbyColliders(UsingActor, 0, 15);
+            GridColliderQuery colliders = UsingActor.World.GetNearbyColliders(UsingActor, 0, 15);
             // Is the actor grounded?
             if (colliders[0, -1])
             {

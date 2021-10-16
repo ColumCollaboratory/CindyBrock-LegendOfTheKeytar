@@ -61,6 +61,8 @@ namespace BattleRoyalRhythm.GridActors.Player
 
         private int animatorMovementMode;
 
+        private GridColliderQuery colliderQuery;
+
         private void SetMode(MovementMode mode)
         {
             this.mode = mode;
@@ -153,6 +155,8 @@ namespace BattleRoyalRhythm.GridActors.Player
 
             if (Application.isPlaying)
             {
+                colliderQuery = new GridColliderQuery(this);
+
                 World.BeatService = beatService;
                 activeGenre = 0;
                 currentAnimations = new Queue<BeatAnimation>();
@@ -186,6 +190,7 @@ namespace BattleRoyalRhythm.GridActors.Player
         private void OnBeatElapsed(float beatTime)
         {
             meshContainer.position = transform.position;
+            colliderQuery.DumpCachedState();
 
             #region Finalize Last Beat Animations
             // Finalize the prior animation if there was one.
@@ -201,11 +206,6 @@ namespace BattleRoyalRhythm.GridActors.Player
             SetMode(nextMode);
             if (mode is MovementMode.Airtime && currentAnimations.Count == 0)
                 SetMode(MovementMode.Grounded);
-            #endregion
-            #region Query World State
-            // Query the world for the surrounding colliders.
-            // These will be used for movement logic.
-            NearbyColliderSet colliders = World.GetNearbyColliders(this, 9, 9, new List<GridActor>() { this });
             #endregion
             #region Process Input
 
@@ -239,9 +239,9 @@ namespace BattleRoyalRhythm.GridActors.Player
                         case PlayerAction.Jump: ProcessJump(); break;
                         case PlayerAction.Duck: ProcessDuck(); break;
                         case PlayerAction.MoveLeft:
-                            ProcessMoveLeft(); break;
+                            ProcessMove(Direction.Left); break;
                         case PlayerAction.MoveRight:
-                            ProcessMoveRight(); break;
+                            ProcessMove(Direction.Right); break;
                         case PlayerAction.UseAbility:
                             ProcessUseAbility(); break;
                         case PlayerAction.Attack:
@@ -307,13 +307,13 @@ namespace BattleRoyalRhythm.GridActors.Player
                         TryDropFromGrab(); break;
                 }
             }
-            void ProcessMoveLeft()
+            void ProcessMove(Direction direction)
             {
                 switch (mode)
                 {
                     case MovementMode.Airtime:
-                        // Try stepping up to the left.
-                        if (TryStepLeft()) break;
+                        // Try to step up onto a ledge.
+                        if (TryStepUp(direction)) break;
                         // Try to grab up a ledge to the left.
                         if (TryGrabUpLeft()) break;
                         // Otherwise do nothing.
@@ -321,7 +321,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                     case MovementMode.Grounded:
                     case MovementMode.Ducking:
                         // Try to step directly to the left.
-                        if (TryWalk(Direction.Left)) break;
+                        if (TryWalk(direction)) break;
                         // Otherwise try to step up/down to the left.
                         if (TryStepLeft()) break;
                         // Otherwise try to jump a gap.
@@ -331,7 +331,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                         // Otherwise try to jump up to grab a ledge.
                         if (TryJumpGrabLeft()) break;
                         // Otherwise try to drop down from a ledge.
-                        if (TryHangLeft()) break;
+                        if (CanHangDown(direction)) HangDown(direction); break;
                         // Otherwise try to jump up.
                         if (TryJumpUp()) break;
                         // Otherwise do nothing.
@@ -346,45 +346,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                         break;
                 }
             }
-            void ProcessMoveRight()
-            {
-                switch (mode)
-                {
-                    case MovementMode.Airtime:
-                        // Try stepping up to the right.
-                        if (TryStepRight()) break;
-                        // Try to grab up a ledge to the right.
-                        if (TryGrabUpRight()) break;
-                        // Otherwise do nothing.
-                        break;
-                    case MovementMode.Grounded:
-                    case MovementMode.Ducking:
-                        // Try to step directly to the right.
-                        if (TryWalk(Direction.Right)) break;
-                        // Otherwise try to step up/down to the right.
-                        if (TryStepRight()) break;
-                        // Otherwise try to jump a gap.
-                        if (TryJump()) break;
-                        // Otherwise try to grab up a nearby block.
-                        if (TryGrabUpRight()) break;
-                        // Otherwise try to jump up to grab a ledge.
-                        if (TryJumpGrabRight()) break;
-                        // Otherwise try to drop down from a ledge.
-                        if (TryHangRight()) break;
-                        // Otherwise try to jump up.
-                        if (TryJumpUp()) break;
-                        // Otherwise do nothing.
-                        break;
-                    case MovementMode.HangingRight:
-                        // Pull up the ledge.
-                        PullUpRight(); break;
-                    case MovementMode.HangingLeft:
-                        // Try falling from the grab.
-                        if (TryDropFromGrab()) break;
-                        // Otherwise do nothing.
-                        break;
-                }
-            }
+
             void ProcessUseAbility()
             {
                 // Only use the ability if it is not
@@ -450,8 +412,11 @@ namespace BattleRoyalRhythm.GridActors.Player
             }
             bool TryJumpUp()
             {
-                // Is there room to jump?
-                if (!colliders.AnyInside(0, 0, 0, TileHeight - 1 + jumpApex))
+                // Are there any colliders obstructing the jump?
+                GridRegion jumpRegion = new GridRegion().PushYBound(TileHeight + jumpApex);
+                if (colliderQuery.AnyTileObstructedIn(jumpRegion))
+                    return false;
+                else
                 {
                     currentAnimations.Clear();
                     currentAnimations.Enqueue(new BeatAnimation(
@@ -463,13 +428,12 @@ namespace BattleRoyalRhythm.GridActors.Player
                     nextMode = MovementMode.Airtime;
                     return true;
                 }
-                return false;
             }
             bool TryDropFromGrab()
             {
                 for (int y = -1; y >= -maxDropDistance; y--)
                 {
-                    if (colliders[0, y])
+                    if (colliderQuery.TileObstructed(new Vector2Int(0, y)))
                     {
                         currentAnimations.Clear();
                         currentAnimations.Enqueue(new BeatAnimation(
@@ -481,9 +445,19 @@ namespace BattleRoyalRhythm.GridActors.Player
                 }
                 return false;
             }
-            bool TryHangRight()
+
+            bool CanHangDown(Direction hangingDirection)
             {
-                if (Direction is Direction.Right && !colliders.AnyInside(1, TileHeight - 1, 1, -TileHeight))
+                Vector2Int offset = hangingDirection == Direction.Right ? Vector2Int.right : Vector2Int.left;
+                GridRegion hangingRegion =
+                    new GridRegion(offset)
+                        .PushYBound(TileHeight - 1)
+                        .PushYBound(-TileHeight);
+                return !colliderQuery.AnyTileObstructedIn(hangingRegion);
+            }
+            void HangDown(Direction hangingDirection)
+            {
+                if (hangingDirection is Direction.Right)
                 {
                     Direction = Direction.Left;
                     mode = MovementMode.HangingRight;
@@ -493,25 +467,18 @@ namespace BattleRoyalRhythm.GridActors.Player
                     SetMode(MovementMode.HangingRight);
                     animator.SetTrigger("DroppedDown");
                     nextMode = MovementMode.HangingRight;
-                    return true;
                 }
-                return false;
-            }
-            bool TryHangLeft()
-            {
-                if (Direction != Direction.Right && !colliders.AnyInside(-1, TileHeight - 1, -1, -TileHeight))
+                else
                 {
-                    mode = MovementMode.HangingLeft;
                     Direction = Direction.Right;
+                    mode = MovementMode.HangingLeft;
                     currentAnimations.Clear();
                     currentAnimations.Enqueue(new BeatAnimation(
                         ActorAnimationsGenerator.CreateHangDownPath(false, TileHeight)));
                     SetMode(MovementMode.HangingLeft);
                     animator.SetTrigger("DroppedDown");
                     nextMode = MovementMode.HangingLeft;
-                    return true;
                 }
-                return false;
             }
 
             bool TryWalk(Direction direction)
@@ -530,6 +497,66 @@ namespace BattleRoyalRhythm.GridActors.Player
                         ActorAnimationsGenerator.CreateWalkPath(1)));
                     animator.SetTrigger("Walked");
                     return true;
+                }
+                return false;
+            }
+
+
+            bool TryStepUp(Direction direction)
+            {
+                int deltaX = (direction is Direction.Right) ? 1 : -1;
+                
+                // Check for valid steps at each valid height. So if step height
+                // is 3, steps at 1 and 2 are checked first then 3.
+                for (int deltaY = 1; deltaY <= autoStepHeight; deltaY++)
+                {
+                    if (colliders[deltaX, deltaY - 1] && !colliders.AnyInside(deltaX, deltaY, deltaX, deltaY + TileHeight - 1))
+                    {
+                        mode = MovementMode.Grounded;
+                        Direction = direction;
+                        currentAnimations.Clear();
+                        currentAnimations.Enqueue(new BeatAnimation(
+                            ActorAnimationsGenerator.CreateWalkPath(deltaX, deltaY)));
+                        animator.SetTrigger("Walked");
+                        nextMode = MovementMode.Grounded;
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+
+            bool TryStepLeft()
+            {
+                // Attempt to do a step up.
+                for (int step = 1; step <= autoStepHeight; step++)
+                {
+                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
+                    {
+                        mode = MovementMode.Grounded;
+                        Direction = Direction.Left;
+                        currentAnimations.Clear();
+                        currentAnimations.Enqueue(new BeatAnimation(
+                            ActorAnimationsGenerator.CreateWalkPath(-1, step)));
+                        animator.SetTrigger("Walked");
+                        nextMode = MovementMode.Grounded;
+                        return true;
+                    }
+                }
+                // Attempt to do a step down.
+                for (int step = -1; step >= -autoStepHeight; step--)
+                {
+                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
+                    {
+                        mode = MovementMode.Grounded;
+                        Direction = Direction.Left;
+                        currentAnimations.Clear();
+                        currentAnimations.Enqueue(new BeatAnimation(
+                            ActorAnimationsGenerator.CreateWalkPath(-1, step)));
+                        animator.SetTrigger("Walked");
+                        nextMode = MovementMode.Grounded;
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -638,40 +665,6 @@ namespace BattleRoyalRhythm.GridActors.Player
                         animator.SetTrigger("Jumped");
                         SetMode(MovementMode.Airtime);
                         nextMode = MovementMode.HangingRight;
-                        return true;
-                    }
-                }
-                return false;
-            }
-            bool TryStepLeft()
-            {
-                // Attempt to do a step up.
-                for (int step = 1; step <= autoStepHeight; step++)
-                {
-                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
-                    {
-                        mode = MovementMode.Grounded;
-                        Direction = Direction.Left;
-                        currentAnimations.Clear();
-                        currentAnimations.Enqueue(new BeatAnimation(
-                            ActorAnimationsGenerator.CreateWalkPath(-1, step)));
-                        animator.SetTrigger("Walked");
-                        nextMode = MovementMode.Grounded;
-                        return true;
-                    }
-                }
-                // Attempt to do a step down.
-                for (int step = -1; step >= -autoStepHeight; step--)
-                {
-                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
-                    {
-                        mode = MovementMode.Grounded;
-                        Direction = Direction.Left;
-                        currentAnimations.Clear();
-                        currentAnimations.Enqueue(new BeatAnimation(
-                            ActorAnimationsGenerator.CreateWalkPath(-1, step)));
-                        animator.SetTrigger("Walked");
-                        nextMode = MovementMode.Grounded;
                         return true;
                     }
                 }

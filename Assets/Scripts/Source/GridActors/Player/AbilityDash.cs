@@ -47,7 +47,7 @@ namespace BattleRoyalRhythm.GridActors.Player
 
         protected override sealed bool IsContextuallyUsable()
         {
-            NearbyColliderSet colliders = UsingActor.World.GetNearbyColliders(
+            GridColliderQuery colliders = UsingActor.World.GetNearbyColliders(
                 UsingActor, dashTiles, UsingActor.TileHeight);
             // Check each step along the dash to find
             // the furthest distance that can be dashed.
@@ -82,7 +82,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Check to see if the result of the dash will land
                 // the player in midair. If so another step will be required
                 // to drop them to complete the ability.
-                NearbyColliderSet colliders = UsingActor.World.GetNearbyColliders(
+                GridColliderQuery colliders = UsingActor.World.GetNearbyColliders(
                     UsingActor, Mathf.Abs(calculatedDashTiles), 1);
                 if (colliders[calculatedDashTiles, -1])
                     StopUsing();
@@ -98,7 +98,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 Debug.Log("falling");
                 StopUsing();
                 // Scan for a location to drop down to.
-                NearbyColliderSet colliders = UsingActor.World.GetNearbyColliders(
+                GridColliderQuery colliders = UsingActor.World.GetNearbyColliders(
                     UsingActor, 0, 30);
                 for (int y = -2; y >= -30; y--)
                     if (colliders[0, y])

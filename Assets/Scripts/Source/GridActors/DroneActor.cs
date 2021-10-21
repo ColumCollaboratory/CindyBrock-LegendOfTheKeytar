@@ -24,13 +24,14 @@ namespace BattleRoyalRhythm.GridActors
         [SerializeField] private MovementMode movementMode = MovementMode.GridUnit;
         [SerializeField][Min(0f)] private float speed = 1f;
 
-        private void Update()
+        protected override sealed void Update()
         {
+            base.Update();
             if (World != null)
             {
                 bool enteredDoorway = false;
 
-                GridColliderQuery colliders = World.GetNearbyColliders(this, 2, 2);
+                NearbyColliderSet colliders = World.GetNearbyColliders(this, 2, 2);
 
 
 

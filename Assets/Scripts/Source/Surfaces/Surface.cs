@@ -7,118 +7,8 @@ using Tools;
 
 namespace BattleRoyalRhythm.Surfaces
 {
-    /// <summary>
-    /// The base class for grid surfaces.
-    /// </summary>
-    [ExecuteInEditMode]
-    [DisallowMultipleComponent]
-    public abstract partial class Surface : MonoBehaviour
-    {
-        #region Serialized Fields | Common Traits
-        [Tooltip("Specifies which surfaces are linked to this surface.")]
-        [SerializeField] public StitchingConstraint[] surfaceLinks = null;
-        [Header("Surface Dimensions")]
-        [Tooltip("The length of the surface in the horizontal direction.")]
-        [SerializeField][Min(1)] private int lengthX = 10;
-        [Tooltip("The length of the surface in the vertical direction.")]
-        [SerializeField][Min(1)] private int lengthY = 10;
-        #endregion
-        #region Properties        | Dimensions
-        /// <summary>
-        /// The horizontal span of the surface.
-        /// </summary>
-        public int LengthX => lengthX;
-        /// <summary>
-        /// The vertical height of the surface.
-        /// </summary>
-        public int LengthY => lengthY;
-        #endregion
-        #region Methods           | Surface Calculation
-        /// <summary>
-        /// Gets the world location at a local location
-        /// on the surface.
-        /// </summary>
-        /// <param name="surfaceLocation">The local surface location.</param>
-        /// <returns>The location in global space.</returns>
-        public Vector3 GetLocation(Vector2 surfaceLocation)
-        {
-            // Return the location in global space.
-            return transform.TransformPoint(
-                GetLocationLocal(surfaceLocation));
-        }
-        /// <summary>
-        /// Gets the world outwards direction at a local
-        /// location on the surface.
-        /// </summary>
-        /// <param name="surfaceLocation">The local surface location.</param>
-        /// <returns>The outwards direction in global space.</returns>
-        public Vector3 GetOutwards(Vector2 surfaceLocation)
-        {
-            // Return the outwards direction in global space.
-            return transform.TransformDirection(
-                GetOutwardsLocal(surfaceLocation));
-        }
-        /// <summary>
-        /// Gets the world up direction at a local
-        /// location on the surface.
-        /// </summary>
-        /// <param name="surfaceLocation">The local surface location.</param>
-        /// <returns>The up direction in global space.</returns>
-        public Vector3 GetUp(Vector2 surfaceLocation)
-        {
-            // Return the up direction in global space.
-            return transform.TransformDirection(
-                GetUpLocal(surfaceLocation));
-        }
-        /// <summary>
-        /// Gets the world right direction at a local
-        /// location on the surface.
-        /// </summary>
-        /// <param name="surfaceLocation">The local surface location.</param>
-        /// <returns>The right direction in global space.</returns>
-        public Vector3 GetRight(Vector2 surfaceLocation)
-        {
-            // Return the right direction in global space.
-            return transform.TransformDirection(
-                GetRightLocal(surfaceLocation));
-        }
-        #endregion
-        #region Methods           | Subclass Requirements
-        /// <summary>
-        /// Calculates the point in space that corresponds
-        /// to a coordinate on the local strip.
-        /// </summary>
-        /// <param name="surfaceLocation">The local surface location.</param>
-        /// <returns>The point on the strip in local space.</returns>
-        protected abstract Vector3 GetLocationLocal(Vector2 surfaceLocation);
-        /// <summary>
-        /// Calculates the surface normal that corresponds
-        /// to a coordinate on the local strip.
-        /// </summary>
-        /// <param name="surfaceLocation">The local surface location.</param>
-        /// <returns>The surface normal in local space.</returns>
-        protected abstract Vector3 GetOutwardsLocal(Vector2 surfaceLocation);
-        /// <summary>
-        /// Calculates the surface up direction that corresponds
-        /// to a coordinate on the local strip. Up is along the positive
-        /// direction of the lengthY axis of the strip.
-        /// </summary>
-        /// <param name="surfaceLocation">The local surface location.</param>
-        /// <returns>The up normal in local space.</returns>
-        protected abstract Vector3 GetUpLocal(Vector2 surfaceLocation);
-        /// <summary>
-        /// Calculates the surface right direction that corresponds
-        /// to a coordinate on the local strip. Right is along the positive
-        /// direction of the lengthX axis of the strip.
-        /// </summary>
-        /// <param name="surfaceLocation">The local surface location.</param>
-        /// <returns>The right normal in local space.</returns>
-        protected abstract Vector3 GetRightLocal(Vector2 surfaceLocation);
-        #endregion
-    }
-
 #if UNITY_EDITOR
-    #region Delegates | Scene Editing
+    #region Scene Editing Delegates
     /// <summary>
     /// Handles a new mesh being generated from changed surface
     /// parameters.
@@ -134,22 +24,26 @@ namespace BattleRoyalRhythm.Surfaces
     /// <param name="newY">The new y dimension.</param>
     public delegate void SurfaceDimensionsChangedHandler(Surface surface, int newX, int newY);
     #endregion
-
-    // Editor specific implementation for surfaces.
-    public abstract partial class Surface : MonoBehaviour
+#endif
+    /// <summary>
+    /// The base class for grid surfaces.
+    /// </summary>
+    [ExecuteInEditMode]
+    [DisallowMultipleComponent]
+    public abstract class Surface : MonoBehaviour
     {
-        #region References | Partner Components
+#if UNITY_EDITOR
+        #region Scene Editing State
+        // Store the locked transform values.
         private ProgrammedTransform programmedTransform;
-        #endregion
-        #region Fields     | Scene Editing State
-        // Store the local wireframe 
+        // Store the local wireframe.
         private Vector3[][] localWireframe;
         // Store prior field state so we can
         // raise an event when they change.
         private int priorLengthX;
         private int priorLengthY;
         #endregion
-        #region Events     | State Change Dispatchers
+        #region State Editing Dispatchers
         /// <summary>
         /// Called whenever the local mesh for this
         /// surface has changed attributes and needs
@@ -190,7 +84,7 @@ namespace BattleRoyalRhythm.Surfaces
         /// <param name="end">The end of the line.</param>
         /// <param name="hitTile">The tile that was hit.</param>
         /// <returns>True if a tile was hit.</returns>
-        public bool TryLinecast(Vector3 start, Vector3 end, out UnityEngine.Vector2Int hitTile)
+        public bool TryLinecast(Vector3 start, Vector3 end, out Vector2Int hitTile)
         {
             // Transform the line into local space,
             // making it easier to calculate.
@@ -201,7 +95,7 @@ namespace BattleRoyalRhythm.Surfaces
             {
                 // Account for the tile counting system
                 // to get the tile that was hit.
-                hitTile = new UnityEngine.Vector2Int(
+                hitTile = new Vector2Int(
                     Mathf.RoundToInt(hitLocation.x + 0.5f),
                     Mathf.RoundToInt(hitLocation.y + 0.5f));
                 // Return true if the hit tile is in
@@ -347,24 +241,122 @@ namespace BattleRoyalRhythm.Surfaces
             };
         }
         #endregion
-        #region Methods | Handle Partner Components
-        protected virtual void OnEnable() => Initialize();
-        protected virtual void Reset() => Initialize();
+        #region Enforced Transform Lock
+        private void OnEnable() => Initialize();
+        private void Reset() => Initialize();
         private void Initialize()
         {
-            // Create the programmed transform if
-            // it does not exist yet.
             programmedTransform = GetComponent<ProgrammedTransform>();
             if (programmedTransform == null)
                 programmedTransform = gameObject.AddComponent<ProgrammedTransform>();
-            programmedTransform.CurrentVisibility = 
-                ProgrammedTransform.Visibility.Hidden;
+            programmedTransform.CurrentVisibility = ProgrammedTransform.Visibility.Hidden;
         }
-        protected virtual void OnDestroy()
+        private void OnDestroy()
         {
             DestroyImmediate(programmedTransform);
         }
         #endregion
-    }
 #endif
+        #region Common Surface Properties
+        [Tooltip("Specifies which surfaces are linked to this surface.")]
+        [SerializeField] public StitchingConstraint[] surfaceLinks = null;
+        [Header("Surface Dimensions")]
+        [Tooltip("The length of the surface in the horizontal direction.")]
+        [SerializeField][Min(1)] private int lengthX = 10;
+        [Tooltip("The length of the surface in the vertical direction.")]
+        [SerializeField][Min(1)] private int lengthY = 10;
+        #endregion
+        #region Exposed Dimension Properties
+        /// <summary>
+        /// The horizontal span of the surface.
+        /// </summary>
+        public int LengthX => lengthX;
+        /// <summary>
+        /// The vertical height of the surface.
+        /// </summary>
+        public int LengthY => lengthY;
+        #endregion
+        #region Surface Calculation Methods
+        /// <summary>
+        /// Gets the world location at a local location
+        /// on the surface.
+        /// </summary>
+        /// <param name="surfaceLocation">The local surface location.</param>
+        /// <returns>The location in global space.</returns>
+        public Vector3 GetLocation(Vector2 surfaceLocation)
+        {
+            // Return the location in global space.
+            return transform.TransformPoint(
+                GetLocationLocal(surfaceLocation));
+        }
+        /// <summary>
+        /// Gets the world outwards direction at a local
+        /// location on the surface.
+        /// </summary>
+        /// <param name="surfaceLocation">The local surface location.</param>
+        /// <returns>The outwards direction in global space.</returns>
+        public Vector3 GetOutwards(Vector2 surfaceLocation)
+        {
+            // Return the outwards direction in global space.
+            return transform.TransformDirection(
+                GetOutwardsLocal(surfaceLocation));
+        }
+        /// <summary>
+        /// Gets the world up direction at a local
+        /// location on the surface.
+        /// </summary>
+        /// <param name="surfaceLocation">The local surface location.</param>
+        /// <returns>The up direction in global space.</returns>
+        public Vector3 GetUp(Vector2 surfaceLocation)
+        {
+            // Return the up direction in global space.
+            return transform.TransformDirection(
+                GetUpLocal(surfaceLocation));
+        }
+        /// <summary>
+        /// Gets the world right direction at a local
+        /// location on the surface.
+        /// </summary>
+        /// <param name="surfaceLocation">The local surface location.</param>
+        /// <returns>The right direction in global space.</returns>
+        public Vector3 GetRight(Vector2 surfaceLocation)
+        {
+            // Return the right direction in global space.
+            return transform.TransformDirection(
+                GetRightLocal(surfaceLocation));
+        }
+        #endregion
+        #region Subclass Local Calculation Methods
+        /// <summary>
+        /// Calculates the point in space that corresponds
+        /// to a coordinate on the local strip.
+        /// </summary>
+        /// <param name="surfaceLocation">The local surface location.</param>
+        /// <returns>The point on the strip in local space.</returns>
+        protected abstract Vector3 GetLocationLocal(Vector2 surfaceLocation);
+        /// <summary>
+        /// Calculates the surface normal that corresponds
+        /// to a coordinate on the local strip.
+        /// </summary>
+        /// <param name="surfaceLocation">The local surface location.</param>
+        /// <returns>The surface normal in local space.</returns>
+        protected abstract Vector3 GetOutwardsLocal(Vector2 surfaceLocation);
+        /// <summary>
+        /// Calculates the surface up direction that corresponds
+        /// to a coordinate on the local strip. Up is along the positive
+        /// direction of the lengthY axis of the strip.
+        /// </summary>
+        /// <param name="surfaceLocation">The local surface location.</param>
+        /// <returns>The up normal in local space.</returns>
+        protected abstract Vector3 GetUpLocal(Vector2 surfaceLocation);
+        /// <summary>
+        /// Calculates the surface right direction that corresponds
+        /// to a coordinate on the local strip. Right is along the positive
+        /// direction of the lengthX axis of the strip.
+        /// </summary>
+        /// <param name="surfaceLocation">The local surface location.</param>
+        /// <returns>The right normal in local space.</returns>
+        protected abstract Vector3 GetRightLocal(Vector2 surfaceLocation);
+        #endregion
+    }
 }

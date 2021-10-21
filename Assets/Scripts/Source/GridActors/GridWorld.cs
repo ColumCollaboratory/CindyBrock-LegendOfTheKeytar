@@ -6,21 +6,6 @@ using BattleRoyalRhythm.Surfaces;
 
 namespace BattleRoyalRhythm.GridActors
 {
-    #region Grid State Change Handlers
-    /// <summary>
-    /// Called when a grid actor has been removed from
-    /// interactions on this grid.
-    /// </summary>
-    /// <param name="actor">The actor that was removed.</param>
-    public delegate void ActorRemovedHandler(GridActor actor);
-    /// <summary>
-    /// Called when a grid actor has been added to
-    /// interactions on this grid.
-    /// </summary>
-    /// <param name="actor">The actor that was added.</param>
-    public delegate void ActorAddedHandler(GridActor actor);
-    #endregion
-
     // Core implementation for the grid world.
     /// <summary>
     /// Holds a collection of surfaces and actors that move on those
@@ -72,21 +57,133 @@ namespace BattleRoyalRhythm.GridActors
         private Dictionary<Surface, SurfaceSeams> surfaceSeams;
         private Dictionary<Surface, bool[,]> surfaceColliders;
 
-
-        public Dictionary<Surface, bool[,]> GetSurfaceColliderSet()
-            => new Dictionary<Surface, bool[,]>(surfaceColliders);
-
         private List<GridActor> actors;
 
         public IBeatService BeatService;
 
-        /// <summary>
-        /// The current actors that are active on this grid.
-        /// </summary>
         public List<GridActor> Actors => actors;
 
 
-        public List<GridActor> GetActorsInRegion(Surface surface, GridRegion region, List<GridActor> ignoredActors = null)
+        /// <summary>
+        /// Gets the nearby static colliders around an actor. This method should be used
+        /// once at the start of movement logic, taking a scan of relevant tiles.
+        /// </summary>
+        /// <param name="actor">The actor to check around.</param>
+        /// <param name="tilesHorizontal">The number of tiles to check in the left and right directions.</param>
+        /// <param name="tilesVertical">The number of tiles to check in the up and down directions.</param>
+        /// <returns>
+        /// A set that contains the surrounding collider state out to the distances
+        /// specified in each direction.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when tile values are negative.</exception>
+        public NearbyColliderSet GetNearbyColliders(GridActor actor,
+            int tilesHorizontal, int tilesVertical, List<GridActor> ignoredActors = null)
+        {
+            return GetNearbyColliders(actor,
+                tilesHorizontal, tilesHorizontal, tilesVertical, tilesVertical, ignoredActors);
+        }
+
+        /// <summary>
+        /// Gets the nearby static colliders around an actor. This method should be used
+        /// once at the start of movement logic, taking a scan of relevant tiles.
+        /// </summary>
+        /// <param name="actor">The actor to check around.</param>
+        /// <param name="tilesLeft">The number of tiles to check to the left.</param>
+        /// <param name="tilesRight">The number of tiles to check to the right.</param>
+        /// <param name="tilesUp">The number of tiles to check up.</param>
+        /// <param name="tilesDown">The number of tiles to check down.</param>
+        /// <returns>
+        /// A set that contains the surrounding collider state out to the distances
+        /// specified in each direction.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when tile values are negative.</exception>
+        public NearbyColliderSet GetNearbyColliders(GridActor actor,
+            int tilesLeft, int tilesRight, int tilesUp, int tilesDown, List<GridActor> ignoredActors = null)
+        {
+            #region Error Checking
+            if (tilesLeft < 0)
+                throw new ArgumentOutOfRangeException("tilesLeft", "Tile values cannot be negative.");
+            else if (tilesRight < 0)
+                throw new ArgumentOutOfRangeException("tilesRight", "Tile values cannot be negative.");
+            else if (tilesUp < 0)
+                throw new ArgumentOutOfRangeException("tilesUp", "Tile values cannot be negative.");
+            else if (tilesDown < 0)
+                throw new ArgumentOutOfRangeException("tilesDown", "Tile values cannot be negative.");
+            #endregion
+            // Create a new array sized to store the
+            // resulting nearby colliders.
+            bool[,] nearbyColliders = new bool[
+                1 + tilesLeft + tilesRight, 1 + tilesDown + tilesUp];
+            #region State Setup
+            // x and y will track the local surface tile
+            // while dX and dY will track the tile relative
+            // to where we started. Location will track
+            // the continuous sweeping location.
+            int x, y, dX, dY;
+            Vector2 location;
+            // Get the current surface state.
+            Surface surface = actor.CurrentSurface;
+            bool[,] colliders = surfaceColliders[surface];
+            #endregion
+            #region Collider Sampling
+            // Fill in the column the actor is on.
+            location = actor.Tile;
+            dX = 0;
+            SampleY();
+            void SampleY()
+            {
+                x = Mathf.RoundToInt(location.x);
+                int startY = Mathf.RoundToInt(location.y);
+                // Iterate up the column.
+                for (dY = -tilesDown; dY <= tilesUp; dY++)
+                {
+                    y = startY + dY;
+                    // If this tile is out of range then
+                    // mark it as a solid collider.
+                    if (x < 1 || y < 1 ||
+                        x > surface.LengthX || y > surface.LengthY)
+                        nearbyColliders[tilesLeft + dX, tilesDown + dY] = true;
+                    // Otherwise sample the collider on the surface.
+                    else
+                        nearbyColliders[tilesLeft + dX, tilesDown + dY] = colliders[x - 1, y - 1];
+                    // Check if any actors are blocking this tile.
+                    if (ignoredActors == null)
+                        ignoredActors = new List<GridActor>();
+                    if (!nearbyColliders[tilesLeft + dX, tilesDown + dY])
+                        foreach (GridActor actor in Actors)
+                            if (!ignoredActors.Contains(actor))
+                                if (actor.CurrentSurface == surface)
+                                    if (actor.IsIntersecting(new Vector2Int(x, y)))
+                                        nearbyColliders[tilesLeft + dX, tilesDown + dY] = true;
+                }
+            }
+            // Sweep at the actor elevation towards the right
+            // in unit step increments.
+            for (dX = 1; dX <= tilesRight; dX++)
+            {
+                SweepTranslate(surface, location, Vector2.right, out surface, out location);
+                colliders = surfaceColliders[surface];
+                // Resample at each step.
+                SampleY();
+            }
+            // Move back to the start and repeat the sweep
+            // in the left direction.
+            location = actor.Tile;
+            surface = actor.CurrentSurface;
+            for (dX = -1; dX >= -tilesLeft; dX--)
+            {
+                SweepTranslate(surface, location, Vector2.left, out surface, out location);
+                colliders = surfaceColliders[surface];
+                // Resample at each step.
+                SampleY();
+            }
+            #endregion
+            // Compile and return the results.
+            return new NearbyColliderSet(nearbyColliders, tilesLeft, tilesDown);
+        }
+
+
+        public List<GridActor> GetIntersectingActors(Surface surface, int x1, int y1, int x2, int y2, List<GridActor> ignoredActors = null)
         {
             List<GridActor> intersectingActors = new List<GridActor>();
             foreach (GridActor actor in Actors)
@@ -95,11 +192,11 @@ namespace BattleRoyalRhythm.GridActors
                 {
                     if (actor.CurrentSurface == surface)
                     {
-                        for (int x = region.Min.x; x <= region.Max.x; x++)
+                        for (int x = x1; x <= x2; x++)
                         {
-                            for (int y = region.Min.y; y <= region.Max.y; y++)
+                            for (int y = y1; y <= y2; y++)
                             {
-                                if (actor.IsIntersecting(new UnityEngine.Vector2Int(x, y)))
+                                if (actor.IsIntersecting(new Vector2Int(x, y)))
                                 {
                                     intersectingActors.Add(actor);
                                     break;
@@ -140,7 +237,7 @@ namespace BattleRoyalRhythm.GridActors
 
         // NOTE this sweeping translation only checks for crossing seams,
         // use GetNearbyColliders to query colliders before translating.
-        public void SweepTranslate(Surface surface, Vector2 position, Vector2 translation,
+        private void SweepTranslate(Surface surface, Vector2 position, Vector2 translation,
             out Surface endingOn, out Vector2 endingLocation)
         {
             bool isRight = translation.x > 0f;
@@ -445,38 +542,6 @@ namespace BattleRoyalRhythm.GridActors
         /// The color preference for the grid fill.
         /// </summary>
         Color FillColor { get; }
-        #endregion
-    }
-    /// <summary>
-    /// POCO class that stores the inspector state for
-    /// the grid world.
-    /// </summary>
-    [Serializable]
-    public sealed class GridWorldInspectorState : IGridWorldPreferences
-    {
-        #region State Fields
-        public bool showEditorProperties;
-        public bool showGuidesInSceneView;
-        public bool showGuidesInPlayMode;
-        public Color wireColor;
-        public Color fillColor;
-        // Accessors for other inspectors.
-        public bool ShowGuidesInSceneView => showGuidesInSceneView;
-        public bool ShowGuidesInPlayMode => showGuidesInPlayMode;
-        public Color WireColor => wireColor;
-        public Color FillColor => fillColor;
-        #endregion
-        #region Constructor / Default Values
-        public GridWorldInspectorState()
-        {
-            // Set the default foldout state.
-            showEditorProperties = false;
-            // Set default editor preferences.
-            showGuidesInSceneView = true;
-            showGuidesInPlayMode = true;
-            wireColor = Color.gray;
-            fillColor = Color.magenta;
-        }
         #endregion
     }
     // Editor specific implementation for the grid world.
@@ -902,6 +967,39 @@ namespace BattleRoyalRhythm.GridActors
             }
             // Finally revalidate the calling surface.
             changedSurface.ValidateConstraints();
+        }
+        #endregion
+    }
+
+    /// <summary>
+    /// POCO class that stores the inspector state for
+    /// the grid world.
+    /// </summary>
+    [Serializable]
+    public sealed class GridWorldInspectorState : IGridWorldPreferences
+    {
+        #region State Fields
+        public bool showEditorProperties;
+        public bool showGuidesInSceneView;
+        public bool showGuidesInPlayMode;
+        public Color wireColor;
+        public Color fillColor;
+        // Accessors for other inspectors.
+        public bool ShowGuidesInSceneView => showGuidesInSceneView;
+        public bool ShowGuidesInPlayMode => showGuidesInPlayMode;
+        public Color WireColor => wireColor;
+        public Color FillColor => fillColor;
+        #endregion
+        #region Constructor / Default Values
+        public GridWorldInspectorState()
+        {
+            // Set the default foldout state.
+            showEditorProperties = false;
+            // Set default editor preferences.
+            showGuidesInSceneView = true;
+            showGuidesInPlayMode = true;
+            wireColor = Color.gray;
+            fillColor = Color.magenta;
         }
         #endregion
     }

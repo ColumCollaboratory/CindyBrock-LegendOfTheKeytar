@@ -15,7 +15,7 @@ namespace BattleRoyalRhythm.GridActors.Hazards
         {
             Debug.Log("Knockback Applied");
             // Find the knockback distance that can be traveled.
-            GridColliderQuery colliders = World.GetNearbyColliders(
+            NearbyColliderSet colliders = World.GetNearbyColliders(
                 this, 10, 10, new List<GridActor>() { this });
 
             int travel = 0;

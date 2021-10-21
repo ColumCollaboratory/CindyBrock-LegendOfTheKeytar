@@ -259,6 +259,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 }
                 else
                 {
+
                     if (wasInputLastBeat)
                     {
                         if (controller.LatestTimestamp - beatTime > 0f)
@@ -268,6 +269,10 @@ namespace BattleRoyalRhythm.GridActors.Player
                         wasInputLastBeat = false;
                     }
                 }
+                if (mode is MovementMode.Grounded && currentAnimations.Count == 0)
+                    animator.SetBool("IsIdle", true);
+                else
+                    animator.SetBool("IsIdle", false);
             }
             void ProcessJump()
             {

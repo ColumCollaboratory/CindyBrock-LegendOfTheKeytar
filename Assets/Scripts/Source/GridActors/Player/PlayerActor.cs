@@ -521,7 +521,7 @@ namespace BattleRoyalRhythm.GridActors.Player
 
             bool TryWalk(Direction direction)
             {
-                int step = Direction == Direction.Right ? 1 : -1;
+                int step = direction == Direction.Right ? 1 : -1;
                 if (// Is there space to move one tile over?
                     !colliders.AnyInside(step, 0, step, TileHeight - 1) &&
                     // Is there a tile to move onto?
@@ -532,7 +532,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                     nextMode = MovementMode.Grounded;
                     currentAnimations.Clear();
                     currentAnimations.Enqueue(new BeatAnimation(
-                        ActorAnimationsGenerator.CreateWalkPath(1)));
+                        ActorAnimationsGenerator.CreateWalkPath(step)));
                     animator.SetTrigger("Walked");
                     return true;
                 }

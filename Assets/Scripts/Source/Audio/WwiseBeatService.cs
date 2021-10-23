@@ -16,6 +16,7 @@ namespace BattleRoyalRhythm.Audio
         private float currentInterpolant;
         public override float CurrentInterpolant => currentInterpolant;
 
+        public override float SecondsPerBeat => millisPerBeat / 1000f;
 
         public override event BeatElapsedHandler BeatElapsed;
 

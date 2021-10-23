@@ -30,6 +30,10 @@
         /// The current beat that this service is on since starting.
         /// </summary>
         int CurrentBeatCount { get; }
+        /// <summary>
+        /// The current seconds per beat of the service.
+        /// </summary>
+        float SecondsPerBeat { get; }
         #endregion
         #region Methods Implemented
         /// <summary>

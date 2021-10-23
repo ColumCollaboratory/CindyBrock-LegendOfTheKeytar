@@ -39,6 +39,7 @@ namespace BattleRoyalRhythm.GridActors.Player
         [SerializeField] private Transform meshContainer = null;
         [SerializeField] private Animator animator = null;
         [SerializeField] private string animatorMovementModeName = string.Empty;
+        [SerializeField][Min(0f)] private float pivotDegreesPerBeat = 180f;
 
         [SerializeField] private BeatService beatService = null;
         [SerializeField][SoundtrackID] private int soundtrackSet = 0;
@@ -89,9 +90,11 @@ namespace BattleRoyalRhythm.GridActors.Player
 
         protected override sealed void OnDirectionChanged(Direction direction)
         {
+            /*
             meshContainer.localRotation = Quaternion.AngleAxis(
                 direction is Direction.Right ? 0f : 180f,
                 Vector3.up);
+            */
         }
 
         private int activeGenre;
@@ -743,6 +746,14 @@ namespace BattleRoyalRhythm.GridActors.Player
                 cameraPivot.rotation = Quaternion.RotateTowards(
                     cameraPivot.rotation, transform.rotation,
                     cameraDegreesPerSecond * Time.deltaTime);
+                // Update the player rotation.
+                float targetDegrees = 0f;
+                switch (Direction)
+                {
+                    case Direction.Left: targetDegrees = 180f; break;
+                    case Direction.Right: targetDegrees = 0f; break;
+                }
+                meshContainer.localRotation = Quaternion.RotateTowards(meshContainer.localRotation, Quaternion.AngleAxis(targetDegrees, Vector3.up), Time.deltaTime * pivotDegreesPerBeat * (1f / beatService.SecondsPerBeat));
             }
         }
 

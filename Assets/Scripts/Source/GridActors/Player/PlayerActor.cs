@@ -14,6 +14,8 @@ namespace BattleRoyalRhythm.GridActors.Player
     /// </summary>
     public sealed class PlayerActor : GridActor, IDamageable, IKnockbackable
     {
+
+
         [Tooltip("The tile height of the actor while ducking.")]
         [SerializeField][Min(1)] private int duckingTileHeight = 1;
         [Header("Actor Health")]
@@ -88,13 +90,15 @@ namespace BattleRoyalRhythm.GridActors.Player
         public event Action BeatEarly;
         public event Action BeatLate;
 
+        private float targetYAxisDegrees;
+
         protected override sealed void OnDirectionChanged(Direction direction)
         {
-            /*
-            meshContainer.localRotation = Quaternion.AngleAxis(
-                direction is Direction.Right ? 0f : 180f,
-                Vector3.up);
-            */
+            switch (direction)
+            {
+                case Direction.Left: targetYAxisDegrees = 180f; break;
+                case Direction.Right: targetYAxisDegrees = 0f; break;
+            }
         }
 
         private int activeGenre;
@@ -747,13 +751,10 @@ namespace BattleRoyalRhythm.GridActors.Player
                     cameraPivot.rotation, transform.rotation,
                     cameraDegreesPerSecond * Time.deltaTime);
                 // Update the player rotation.
-                float targetDegrees = 0f;
-                switch (Direction)
-                {
-                    case Direction.Left: targetDegrees = 180f; break;
-                    case Direction.Right: targetDegrees = 0f; break;
-                }
-                meshContainer.localRotation = Quaternion.RotateTowards(meshContainer.localRotation, Quaternion.AngleAxis(targetDegrees, Vector3.up), Time.deltaTime * pivotDegreesPerBeat * (1f / beatService.SecondsPerBeat));
+                meshContainer.localRotation = Quaternion.RotateTowards(
+                    meshContainer.localRotation,
+                    Quaternion.AngleAxis(targetYAxisDegrees, Vector3.up),
+                    Time.deltaTime * pivotDegreesPerBeat * (1f / beatService.SecondsPerBeat));
             }
         }
 

@@ -64,7 +64,8 @@ namespace BattleRoyalRhythm.GridActors
         }
         protected virtual void OnDestroy()
         {
-            DestroyImmediate(programmedTransform);
+            if (!Application.isPlaying)
+                DestroyImmediate(programmedTransform);
         }
         #endregion
 

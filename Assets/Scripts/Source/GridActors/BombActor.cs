@@ -1,4 +1,5 @@
 ﻿using BattleRoyalRhythm.Audio;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,11 +13,16 @@ namespace BattleRoyalRhythm.GridActors
 
         public override sealed event ActorRemoved Destroyed;
 
-        [HideInInspector] public int explosionRadius;
-        [HideInInspector] public int enemyDamage;
-        [HideInInspector] public int enemyStunBeats;
-        [HideInInspector] public int enemyKnockback;
-        [HideInInspector] public int beatsUntilExplosion;
+        [SerializeField][Min(1)] private int explosionRadius = 1;
+        [SerializeField][Min(0)] private int enemyDamage = 5;
+        [SerializeField][Min(0)] private int enemyStunBeats = 0;
+        [SerializeField][Min(0)] private int enemyKnockback = 0;
+        [SerializeField][Min(1)] private int beatsUntilExplosion = 3;
+
+        [SerializeField] private Animator animator = null;
+        [SerializeField] private ParticleSystem explosionParticles = null;
+        [SerializeField] private Transform bombMesh = null;
+
 
 
         private IBeatService beatService;
@@ -25,6 +31,7 @@ namespace BattleRoyalRhythm.GridActors
             set
             {
                 beatService = value;
+                animator.speed = 1f / beatService.SecondsPerBeat;
                 beatService.BeatElapsed += OnBeatElapsed;
             }
         }
@@ -32,8 +39,11 @@ namespace BattleRoyalRhythm.GridActors
         private void OnBeatElapsed(float beatTime)
         {
             beatsUntilExplosion--;
-            if (beatsUntilExplosion == 0)
+            if (beatsUntilExplosion <= 0)
             {
+                explosionParticles.Play();
+
+
                 // Check for stuff to damage.
                 int x1 = Mathf.Max(0, Tile.x - explosionRadius);
                 int x2 = Mathf.Min(CurrentSurface.LengthX, Tile.x + explosionRadius);
@@ -44,14 +54,21 @@ namespace BattleRoyalRhythm.GridActors
 
                 foreach (GridActor actor in actorsHit)
                     if(actor is IDamageable damageActor)
-                    {
                         damageActor.ApplyDamage(enemyDamage);
-                    }
-
+                beatService.BeatElapsed -= OnBeatElapsed;
                 Destroyed?.Invoke(this);
                 World.Actors.Remove(this);
-                Destroy(gameObject);
+
+                StartCoroutine(CleanUpParticleSystem());
+
+                Destroy(bombMesh.gameObject);
             }
+        }
+
+        private IEnumerator CleanUpParticleSystem()
+        {
+            yield return new WaitForSeconds(explosionParticles.main.duration);
+            Destroy(gameObject);
         }
     }
 }

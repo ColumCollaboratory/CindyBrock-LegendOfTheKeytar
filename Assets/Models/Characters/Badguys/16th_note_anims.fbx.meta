@@ -1,14 +1,26 @@
 fileFormatVersion: 2
-guid: ac7de18a15527a344b44913b4d86c04b
+guid: abb51fc4cb8a33043a448af114f68745
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
-      74: 4051710245905789275
-    second: bomb|bomb_idle
+      74: 3008908178799208851
+    second: rig|baddie_attack
   - first:
-      74: -352285720313908914
-    second: bomb|bomb_placement
+      74: -7066082256050638990
+    second: rig|baddie_die
+  - first:
+      74: 3384971956736740870
+    second: rig|baddie_idle
+  - first:
+      74: -5838969264197340665
+    second: rig|baddie_repulsored
+  - first:
+      74: 3995646899764204771
+    second: rig|baddie_take_hit_A
+  - first:
+      74: 2354075284802564775
+    second: rig|baddie_walk_A
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -36,65 +48,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations:
-    - serializedVersion: 16
-      name: bomb|bomb_idle
-      takeName: bomb|bomb_idle
-      internalID: 0
-      firstFrame: 0
-      lastFrame: 29
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: bomb|bomb_placement
-      takeName: bomb|bomb_placement
-      internalID: 0
-      firstFrame: 0
-      lastFrame: 33
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+    clipAnimations: []
     isReadable: 0
   meshes:
     lODScreenPercentages: []

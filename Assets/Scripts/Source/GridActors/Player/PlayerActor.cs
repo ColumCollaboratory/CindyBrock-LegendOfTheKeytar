@@ -87,8 +87,9 @@ namespace BattleRoyalRhythm.GridActors.Player
 
 
 
-        public event Action BeatEarly;
-        public event Action BeatLate;
+        public event Action<float> BeatEarly;
+        public event Action<float> BeatLate;
+        public event Action<PlayerAction> ActionExecuted;
 
         private float targetYAxisDegrees;
 
@@ -239,7 +240,8 @@ namespace BattleRoyalRhythm.GridActors.Player
 
                 // React to the latest input if it has
                 // been timed well enough.
-                if (Mathf.Abs(controller.LatestTimestamp - beatTime) < inputTolerance)
+                float beatDelta = controller.LatestTimestamp - beatTime;
+                if (Mathf.Abs(beatDelta) < inputTolerance)
                 {
                     switch (controller.LatestAction)
                     {
@@ -262,6 +264,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                         case PlayerAction.SetGenre4:
                             ProcessSetGenre(3); break;
                     }
+                    ActionExecuted?.Invoke(controller.LatestAction);
                     wasInputLastBeat = true;
                 }
                 else
@@ -269,10 +272,10 @@ namespace BattleRoyalRhythm.GridActors.Player
 
                     if (wasInputLastBeat)
                     {
-                        if (controller.LatestTimestamp - beatTime > 0f)
-                            BeatLate?.Invoke();
+                        if (beatDelta > 0f)
+                            BeatLate?.Invoke(beatDelta);
                         else
-                            BeatEarly?.Invoke();
+                            BeatEarly?.Invoke(beatDelta);
                         wasInputLastBeat = false;
                     }
                 }

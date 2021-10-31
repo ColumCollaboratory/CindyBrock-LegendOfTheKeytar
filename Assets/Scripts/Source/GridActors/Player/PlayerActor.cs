@@ -4,85 +4,150 @@ using BattleRoyalRhythm.Input;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Tools;
 using UnityEngine;
 
 namespace BattleRoyalRhythm.GridActors.Player
 {
+    /// <summary>
+    /// The actor that controls the main player character.
+    /// </summary>
     public sealed class PlayerActor : GridActor, IDamageable, IKnockbackable
     {
 
+
+        [Tooltip("The tile height of the actor while ducking.")]
+        [SerializeField][Min(1)] private int duckingTileHeight = 1;
+        [Header("Actor Health")]
+        [Tooltip("The maximum health of the player.")]
+        [SerializeField][Min(0f)] private float maxHealth = 100f;
+        [Tooltip("The current health of the player.")]
+        [SerializeField][Min(0f)] private float health = 100f;
+        [Header("Player Input")]
+        [SerializeField] private PlayerController controller = null;
+        [SerializeField][Min(0f)] private float inputTolerance = 0.1f;
+
+
+        [Header("Player Camera")]
+        [Tooltip("A transform that follows the player containing a child transform with the camera.")]
+        [SerializeField] private Transform cameraPivot = null;
+        [Tooltip("The speed that the camera rotates when rounding corners.")]
+        [SerializeField][Min(0f)] private float cameraDegreesPerSecond = 5f;
+
+        [Tooltip("Jump height apex in tiles.")]
+        [SerializeField][Min(1)] private int jumpApex = 2;
+
+
+        [SerializeField] private Transform meshContainer = null;
+        [SerializeField] private Animator animator = null;
+        [SerializeField] private string animatorMovementModeName = string.Empty;
+        [SerializeField][Min(0f)] private float pivotDegreesPerBeat = 180f;
+
+        [SerializeField] private BeatService beatService = null;
         [SerializeField][SoundtrackID] private int soundtrackSet = 0;
+        [SerializeField] private GenreAbilityPair[] genres = null;
+        [Header("Automatic Actions")]
+        [Tooltip("The minimum number of tiles the player can jump along the x-axis.")]
+        [SerializeField][Min(2)] private int minJumpX = 2;
+        [Tooltip("The maximum number of tiles the player can jump along the x-axis.")]
+        [SerializeField][Min(2)] private int maxJumpX = 3;
+        [Tooltip("The maximum number of tiles the player will drop from.")]
+        [SerializeField][Min(0)] private int maxDropDistance = 4;
+        [SerializeField][Min(0)] private int maxPullupHeight = 3;
+        [SerializeField][Min(0)] private int autoStepHeight = 1;
+
+        [Header("Player State (Debug)")]
+        [Tooltip("The current movement mode of the player.")]
+        [SerializeField][ReadonlyField] private MovementMode mode = MovementMode.Grounded;
+
+        private MovementMode nextMode;
+
+        private int animatorMovementMode;
+
+        private void SetMode(MovementMode mode)
+        {
+            this.mode = mode;
+            // TODO this should cast the enum directly to an int;
+            // Alternatively there could be an animator controller
+            // that observes the player (to decouple from animator).
+            switch (mode)
+            {
+                case MovementMode.Grounded:
+                    animator.SetInteger(animatorMovementModeName, 1);
+                    break;
+                case MovementMode.Airtime:
+                    animator.SetInteger(animatorMovementMode, 2);
+                    break;
+                case MovementMode.HangingLeft:
+                case MovementMode.HangingRight:
+                    animator.SetInteger(animatorMovementMode, 3);
+                    break;
+            }
+        }
+
 
 
         public event Action BeatEarly;
         public event Action BeatLate;
 
-        protected override void OnDirectionChanged(bool isRightFacing)
+        private float targetYAxisDegrees;
+
+        protected override sealed void OnDirectionChanged(Direction direction)
         {
-            playerMesh.localRotation = Quaternion.AngleAxis(isRightFacing ? 0f : 180f, Vector3.up);
+            switch (direction)
+            {
+                case Direction.Left: targetYAxisDegrees = 180f; break;
+                case Direction.Right: targetYAxisDegrees = 0f; break;
+            }
         }
 
         private int activeGenre;
 
-        private enum BeatAffordance : byte
+        private enum MovementMode : int
         {
             Grounded,
-            JumpApex,
+            Airtime,
             HangingLeft,
             HangingRight,
             Ducking
         }
 
-        [SerializeField] private BeatAffordance affordance;
 
         private Vector2 lastAnimationFrame;
 
-        private Queue<ActorAnimationPath> currentAnimations;
+        private Vector3 lastBeatLocation;
+
+        private Queue<BeatAnimation> currentAnimations;
+
+
+        private sealed class BeatAnimation
+        {
+            public BeatAnimation(ActorAnimationPath path, bool animatorOverrides = false)
+            {
+                Path = path;
+                AnimatorOverrides = animatorOverrides;
+            }
+
+            public ActorAnimationPath Path { get; }
+            public bool AnimatorOverrides { get; }
+        }
 
         private bool abilityInUse = false;
 
-        [SerializeField][Min(1)] private int duckingTileHeight = 1;
-        [SerializeField] private Transform playerMesh = null;
-        [SerializeField][Min(0f)] private float inputTolerance = 0.1f;
-
-        [SerializeField] private AnimationCurve walkCurve = null;
-
-        [Tooltip("Jump height apex in tiles.")]
-        [SerializeField][Min(1)] private int jumpApex = 2;
-
-        [SerializeField] private PlayerController controller = null;
-        [SerializeField] private BeatService beatService = null;
-
-        [SerializeField] private GenreAbilityPair[] genres = null;
 
         [Serializable]
         private sealed class GenreAbilityPair
         {
             [SerializeField] public string wwiseGenreTarget = "Wwise Target";
             [SerializeField] public ActorAbility ability = null;
+            [SerializeField] public string abilityUsedName = "Used";
         }
 
-        [SerializeField][Min(0f)] private float maxHealth = 100f;
-        [SerializeField][Min(0f)] private float health = 100f;
 
         public float Health => health;
 
         public float MaxHealth => maxHealth;
 
-        [Header("Automatic Actions")]
-        [SerializeField][Min(0)] private int jumpDistance = 3;
-        [SerializeField][Min(0)] private int maxDropDistance = 4;
-
-        [SerializeField][Min(0)] private int maxPullupHeight = 3;
-        [SerializeField][Min(0)] private int autoStepHeight = 1;
-
-
-        [Header("Animation")]
-        [SerializeField] private Animator animator = null;
-
-
-        [SerializeField] private Transform cameraPivot = null;
-        [SerializeField][Min(0f)] private float cameraDegreesPerSecond = 5f;
 
         protected override void OnValidate()
         {
@@ -97,10 +162,18 @@ namespace BattleRoyalRhythm.GridActors.Player
             {
                 World.BeatService = beatService;
                 activeGenre = 0;
-                currentAnimations = new Queue<ActorAnimationPath>();
+                currentAnimations = new Queue<BeatAnimation>();
                 beatService.BeatOffset = -inputTolerance * 0.5f;
                 beatService.BeatElapsed += OnBeatElapsed;
-                beatService.SetBeatSoundtrack(SoundtrackSettings.Load().GetSetByID(soundtrackSet));
+                SoundtrackSet levelSet = SoundtrackSettings.Load().GetSetByID(soundtrackSet);
+                beatService.SetBeatSoundtrack(levelSet);
+
+                animatorMovementMode = Animator.StringToHash(animatorMovementModeName);
+                // Set the animator such that 60 frames (1 second)
+                // elapses in one beat.
+                animator.speed = levelSet.BeatsPerMinute / 60f;
+                SetMode(MovementMode.Grounded);
+                nextMode = MovementMode.Grounded;
 
                 if (genres != null)
                     foreach (GenreAbilityPair pair in genres)
@@ -109,30 +182,32 @@ namespace BattleRoyalRhythm.GridActors.Player
             }
         }
 
-        private void OnEnable()
+        protected override sealed void OnEnable()
         {
-            affordance = BeatAffordance.Grounded;
-            IsRightFacing = true;
-        }
-        private void OnDisable()
-        {
-
+            base.OnEnable();
+            Direction = Direction.Right;
         }
 
         private bool wasInputLastBeat;
 
         private void OnBeatElapsed(float beatTime)
         {
+            meshContainer.position = transform.position;
+
             #region Finalize Last Beat Animations
             // Finalize the prior animation if there was one.
             if (currentAnimations.Count > 0)
             {
-                Vector2 toLocation = currentAnimations.Peek()(1f);
+                Vector2 toLocation = currentAnimations.Peek().Path(1f);
                 // Apply the translation to the actor.
                 World.TranslateActor(this, toLocation - lastAnimationFrame);
                 currentAnimations.Dequeue();
             }
+            lastBeatLocation = transform.position;
             lastAnimationFrame = Vector2.zero;
+            SetMode(nextMode);
+            if (mode is MovementMode.Airtime && currentAnimations.Count == 0)
+                SetMode(MovementMode.Grounded);
             #endregion
             #region Query World State
             // Query the world for the surrounding colliders.
@@ -152,7 +227,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                     ActorAnimationPath path = genres[activeGenre].ability.ElapseBeat();
                     if (path != null)
                     {
-                        currentAnimations.Enqueue(path);
+                        currentAnimations.Enqueue(new BeatAnimation(path));
                         movementOverriden = true;
                     }
                 }
@@ -171,13 +246,13 @@ namespace BattleRoyalRhythm.GridActors.Player
                         case PlayerAction.Jump: ProcessJump(); break;
                         case PlayerAction.Duck: ProcessDuck(); break;
                         case PlayerAction.MoveLeft:
-                            IsRightFacing = false;
                             ProcessMoveLeft(); break;
                         case PlayerAction.MoveRight:
-                            IsRightFacing = true;
                             ProcessMoveRight(); break;
                         case PlayerAction.UseAbility:
                             ProcessUseAbility(); break;
+                        case PlayerAction.Attack:
+                            ProcessAttack(); break;
                         case PlayerAction.SetGenre1:
                             ProcessSetGenre(0); break;
                         case PlayerAction.SetGenre2:
@@ -191,7 +266,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 }
                 else
                 {
-                    animator.SetTrigger("Idle");
+
                     if (wasInputLastBeat)
                     {
                         if (controller.LatestTimestamp - beatTime > 0f)
@@ -201,17 +276,17 @@ namespace BattleRoyalRhythm.GridActors.Player
                         wasInputLastBeat = false;
                     }
                 }
+                if (mode is MovementMode.Grounded && currentAnimations.Count == 0)
+                    animator.SetBool("IsIdle", true);
+                else
+                    animator.SetBool("IsIdle", false);
             }
-            // TODO this is needed to advance jump state.
-            // Should be removed to conform structure.
-            if (affordance is BeatAffordance.JumpApex && currentAnimations.Count == 1)
-                affordance = BeatAffordance.Grounded;
             void ProcessJump()
             {
-                switch (affordance)
+                switch (mode)
                 {
-                    case BeatAffordance.Grounded:
-                    case BeatAffordance.Ducking:
+                    case MovementMode.Grounded:
+                    case MovementMode.Ducking:
                         // Attempt to enter a door.
                         if (TryEnterDoor()) break;
                         // Attempt to jump up.
@@ -219,43 +294,52 @@ namespace BattleRoyalRhythm.GridActors.Player
                         // Otherwise do nothing.
                         break;
                     // Pull up to the ledge.
-                    case BeatAffordance.HangingLeft:
+                    case MovementMode.HangingLeft:
                         PullUpLeft(); break;
-                    case BeatAffordance.HangingRight:
+                    case MovementMode.HangingRight:
                         PullUpRight(); break;
                 }
             }
             void ProcessDuck()
             {
-                switch (affordance)
+                switch (mode)
                 {
-                    case BeatAffordance.Ducking:
+                    case MovementMode.Ducking:
                         // Exit the duck state.
-                        affordance = BeatAffordance.Grounded; break;
-                    case BeatAffordance.Grounded:
+                        mode = MovementMode.Grounded; break;
+                    case MovementMode.Grounded:
                         // First try hanging from either edge.
                         if (TryHangRight()) break;
                         if (TryHangLeft()) break;
                         // Otherwise simply enter the duck state.
-                        affordance = BeatAffordance.Ducking; break;
-                    case BeatAffordance.HangingLeft:
-                    case BeatAffordance.HangingRight:
+                        mode = MovementMode.Ducking; break;
+                    case MovementMode.HangingLeft:
+                    case MovementMode.HangingRight:
                         // Try to drop from the grab.
                         TryDropFromGrab(); break;
                 }
             }
             void ProcessMoveLeft()
             {
-                switch (affordance)
+                switch (mode)
                 {
-                    case BeatAffordance.Grounded:
-                    case BeatAffordance.Ducking:
-                        // Try to step directly to the right.
-                        if (TryWalkLeft()) break;
-                        // Otherwise try to step up/down to the right.
+                    case MovementMode.Airtime:
+                        // Try stepping up to the left.
+                        if (TryStepLeft()) break;
+                        // Try to grab up a ledge to the left.
+                        if (TryGrabUpLeft()) break;
+                        // Otherwise do nothing.
+                        break;
+                    case MovementMode.Grounded:
+                    case MovementMode.Ducking:
+                        // Try to step directly to the left.
+                        if (TryWalk(Direction.Left)) break;
+                        // Otherwise try to step up/down to the left.
                         if (TryStepLeft()) break;
                         // Otherwise try to jump a gap.
-                        if (TryJumpLeft()) break;
+                        if (TryJump()) break;
+                        // Otherwise try to climb up a nearby block.
+                        if (TryGrabUpLeft()) break;
                         // Otherwise try to jump up to grab a ledge.
                         if (TryJumpGrabLeft()) break;
                         // Otherwise try to drop down from a ledge.
@@ -264,10 +348,10 @@ namespace BattleRoyalRhythm.GridActors.Player
                         if (TryJumpUp()) break;
                         // Otherwise do nothing.
                         break;
-                    case BeatAffordance.HangingRight:
+                    case MovementMode.HangingLeft:
                         // Pull up the ledge.
-                        PullUpRight(); break;
-                    case BeatAffordance.HangingLeft:
+                        PullUpLeft(); break;
+                    case MovementMode.HangingRight:
                         // Try falling from the grab.
                         if (TryDropFromGrab()) break;
                         // Otherwise do nothing.
@@ -276,16 +360,25 @@ namespace BattleRoyalRhythm.GridActors.Player
             }
             void ProcessMoveRight()
             {
-                switch (affordance)
+                switch (mode)
                 {
-                    case BeatAffordance.Grounded:
-                    case BeatAffordance.Ducking:
+                    case MovementMode.Airtime:
+                        // Try stepping up to the right.
+                        if (TryStepRight()) break;
+                        // Try to grab up a ledge to the right.
+                        if (TryGrabUpRight()) break;
+                        // Otherwise do nothing.
+                        break;
+                    case MovementMode.Grounded:
+                    case MovementMode.Ducking:
                         // Try to step directly to the right.
-                        if (TryWalkRight()) break;
+                        if (TryWalk(Direction.Right)) break;
                         // Otherwise try to step up/down to the right.
                         if (TryStepRight()) break;
                         // Otherwise try to jump a gap.
-                        if (TryJumpRight()) break;
+                        if (TryJump()) break;
+                        // Otherwise try to grab up a nearby block.
+                        if (TryGrabUpRight()) break;
                         // Otherwise try to jump up to grab a ledge.
                         if (TryJumpGrabRight()) break;
                         // Otherwise try to drop down from a ledge.
@@ -294,10 +387,10 @@ namespace BattleRoyalRhythm.GridActors.Player
                         if (TryJumpUp()) break;
                         // Otherwise do nothing.
                         break;
-                    case BeatAffordance.HangingLeft:
+                    case MovementMode.HangingRight:
                         // Pull up the ledge.
-                        PullUpLeft(); break;
-                    case BeatAffordance.HangingRight:
+                        PullUpRight(); break;
+                    case MovementMode.HangingLeft:
                         // Try falling from the grab.
                         if (TryDropFromGrab()) break;
                         // Otherwise do nothing.
@@ -312,19 +405,20 @@ namespace BattleRoyalRhythm.GridActors.Player
                 {
                     if (genres[activeGenre].ability.IsUsable(beatService.CurrentBeatCount))
                     {
-                        if (genres[activeGenre].ability is AbilityGrenade)
-                        {
-                            animator.SetTrigger("Bomb");
-                        }
+                        animator.SetTrigger(genres[activeGenre].abilityUsedName);
 
 
                         genres[activeGenre].ability.StartUsing(beatService.CurrentBeatCount);
                         ActorAnimationPath path = genres[activeGenre].ability.ElapseBeat();
                         if (path != null)
-                            currentAnimations.Enqueue(path);
+                            currentAnimations.Enqueue(new BeatAnimation(path));
                         abilityInUse = true;
                     }
                 }
+            }
+            void ProcessAttack()
+            {
+                animator.SetTrigger("Attacked");
             }
             void ProcessSetGenre(int genre)
             {
@@ -347,16 +441,20 @@ namespace BattleRoyalRhythm.GridActors.Player
             void PullUpRight()
             {
                 currentAnimations.Clear();
-                currentAnimations.Enqueue(ActorAnimationsGenerator.CreatePullUpPath(true, TileHeight));
-                affordance = BeatAffordance.Grounded;
-                animator.SetTrigger("HangClimbUp");
+                currentAnimations.Enqueue(new BeatAnimation(
+                    ActorAnimationsGenerator.CreatePullUpPath(false, TileHeight), true));
+                SetMode(MovementMode.HangingRight);
+                animator.SetTrigger("ClimbedUp");
+                nextMode = MovementMode.Grounded;
             }
             void PullUpLeft()
             {
                 currentAnimations.Clear();
-                currentAnimations.Enqueue(ActorAnimationsGenerator.CreatePullUpPath(false, TileHeight));
-                affordance = BeatAffordance.Grounded;
-                animator.SetTrigger("HangClimbUp");
+                currentAnimations.Enqueue(new BeatAnimation(
+                    ActorAnimationsGenerator.CreatePullUpPath(true, TileHeight), true));
+                SetMode(MovementMode.HangingLeft);
+                animator.SetTrigger("ClimbedUp");
+                nextMode = MovementMode.Grounded;
             }
             bool TryEnterDoor()
             {
@@ -368,10 +466,13 @@ namespace BattleRoyalRhythm.GridActors.Player
                 if (!colliders.AnyInside(0, 0, 0, TileHeight - 1 + jumpApex))
                 {
                     currentAnimations.Clear();
-                    currentAnimations.Enqueue(ActorAnimationsGenerator.CreateJumpUpPath(jumpApex));
-                    currentAnimations.Enqueue(ActorAnimationsGenerator.CreateDropDownPath(-jumpApex));
-                    affordance = BeatAffordance.JumpApex;
-                    animator.SetTrigger("Jump");
+                    currentAnimations.Enqueue(new BeatAnimation(
+                        ActorAnimationsGenerator.CreateJumpUpPath(jumpApex)));
+                    currentAnimations.Enqueue(new BeatAnimation(
+                        ActorAnimationsGenerator.CreateJumpUpPath(-jumpApex)));
+                    SetMode(MovementMode.Airtime);
+                    animator.SetTrigger("Jumped");
+                    nextMode = MovementMode.Airtime;
                     return true;
                 }
                 return false;
@@ -383,9 +484,10 @@ namespace BattleRoyalRhythm.GridActors.Player
                     if (colliders[0, y])
                     {
                         currentAnimations.Clear();
-                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateDropDownPath(y + 1));
-                        affordance = BeatAffordance.Grounded;
-                        animator.SetTrigger("Drop");
+                        currentAnimations.Enqueue(new BeatAnimation(
+                            ActorAnimationsGenerator.CreateDropDownPath(y + 1)));
+                        SetMode(MovementMode.Airtime);
+                        nextMode = MovementMode.Grounded;
                         return true;
                     }
                 }
@@ -393,39 +495,52 @@ namespace BattleRoyalRhythm.GridActors.Player
             }
             bool TryHangRight()
             {
-                if (IsRightFacing && !colliders.AnyInside(1, TileHeight - 1, 1, -TileHeight))
+                if (Direction is Direction.Right && !colliders.AnyInside(1, TileHeight - 1, 1, -TileHeight))
                 {
-                    affordance = BeatAffordance.HangingRight;
+                    Direction = Direction.Left;
+                    mode = MovementMode.HangingRight;
                     currentAnimations.Clear();
-                    currentAnimations.Enqueue(ActorAnimationsGenerator.CreateHangDownPath(true, TileHeight));
-                    animator.SetTrigger("DropToHang");
+                    currentAnimations.Enqueue(new BeatAnimation(
+                        ActorAnimationsGenerator.CreateHangDownPath(true, TileHeight)));
+                    SetMode(MovementMode.HangingRight);
+                    animator.SetTrigger("DroppedDown");
+                    nextMode = MovementMode.HangingRight;
                     return true;
                 }
                 return false;
             }
             bool TryHangLeft()
             {
-                if (!IsRightFacing && !colliders.AnyInside(-1, TileHeight - 1, -1, -TileHeight))
+                if (Direction != Direction.Right && !colliders.AnyInside(-1, TileHeight - 1, -1, -TileHeight))
                 {
-                    affordance = BeatAffordance.HangingLeft;
+                    mode = MovementMode.HangingLeft;
+                    Direction = Direction.Right;
                     currentAnimations.Clear();
-                    currentAnimations.Enqueue(ActorAnimationsGenerator.CreateHangDownPath(false, TileHeight));
-                    animator.SetTrigger("DropToHang");
+                    currentAnimations.Enqueue(new BeatAnimation(
+                        ActorAnimationsGenerator.CreateHangDownPath(false, TileHeight)));
+                    SetMode(MovementMode.HangingLeft);
+                    animator.SetTrigger("DroppedDown");
+                    nextMode = MovementMode.HangingLeft;
                     return true;
                 }
                 return false;
             }
-            bool TryWalkRight()
+
+            bool TryWalk(Direction direction)
             {
-                // Is there a wall preventing right movement?
-                if (!colliders.AnyInside(1, 0, 1, TileHeight - 1) &&
-                    colliders[1, -1])
+                int step = direction == Direction.Right ? 1 : -1;
+                if (// Is there space to move one tile over?
+                    !colliders.AnyInside(step, 0, step, TileHeight - 1) &&
+                    // Is there a tile to move onto?
+                    colliders[step, -1])
                 {
-                    // Move to the right.
-                    affordance = BeatAffordance.Grounded;
+                    // Apply movement.
+                    Direction = direction;
+                    nextMode = MovementMode.Grounded;
                     currentAnimations.Clear();
-                    currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(1));
-                    animator.SetTrigger("Walk");
+                    currentAnimations.Enqueue(new BeatAnimation(
+                        ActorAnimationsGenerator.CreateWalkPath(step)));
+                    animator.SetTrigger("Walked");
                     return true;
                 }
                 return false;
@@ -437,10 +552,13 @@ namespace BattleRoyalRhythm.GridActors.Player
                 {
                     if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1))
                     {
-                        affordance = BeatAffordance.Grounded;
+                        Direction = Direction.Right;
+                        mode = MovementMode.Grounded;
                         currentAnimations.Clear();
-                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(1, step));
-                        animator.SetTrigger("Walk");
+                        currentAnimations.Enqueue(new BeatAnimation(
+                            ActorAnimationsGenerator.CreateWalkPath(1, step)));
+                        animator.SetTrigger("Walked");
+                        nextMode = MovementMode.Grounded;
                         return true;
                     }
                 }
@@ -449,75 +567,91 @@ namespace BattleRoyalRhythm.GridActors.Player
                 {
                     if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1))
                     {
+                        Direction = Direction.Right;
                         currentAnimations.Clear();
-                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(1, step));
-                        animator.SetTrigger("Walk");
+                        currentAnimations.Enqueue(new BeatAnimation(
+                            ActorAnimationsGenerator.CreateWalkPath(1, step)));
+                        animator.SetTrigger("Walked");
+                        nextMode = MovementMode.Grounded;
                         return true;
                     }
                 }
                 return false;
             }
-            bool TryJumpRight()
+            bool TryJump()
             {
-                // Check by row to find the highest jump.
-                for (int y = 0; y >= -maxDropDistance; y--)
+                int xStep = Direction is Direction.Right ? 1 : -1;
+                // Start by looking for a max height jump,
+                // then progress downwards to a height one jump.
+                for (int height = jumpApex; height > 0; height--)
                 {
-                    for (int x = 1; x <= jumpDistance; x++)
+                    // Check for ceiling clearence.
+                    int maxXDistance = maxJumpX;
+                    for (int x = 0; Mathf.Abs(x) < maxJumpX; x += xStep)
                     {
-                        // Is the landing space obstructed?
-                        if (colliders[x, y]) break;
-                        // Is there a place to land on?
-                        if (x >= 3 && colliders[x, y - 1])
+                        if (colliders.AnyInside(x, TileHeight, x, TileHeight - 1 + jumpApex))
                         {
-                            currentAnimations.Clear();
-                            foreach (ActorAnimationPath path in ActorAnimationsGenerator.CreateJumpPaths(x, y, jumpApex))
-                                currentAnimations.Enqueue(path);
-                            affordance = BeatAffordance.JumpApex;
-                            animator.SetTrigger("Jump");
-                            return true;
+                            maxXDistance = x;
+                            break;
+                        }
+                    }
+                    // Search for a jump in the clearence area
+                    // from the top down.
+                    for (int y = 0; y >= -maxDropDistance; y--)
+                    {
+                        // Sweep from left to right to look for landing spots.
+                        for (int x = xStep; Mathf.Abs(x) <= maxXDistance; x += xStep)
+                        {
+                            // Is the sweep path blocked? If so stop checking this row.
+                            if (colliders[x, y]) break;
+                            // Is there a block to land on, and is it a far enough jump?
+                            if (colliders[x, y - 1] && Mathf.Abs(x) >= minJumpX)
+                            {
+                                currentAnimations.Clear();
+                                List<ActorAnimationPath> jumpArc = ActorAnimationsGenerator.CreateJumpPaths(x, y, height);
+                                foreach (ActorAnimationPath path in jumpArc)
+                                    currentAnimations.Enqueue(new BeatAnimation(path));
+                                animator.SetTrigger("Jumped");
+                                SetMode(MovementMode.Airtime);
+                                nextMode = MovementMode.Airtime;
+                                return true;
+                            }
                         }
                     }
                 }
                 return false;
             }
-            bool TryJumpGrabRight()
+            bool TryGrabUpRight()
             {
                 // Attempt to do an instant grab up.
                 if (colliders[1, TileHeight - 1] && !colliders.AnyInside(1, TileHeight, 1, 2 * TileHeight - 1)
                     && !colliders.AnyInside(0, TileHeight - 1, 0, 2 * TileHeight - 1))
                 {
-                    PullUpLeft();
-                    affordance = BeatAffordance.Grounded;
-                    animator.SetTrigger("DropToHang");
+                    Direction = Direction.Right;
+                    PullUpRight();
                     return true;
                 }
+                return false;
+            }
+            bool TryJumpGrabRight()
+            {
                 // Attempt to jump into a grab.
                 for (int step = TileHeight + 1; step <= maxPullupHeight; step++)
                 {
                     if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1)
                         && !colliders.AnyInside(0, TileHeight - 1, 0, step + TileHeight - 1))
                     {
-                        affordance = BeatAffordance.HangingLeft;
+                        Direction = Direction.Right;
+                        mode = MovementMode.HangingLeft;
                         currentAnimations.Clear();
-                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateJumpUpPath(step - TileHeight));
-                        animator.SetTrigger("DropToHang");
+                        currentAnimations.Enqueue(new BeatAnimation(
+                            ActorAnimationsGenerator.CreateJumpUpPath(step - TileHeight)));
+
+                        animator.SetTrigger("Jumped");
+                        SetMode(MovementMode.Airtime);
+                        nextMode = MovementMode.HangingRight;
                         return true;
                     }
-                }
-                return false;
-            }
-            bool TryWalkLeft()
-            {
-                // Is there a wall preventing left movement?
-                if (!colliders.AnyInside(-1, 0, -1, TileHeight - 1) &&
-                    colliders[-1, -1])
-                {
-                    // Move to the left.
-                    affordance = BeatAffordance.Grounded;
-                    currentAnimations.Clear();
-                    currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(-1));
-                    animator.SetTrigger("Walk");
-                    return true;
                 }
                 return false;
             }
@@ -528,10 +662,13 @@ namespace BattleRoyalRhythm.GridActors.Player
                 {
                     if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
                     {
-                        affordance = BeatAffordance.Grounded;
+                        mode = MovementMode.Grounded;
+                        Direction = Direction.Left;
                         currentAnimations.Clear();
-                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(-1, step));
-                        animator.SetTrigger("Walk");
+                        currentAnimations.Enqueue(new BeatAnimation(
+                            ActorAnimationsGenerator.CreateWalkPath(-1, step)));
+                        animator.SetTrigger("Walked");
+                        nextMode = MovementMode.Grounded;
                         return true;
                     }
                 }
@@ -540,59 +677,46 @@ namespace BattleRoyalRhythm.GridActors.Player
                 {
                     if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
                     {
-                        affordance = BeatAffordance.Grounded;
+                        mode = MovementMode.Grounded;
+                        Direction = Direction.Left;
                         currentAnimations.Clear();
-                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateWalkPath(-1, step));
-                        animator.SetTrigger("Walk");
+                        currentAnimations.Enqueue(new BeatAnimation(
+                            ActorAnimationsGenerator.CreateWalkPath(-1, step)));
+                        animator.SetTrigger("Walked");
+                        nextMode = MovementMode.Grounded;
                         return true;
                     }
                 }
                 return false;
             }
-            bool TryJumpLeft()
-            {
-                // Check by row to find the highest jump.
-                for (int y = 0; y >= -maxDropDistance; y--)
-                {
-                    for (int x = -1; x >= -jumpDistance; x--)
-                    {
-                        // Is the landing space obstructed?
-                        if (colliders[x, y]) break;
-                        // Is there a place to land on?
-                        if (x <= -3 && colliders[x, y - 1])
-                        {
-                            currentAnimations.Clear();
-                            foreach (ActorAnimationPath path in ActorAnimationsGenerator.CreateJumpPaths(x, y, jumpApex))
-                                currentAnimations.Enqueue(path);
-                            affordance = BeatAffordance.JumpApex;
-                            animator.SetTrigger("Jump");
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-            bool TryJumpGrabLeft()
+            bool TryGrabUpLeft()
             {
                 // Attempt to do an instant grab up.
                 if (colliders[-1, TileHeight - 1] && !colliders.AnyInside(-1, TileHeight, -1, 2 * TileHeight - 1)
                     && !colliders.AnyInside(0, TileHeight - 1, 0, 2 * TileHeight - 1))
                 {
-                    PullUpRight();
-                    affordance = BeatAffordance.Grounded;
-                    animator.SetTrigger("DropToHang");
+                    PullUpLeft();
+                    Direction = Direction.Left;
                     return true;
                 }
+                return false;
+            }
+            bool TryJumpGrabLeft()
+            {
                 // Attempt to jump into a grab.
                 for (int step = TileHeight + 1; step <= maxPullupHeight; step++)
                 {
                     if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1)
                         && !colliders.AnyInside(0, TileHeight - 1, 0, step + TileHeight - 1))
                     {
-                        affordance = BeatAffordance.HangingRight;
+                        mode = MovementMode.HangingRight;
+                        Direction = Direction.Left;
                         currentAnimations.Clear();
-                        currentAnimations.Enqueue(ActorAnimationsGenerator.CreateJumpUpPath(step - TileHeight));
-                        animator.SetTrigger("DropToHang");
+                        currentAnimations.Enqueue(new BeatAnimation(
+                            ActorAnimationsGenerator.CreateJumpUpPath(step - TileHeight)));
+                        animator.SetTrigger("Jumped");
+                        SetMode(MovementMode.Airtime);
+                        nextMode = MovementMode.HangingLeft;
                         return true;
                     }
                 }
@@ -601,10 +725,8 @@ namespace BattleRoyalRhythm.GridActors.Player
             #endregion
         }
 
-        protected override sealed void Update()
+        private void Update()
         {
-            base.Update();
-
             if (Application.isPlaying)
             {
                 // Are there animations to execute
@@ -612,15 +734,27 @@ namespace BattleRoyalRhythm.GridActors.Player
                 if (currentAnimations.Count > 0)
                 {
                     // Request the next animation location.
-                    Vector2 toLocation = currentAnimations.Peek()
+                    Vector2 toLocation = currentAnimations.Peek().Path
                         (beatService.CurrentInterpolant);
                     // Apply the translation to the actor.
                     World.TranslateActor(this, toLocation - lastAnimationFrame);
                     lastAnimationFrame = toLocation;
+                    // Lag the animator transform behind.
+                    if (currentAnimations.Peek().AnimatorOverrides)
+                        meshContainer.position = lastBeatLocation;
                 }
+                else
+                    meshContainer.position = transform.position;
                 // Update the camera.
                 cameraPivot.transform.position = transform.position;
-                cameraPivot.rotation = Quaternion.RotateTowards(cameraPivot.rotation, transform.rotation, cameraDegreesPerSecond * Time.deltaTime);
+                cameraPivot.rotation = Quaternion.RotateTowards(
+                    cameraPivot.rotation, transform.rotation,
+                    cameraDegreesPerSecond * Time.deltaTime);
+                // Update the player rotation.
+                meshContainer.localRotation = Quaternion.RotateTowards(
+                    meshContainer.localRotation,
+                    Quaternion.AngleAxis(targetYAxisDegrees, Vector3.up),
+                    Time.deltaTime * pivotDegreesPerBeat * (1f / beatService.SecondsPerBeat));
             }
         }
 

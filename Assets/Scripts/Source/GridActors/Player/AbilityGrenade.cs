@@ -12,18 +12,6 @@ namespace BattleRoyalRhythm.GridActors.Player
         [Header("Base Grenade Attributes")]
         [Tooltip("The maximum number of grenades spawned at any given time.")]
         [SerializeField][Min(1)] private int maxGrenades = 1;
-        [Tooltip("The distance to throw the grenade.")]
-        [SerializeField][Min(0)] private int throwDistance = 0;
-        [Tooltip("The number of beats before the grenade explodes.")]
-        [SerializeField][Min(1)] private int beatsUntilExplosion = 3;
-        [Tooltip("The radius of the grenade explosion.")]
-        [SerializeField][Min(1)] private int explosionRadius = 2;
-        [Tooltip("The damage that is dealt to each enemy hit while dashing.")]
-        [SerializeField][Min(0)] private int enemyDamage = 0;
-        [Tooltip("The number of beats that enemies are stunned for after hit by the dash.")]
-        [SerializeField][Min(0)] private int enemyStunBeats = 0;
-        [Tooltip("The number of tiles that the enemy is knocked back in the direction of the dash.")]
-        [SerializeField][Min(0)] private int enemyKnockback = 0;
         [Header("Grenade Object")]
         [Tooltip("The template GameObject containing a BombActor.")]
         [SerializeField] private GameObject grenadeTemplate = null;
@@ -50,12 +38,6 @@ namespace BattleRoyalRhythm.GridActors.Player
             StopUsing();
             // Spawn the bomb actor.
             BombActor newBomb = Instantiate(grenadeTemplate).GetComponent<BombActor>();
-            // Assign the properties of the bomb.
-            newBomb.beatsUntilExplosion = beatsUntilExplosion;
-            newBomb.explosionRadius = explosionRadius;
-            newBomb.enemyDamage = enemyDamage;
-            newBomb.enemyKnockback = enemyKnockback;
-            newBomb.enemyStunBeats = enemyStunBeats;
             // Spawn the bomb at the actor location.
             newBomb.World = UsingActor.World;
             newBomb.BeatService = UsingActor.World.BeatService;

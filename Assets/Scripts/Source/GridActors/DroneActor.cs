@@ -24,9 +24,8 @@ namespace BattleRoyalRhythm.GridActors
         [SerializeField] private MovementMode movementMode = MovementMode.GridUnit;
         [SerializeField][Min(0f)] private float speed = 1f;
 
-        protected override sealed void Update()
+        private void Update()
         {
-            base.Update();
             if (World != null)
             {
                 bool enteredDoorway = false;

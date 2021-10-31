@@ -52,7 +52,7 @@ namespace BattleRoyalRhythm.GridActors.Player
             // Check each step along the dash to find
             // the furthest distance that can be dashed.
             calculatedDashTiles = 0;
-            if (UsingActor.IsRightFacing)
+            if (UsingActor.Direction == Direction.Right)
             {
                 for (int x = 1; x <= dashTiles; x++)
                 {

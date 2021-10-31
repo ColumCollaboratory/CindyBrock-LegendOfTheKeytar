@@ -31,7 +31,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 int y2 = UsingActor.Tile.y + UsingActor.TileHeight;
 
                 int x1, x2;
-                if (UsingActor.IsRightFacing)
+                if (UsingActor.Direction == Direction.Right)
                 {
                     x1 = UsingActor.Tile.x;
                     x2 = UsingActor.Tile.x + repulsionRadius;
@@ -54,7 +54,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 Debug.Log(affectedActors.Count);
 
                 foreach (IKnockbackable actor in affectedActors)
-                    actor.ApplyKnockback(UsingActor.IsRightFacing ? repulsionRadius : -repulsionRadius, 0);
+                    actor.ApplyKnockback(UsingActor.Direction == Direction.Right ? repulsionRadius : -repulsionRadius, 0);
 
             }
             return null;

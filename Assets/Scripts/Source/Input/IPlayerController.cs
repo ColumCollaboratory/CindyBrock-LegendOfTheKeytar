@@ -4,7 +4,9 @@ using UnityEngine;
 
 namespace BattleRoyalRhythm.Input
 {
-
+    /// <summary>
+    /// Describes the player action taken.
+    /// </summary>
     public enum PlayerAction : byte
     {
         SetGenre1,
@@ -18,6 +20,7 @@ namespace BattleRoyalRhythm.Input
         Attack,
         UseAbility
     }
+
 
     public interface IPlayerController
     {

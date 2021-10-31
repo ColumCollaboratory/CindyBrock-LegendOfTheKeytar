@@ -1,17 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using BattleRoyalRhythm.Surfaces;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+using Tools;
 
 namespace BattleRoyalRhythm.GridActors
 {
 
-    public delegate void SurfaceChangedHandler(Surface newSurface);
+    public enum Direction : byte
+    {
+        Left,
+        Right
+    }
 
-    public delegate void ActorDestroyed(GridActor actor);
+    /// <summary>
+    /// Called whenever this actor's surface changes.
+    /// </summary>
+    /// <param name="newSurface"></param>
+    public delegate void SurfaceChangedHandler(Surface newSurface);
+    /// <summary>
+    /// Called when this grid actor has been removed from
+    /// interactions on the grid.
+    /// </summary>
+    /// <param name="actor"></param>
+    public delegate void ActorRemoved(GridActor actor);
 
     /// <summary>
     /// Scene instance for the base class of grid actors.
@@ -23,8 +33,7 @@ namespace BattleRoyalRhythm.GridActors
     {
         #region Scene Editing State
         // Store the locked transform values.
-        private Vector3 currentPosition;
-        private Quaternion currentRotation;
+        private ProgrammedTransform programmedTransform;
         #endregion
 
         public void RefreshPosition()
@@ -35,39 +44,28 @@ namespace BattleRoyalRhythm.GridActors
                     Mathf.Clamp(location.x, 0.5f, currentSurface.LengthX + 0.5f),
                     Mathf.Clamp(location.y, 0.5f, currentSurface.LengthY + 0.5f));
                 Vector2 newLoc = new Vector2(location.x - 0.5f, location.y - 0.5f);
-                currentPosition = currentSurface.GetLocation(newLoc);
-                currentRotation = Quaternion.LookRotation(currentSurface.GetRight(newLoc), currentSurface.GetUp(newLoc));
-                transform.position = currentPosition;
-                transform.rotation = currentRotation;
+                if (programmedTransform == null)
+                    Initialize();
+                programmedTransform.Position = currentSurface.GetLocation(newLoc);
+                programmedTransform.Rotation = Quaternion.LookRotation(currentSurface.GetRight(newLoc), currentSurface.GetUp(newLoc));
             }
         }
 
 #if UNITY_EDITOR
         #region Enforced Transform Lock
-        private void OnEnable()
+        protected virtual void OnEnable() => Initialize();
+        protected virtual void Reset() => Initialize();
+        private void Initialize()
         {
-            // Conceal the transform.
-            transform.hideFlags = HideFlags.HideInInspector;
+            programmedTransform = GetComponent<ProgrammedTransform>();
+            if (programmedTransform == null)
+                programmedTransform = gameObject.AddComponent<ProgrammedTransform>();
+            programmedTransform.CurrentVisibility = ProgrammedTransform.Visibility.Hidden;
         }
-        private void Reset()
+        protected virtual void OnDestroy()
         {
-            // Conceal the transform.
-            transform.hideFlags = HideFlags.HideInInspector;
-        }
-        protected virtual void Update()
-        {
-            // Lock out any value changes.
-            if (transform.position != currentPosition)
-                transform.position = currentPosition;
-            if (transform.rotation != currentRotation)
-                transform.rotation = currentRotation;
-            if (transform.localScale != Vector3.one)
-                transform.localScale = Vector3.one;
-        }
-        private void OnDisable()
-        {
-            // Reveal the transform.
-            transform.hideFlags = HideFlags.None;
+            if (!Application.isPlaying)
+                DestroyImmediate(programmedTransform);
         }
         #endregion
 
@@ -85,12 +83,11 @@ namespace BattleRoyalRhythm.GridActors
         }
 #else
         protected virtual void OnValidate() { }
-        protected virtual void Update() { }
 #endif
 
-        public virtual event ActorDestroyed Destroyed;
+        public virtual event ActorRemoved Destroyed;
 
-
+        [Header("Surface Positioning")]
         [Tooltip("The current surface that this actor is on.")]
         [SerializeField] private Surface currentSurface = null;
         [Tooltip("The tile location of the actor on this surface.")]
@@ -139,22 +136,22 @@ namespace BattleRoyalRhythm.GridActors
             }
         }
 
-        private bool isRightFacing;
+        private Direction direction;
 
-        public bool IsRightFacing
+        public Direction Direction
         {
-            get => isRightFacing;
+            get => direction;
             set
             {
-                if (value != isRightFacing)
+                if (value != direction)
                 {
-                    isRightFacing = value;
+                    direction = value;
                     OnDirectionChanged(value);
                 }
             }
         }
 
-        protected virtual void OnDirectionChanged(bool isRightFacing) { }
+        protected virtual void OnDirectionChanged(Direction direction) { }
 
         [HideInInspector] public GridWorld World;
     }

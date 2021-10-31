@@ -9,7 +9,7 @@ namespace BattleRoyalRhythm.GridActors.Hazards
     {
         [SerializeField][Min(0f)] private float health = 1f;
 
-        public override event ActorDestroyed Destroyed;
+        public override event ActorRemoved Destroyed;
 
 
         public void ApplyDamage(float amount)

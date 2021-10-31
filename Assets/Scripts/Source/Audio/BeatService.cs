@@ -18,6 +18,8 @@ namespace BattleRoyalRhythm.Audio
         public int CurrentBeatCount { get; protected set; }
         public float BeatOffset { get; set; }
 
+        public abstract float SecondsPerBeat { get; }
+
         public abstract void SetBeatSoundtrack(SoundtrackSet set);
     }
 }

@@ -19,6 +19,8 @@ namespace BattleRoyalRhythm.Audio
         #region Beat Service Properties
         public override sealed float CurrentInterpolant =>
             (Time.fixedTime - lastBeatTime) / (60f / beatsPerMinute);
+
+        public override float SecondsPerBeat => 60f / beatsPerMinute;
         #endregion
         #region Fixed Update Cycle
         private void FixedUpdate()

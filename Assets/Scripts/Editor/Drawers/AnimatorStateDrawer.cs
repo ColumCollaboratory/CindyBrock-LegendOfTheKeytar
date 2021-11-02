@@ -16,6 +16,8 @@ namespace BattleRoyalRhythm.UnityEditor.Drawers
             isExpanded = false;
         }
 
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => 0f;
+
         public override sealed void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
 
@@ -34,12 +36,16 @@ namespace BattleRoyalRhythm.UnityEditor.Drawers
                 string[] displayNames = stateProp.enumDisplayNames;
 
                 // Resize the array in case the enum has changed.
-                int offset = bindingsProp.arraySize - names.Length;
-                for (int i = 0; i < offset; i++)
-                    bindingsProp.DeleteArrayElementAtIndex(bindingsProp.arraySize - 1);
-                offset = names.Length - bindingsProp.arraySize;
-                for (int i = 0; i < offset; i++)
-                    bindingsProp.InsertArrayElementAtIndex(bindingsProp.arraySize - 1);
+                int size = bindingsProp.arraySize;
+                int resize = names.Length - size;
+                if (resize > 0)
+                    for (int i = 0; i < resize; i++)
+                        bindingsProp.InsertArrayElementAtIndex(size + i);
+                else if (resize < 0)
+                    for (int i = 0; i < Mathf.Abs(resize); i++)
+                        bindingsProp.DeleteArrayElementAtIndex(size - 1 - i);
+
+                EditorGUILayout.LabelField(new GUIContent("Bool Parameters"));
 
                 for (int i = 0; i < names.Length; i++)
                 {
@@ -48,12 +54,11 @@ namespace BattleRoyalRhythm.UnityEditor.Drawers
                     SerializedProperty enumProp = bindingProp.FindPropertyRelative("enumValue");
 
                     EditorGUILayout.PropertyField(nameProp, new GUIContent(displayNames[i]));
+                    enumProp.enumValueIndex = i;
                 }
 
                 EditorGUI.indentLevel--;
             }
-
-            base.OnGUI(position, property, label);
         }
 
     }

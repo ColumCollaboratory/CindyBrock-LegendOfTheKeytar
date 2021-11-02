@@ -22,7 +22,6 @@ public sealed class AnimatorState<TEnum> : IAnimatorState
 
     [SerializeField] private AnimatorBinding[] bindings = null;
 
-    private bool hasInitialized;
 
     public AnimatorState()
     {

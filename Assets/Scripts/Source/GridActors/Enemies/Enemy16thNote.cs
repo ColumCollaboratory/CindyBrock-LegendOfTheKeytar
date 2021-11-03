@@ -138,7 +138,7 @@ namespace BattleRoyalRhythm.GridActors.Enemies
                     else
                     {
                         // Can we walk towards the player?
-                        NearbyColliderSet colliders = World.GetNearbyColliders(this, 1, 1, new List<GridActor> { this });
+                        NearbyColliderSet colliders = World.GetNearbyColliders(this, 1, 1, World.Actors);
                         if (colliders[1, -1] && !colliders.AnyInside(1, 0, 1, TileHeight - 1))
                         {
                             animator.State = BehaviourState.Walking;
@@ -159,7 +159,7 @@ namespace BattleRoyalRhythm.GridActors.Enemies
                     else
                     {
                         // Can we walk towards the player?
-                        NearbyColliderSet colliders = World.GetNearbyColliders(this, 1, 1, new List<GridActor> { this });
+                        NearbyColliderSet colliders = World.GetNearbyColliders(this, 1, 1, World.Actors);
                         if (colliders[-1, -1] && !colliders.AnyInside(-1, 0, -1, TileHeight - 1))
                         {
                             animator.State = BehaviourState.Walking;

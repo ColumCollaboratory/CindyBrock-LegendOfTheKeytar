@@ -213,7 +213,7 @@ namespace BattleRoyalRhythm.GridActors.Player
             #region Query World State
             // Query the world for the surrounding colliders.
             // These will be used for movement logic.
-            NearbyColliderSet colliders = World.GetNearbyColliders(this, 9, 9, new List<GridActor>() { this });
+            NearbyColliderSet colliders = World.GetNearbyColliders(this, 9, 9, World.Actors);
             #endregion
             #region Process Input
 
@@ -501,13 +501,13 @@ namespace BattleRoyalRhythm.GridActors.Player
                 if (Direction is Direction.Right && !colliders.AnyInside(1, TileHeight - 1, 1, -TileHeight))
                 {
                     Direction = Direction.Left;
-                    mode = MovementMode.HangingRight;
+                    mode = MovementMode.HangingLeft;
                     currentAnimations.Clear();
                     currentAnimations.Enqueue(new BeatAnimation(
                         ActorAnimationsGenerator.CreateHangDownPath(true, TileHeight)));
-                    SetMode(MovementMode.HangingRight);
+                    SetMode(MovementMode.HangingLeft);
                     animator.SetTrigger("DroppedDown");
-                    nextMode = MovementMode.HangingRight;
+                    nextMode = MovementMode.HangingLeft;
                     return true;
                 }
                 return false;
@@ -516,14 +516,14 @@ namespace BattleRoyalRhythm.GridActors.Player
             {
                 if (Direction != Direction.Right && !colliders.AnyInside(-1, TileHeight - 1, -1, -TileHeight))
                 {
-                    mode = MovementMode.HangingLeft;
+                    mode = MovementMode.HangingRight;
                     Direction = Direction.Right;
                     currentAnimations.Clear();
                     currentAnimations.Enqueue(new BeatAnimation(
                         ActorAnimationsGenerator.CreateHangDownPath(false, TileHeight)));
-                    SetMode(MovementMode.HangingLeft);
+                    SetMode(MovementMode.HangingRight);
                     animator.SetTrigger("DroppedDown");
-                    nextMode = MovementMode.HangingLeft;
+                    nextMode = MovementMode.HangingRight;
                     return true;
                 }
                 return false;

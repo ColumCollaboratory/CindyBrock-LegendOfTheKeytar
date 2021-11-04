@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 588073fd432acfb49adc597ac15fe20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tags: 8
+  blocksTags: 0
+  blocksDirections: 0
   currentSurface: {fileID: 0}
   tile: {x: 0, y: 0}
   tileHeight: 1
@@ -54,7 +57,7 @@ MonoBehaviour:
   damage: 5
   stunBeats: 0
   knockbackTiles: 0
-  beatsUntilExplosion: 4
+  beatsUntilExplosion: 7
   animator: {fileID: 3957056792127913817}
   explosionParticles: {fileID: 7486014435862875958}
   bombMesh: {fileID: 8399910766921617426}

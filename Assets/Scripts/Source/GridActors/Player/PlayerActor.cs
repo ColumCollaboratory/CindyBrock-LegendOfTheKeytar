@@ -213,7 +213,7 @@ namespace BattleRoyalRhythm.GridActors.Player
             #region Query World State
             // Query the world for the surrounding colliders.
             // These will be used for movement logic.
-            NearbyColliderSet colliders = World.GetNearbyColliders(this, 9, 9, World.Actors);
+            NearbyColliderSet colliders = World.GetNearbyColliders(this, 9, 9);
             #endregion
             #region Process Input
 
@@ -484,7 +484,7 @@ namespace BattleRoyalRhythm.GridActors.Player
             {
                 for (int y = -1; y >= -maxDropDistance; y--)
                 {
-                    if (colliders[0, y])
+                    if (colliders[0, y, CollisionDirectionMask.Down])
                     {
                         currentAnimations.Clear();
                         currentAnimations.Enqueue(new BeatAnimation(
@@ -535,7 +535,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 if (// Is there space to move one tile over?
                     !colliders.AnyInside(step, 0, step, TileHeight - 1) &&
                     // Is there a tile to move onto?
-                    colliders[step, -1])
+                    colliders[step, -1, CollisionDirectionMask.Down])
                 {
                     // Apply movement.
                     Direction = direction;
@@ -553,7 +553,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Attempt to do a step up.
                 for (int step = 1; step <= autoStepHeight; step++)
                 {
-                    if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1))
+                    if (colliders[1, step - 1, CollisionDirectionMask.Down] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1))
                     {
                         Direction = Direction.Right;
                         mode = MovementMode.Grounded;
@@ -568,7 +568,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Attempt to do a step down.
                 for (int step = -1; step >= -autoStepHeight; step--)
                 {
-                    if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1))
+                    if (colliders[1, step - 1, CollisionDirectionMask.Down] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1))
                     {
                         Direction = Direction.Right;
                         currentAnimations.Clear();
@@ -608,7 +608,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                             // Is the sweep path blocked? If so stop checking this row.
                             if (colliders[x, y]) break;
                             // Is there a block to land on, and is it a far enough jump?
-                            if (colliders[x, y - 1] && Mathf.Abs(x) >= minJumpX)
+                            if (colliders[x, y - 1, CollisionDirectionMask.Down] && Mathf.Abs(x) >= minJumpX)
                             {
                                 currentAnimations.Clear();
                                 List<ActorAnimationPath> jumpArc = ActorAnimationsGenerator.CreateJumpPaths(x, y, height);
@@ -627,7 +627,7 @@ namespace BattleRoyalRhythm.GridActors.Player
             bool TryGrabUpRight()
             {
                 // Attempt to do an instant grab up.
-                if (colliders[1, TileHeight - 1] && !colliders.AnyInside(1, TileHeight, 1, 2 * TileHeight - 1)
+                if (colliders[1, TileHeight - 1, CollisionDirectionMask.Down] && !colliders.AnyInside(1, TileHeight, 1, 2 * TileHeight - 1)
                     && !colliders.AnyInside(0, TileHeight - 1, 0, 2 * TileHeight - 1))
                 {
                     Direction = Direction.Right;
@@ -641,7 +641,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Attempt to jump into a grab.
                 for (int step = TileHeight + 1; step <= maxPullupHeight; step++)
                 {
-                    if (colliders[1, step - 1] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1)
+                    if (colliders[1, step - 1, CollisionDirectionMask.Down] && !colliders.AnyInside(1, step, 1, step + TileHeight - 1)
                         && !colliders.AnyInside(0, TileHeight - 1, 0, step + TileHeight - 1))
                     {
                         Direction = Direction.Right;
@@ -663,7 +663,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Attempt to do a step up.
                 for (int step = 1; step <= autoStepHeight; step++)
                 {
-                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
+                    if (colliders[-1, step - 1, CollisionDirectionMask.Down] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
                     {
                         mode = MovementMode.Grounded;
                         Direction = Direction.Left;
@@ -678,7 +678,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Attempt to do a step down.
                 for (int step = -1; step >= -autoStepHeight; step--)
                 {
-                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
+                    if (colliders[-1, step - 1, CollisionDirectionMask.Down] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1))
                     {
                         mode = MovementMode.Grounded;
                         Direction = Direction.Left;
@@ -695,7 +695,7 @@ namespace BattleRoyalRhythm.GridActors.Player
             bool TryGrabUpLeft()
             {
                 // Attempt to do an instant grab up.
-                if (colliders[-1, TileHeight - 1] && !colliders.AnyInside(-1, TileHeight, -1, 2 * TileHeight - 1)
+                if (colliders[-1, TileHeight - 1, CollisionDirectionMask.Down] && !colliders.AnyInside(-1, TileHeight, -1, 2 * TileHeight - 1)
                     && !colliders.AnyInside(0, TileHeight - 1, 0, 2 * TileHeight - 1))
                 {
                     PullUpLeft();
@@ -709,7 +709,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Attempt to jump into a grab.
                 for (int step = TileHeight + 1; step <= maxPullupHeight; step++)
                 {
-                    if (colliders[-1, step - 1] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1)
+                    if (colliders[-1, step - 1, CollisionDirectionMask.Down] && !colliders.AnyInside(-1, step, -1, step + TileHeight - 1)
                         && !colliders.AnyInside(0, TileHeight - 1, 0, step + TileHeight - 1))
                     {
                         mode = MovementMode.HangingRight;

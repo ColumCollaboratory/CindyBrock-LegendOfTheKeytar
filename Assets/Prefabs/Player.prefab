@@ -81,6 +81,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4973b5e2f2571a042ae1e3279ec987b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tags: 1
+  blocksTags: 4
+  blocksDirections: 11
   currentSurface: {fileID: 0}
   tile: {x: 3, y: 7}
   tileHeight: 2

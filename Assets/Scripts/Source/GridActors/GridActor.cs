@@ -1,9 +1,30 @@
+using System;
 using UnityEngine;
 using BattleRoyalRhythm.Surfaces;
 using Tools;
 
 namespace BattleRoyalRhythm.GridActors
 {
+    [Flags]
+    public enum ActorTag
+    {
+        Nothing = 0,
+        Hero = 1,
+        Passive = 2,
+        Villain = 4,
+        Intangible = 8
+    }
+
+    [Flags]
+    public enum CollisionDirectionMask
+    {
+        Nothing = 0,
+        Left = 1,
+        Right = 2,
+        Up = 4,
+        Down = 8,
+        Everything = 15
+    }
 
     public enum Direction : byte
     {
@@ -31,6 +52,29 @@ namespace BattleRoyalRhythm.GridActors
 #endif
     public abstract class GridActor : MonoBehaviour
     {
+
+
+
+        [Header("Actor Interaction")]
+        [Tooltip("The tags associated with this actor.")]
+        [SerializeField] protected ActorTag tags = default;
+        [Tooltip("The tags that this actor blocks in collisions.")]
+        [SerializeField] protected ActorTag blocksTags = default;
+        [Tooltip("The directions that this actor blocks in.")]
+        [SerializeField] protected CollisionDirectionMask blocksDirections = default;
+        [Header("Surface Positioning")]
+        [Tooltip("The current surface that this actor is on.")]
+        [SerializeField] private Surface currentSurface = null;
+        [Tooltip("The tile location of the actor on this surface.")]
+        [SerializeField] private Vector2Int tile = Vector2Int.zero;
+        [Tooltip("The vertical height of this actor.")]
+        [SerializeField][Min(1)] private int tileHeight = 2;
+
+        public ActorTag Tags => tags;
+        public ActorTag BlocksTags => blocksTags;
+        public CollisionDirectionMask BlocksDirections => blocksDirections;
+
+
         #region Scene Editing State
         // Store the locked transform values.
         private ProgrammedTransform programmedTransform;
@@ -86,14 +130,6 @@ namespace BattleRoyalRhythm.GridActors
 #endif
 
         public virtual event ActorRemoved Destroyed;
-
-        [Header("Surface Positioning")]
-        [Tooltip("The current surface that this actor is on.")]
-        [SerializeField] private Surface currentSurface = null;
-        [Tooltip("The tile location of the actor on this surface.")]
-        [SerializeField] private Vector2Int tile = Vector2Int.zero;
-        [Tooltip("The vertical height of this actor.")]
-        [SerializeField][Min(1)] private int tileHeight = 2;
 
         public int TileHeight => tileHeight;
 

@@ -64,6 +64,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 074a575f4e02aa347959dfefadf2a530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tags: 4
+  blocksTags: 1
+  blocksDirections: 3
   currentSurface: {fileID: 0}
   tile: {x: 7, y: 9}
   tileHeight: 2
@@ -71,7 +74,6 @@ MonoBehaviour:
   meshRootTransform: {fileID: 660349938076360598}
   animator:
     boundAnimator: {fileID: 1054037718260217968}
-    state: 0
     bindings:
     - boolName: Idle
       hashValue: 0
@@ -91,6 +93,7 @@ MonoBehaviour:
     - boolName: Dying
       hashValue: 0
       enumValue: 0
+    state: 0
   health: 0
   meleeChargeupBeats: 1
   meleeDamage: 1

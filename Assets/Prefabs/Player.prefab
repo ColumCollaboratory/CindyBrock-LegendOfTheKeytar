@@ -81,6 +81,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4973b5e2f2571a042ae1e3279ec987b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tags: 1
+  blocksTags: 4
+  blocksDirections: 11
   currentSurface: {fileID: 0}
   tile: {x: 3, y: 7}
   tileHeight: 2
@@ -142,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95ad5cf4f40c9d94f812fefd50e9cc60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldownBeats: 1
+  cooldownBeats: 0
   dashTiles: 4
   dashThroughWalls: 0
   dashThroughSpecialActors: 0
@@ -164,12 +167,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldownBeats: 1
   maxGrenades: 2
-  throwDistance: 2
-  beatsUntilExplosion: 6
-  explosionRadius: 1
-  enemyDamage: 1
-  enemyStunBeats: 0
-  enemyKnockback: 0
   grenadeTemplate: {fileID: 1077037783006298253, guid: 69ab8086a2a8fb744b2255e1c3a46f9d, type: 3}
 --- !u!114 &1435093365478752561
 MonoBehaviour:
@@ -241,6 +238,18 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: b0f7e1b2fe5aa4945b7a70e4080107b2, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b0f7e1b2fe5aa4945b7a70e4080107b2, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b0f7e1b2fe5aa4945b7a70e4080107b2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b0f7e1b2fe5aa4945b7a70e4080107b2, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b0f7e1b2fe5aa4945b7a70e4080107b2, type: 3}
       propertyPath: m_LocalPosition.x

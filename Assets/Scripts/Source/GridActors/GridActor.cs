@@ -131,7 +131,11 @@ namespace BattleRoyalRhythm.GridActors
 
         public virtual event ActorRemoved Destroyed;
 
-        public int TileHeight => tileHeight;
+        public int TileHeight
+        {
+            get => tileHeight;
+            protected set => tileHeight = value;
+        }
 
         public event SurfaceChangedHandler SurfaceChanged;
 

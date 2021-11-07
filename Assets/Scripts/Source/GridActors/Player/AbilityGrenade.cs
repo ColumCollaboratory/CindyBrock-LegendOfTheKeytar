@@ -21,9 +21,6 @@ namespace BattleRoyalRhythm.GridActors.Player
 
         [SerializeField] private AnimatorState<State> animator = null;
 
-        // TODO this should not be here :(
-        [SerializeField] private BeatService beatService = null;
-
         private int activeGrenades;
 
         protected override void Awake()
@@ -40,10 +37,14 @@ namespace BattleRoyalRhythm.GridActors.Player
             return activeGrenades < maxGrenades;
         }
 
+        protected override void PostUsingCleanUp()
+        {
+            animator.State = State.None;
+        }
+
         public override void StartUsing(int beatCount)
         {
             animator.State = State.PlacingBomb;
-            beatService.BeatElapsed += OnBeatElapsed;
             // Since the grenade is thrown automatically,
             // this ability only takes one beat.
             StopUsing();
@@ -56,12 +57,6 @@ namespace BattleRoyalRhythm.GridActors.Player
             newBomb.Location = UsingActor.Location;
             UsingActor.World.Actors.Add(newBomb);
             newBomb.Destroyed += OnBombDestroyed;
-        }
-
-        private void OnBeatElapsed(float beatTime)
-        {
-            animator.State = State.None;
-            beatService.BeatElapsed -= OnBeatElapsed;
         }
 
         private void OnBombDestroyed(GridActor bomb)

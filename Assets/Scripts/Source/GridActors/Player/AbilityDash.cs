@@ -4,6 +4,13 @@ namespace BattleRoyalRhythm.GridActors.Player
 {
     public sealed class AbilityDash : ActorAbility
     {
+        private enum DashState : byte
+        {
+            None,
+            Dashing,
+            Falling
+        }
+
         [Header("Base Dash Attributes")]
         [Tooltip("The distance to move or less if occluded.")]
         [SerializeField][Min(1)] private int dashTiles = 2;
@@ -20,7 +27,15 @@ namespace BattleRoyalRhythm.GridActors.Player
         [Tooltip("The number of tiles that the enemy is knocked back in the direction of the dash.")]
         [SerializeField][Min(0)] private int enemyKnockback = 0;
 
-        bool fallingFromDash;
+        [SerializeField] private AnimatorState<DashState> animator = null;
+
+        private int calculatedDashTiles;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            animator.State = DashState.None;
+        }
 
         public int DashTiles
         {
@@ -42,7 +57,12 @@ namespace BattleRoyalRhythm.GridActors.Player
         public override void StartUsing(int beatCount)
         {
             base.StartUsing(beatCount);
-            fallingFromDash = false;
+            animator.State = DashState.Dashing;
+        }
+
+        protected override void PostUsingCleanUp()
+        {
+            animator.State = DashState.None;
         }
 
         protected override sealed bool IsContextuallyUsable()
@@ -70,41 +90,41 @@ namespace BattleRoyalRhythm.GridActors.Player
                     else if (!dashThroughWalls) break;
                 }
             }
+            willFall = false;
             return calculatedDashTiles != 0;
         }
-        private int calculatedDashTiles;
 
+        private bool willFall;
 
         protected override sealed ActorAnimationPath UsingBeatElapsed()
         {
-            if (!fallingFromDash)
+            if (willFall)
+                animator.State = DashState.Falling;
+            switch (animator.State)
             {
-                // Check to see if the result of the dash will land
-                // the player in midair. If so another step will be required
-                // to drop them to complete the ability.
-                NearbyColliderSet colliders = UsingActor.World.GetNearbyColliders(
-                    UsingActor, Mathf.Abs(calculatedDashTiles), 1);
-                if (colliders[calculatedDashTiles, -1])
+                case DashState.Dashing:
+                    // Check to see if the result of the dash will land
+                    // the player in midair. If so another step will be required
+                    // to drop them to complete the ability.
+                    NearbyColliderSet colliders = UsingActor.World.GetNearbyColliders(
+                        UsingActor, Mathf.Abs(calculatedDashTiles), 1);
+                    if (colliders[calculatedDashTiles, -1])
+                        StopUsing();
+                    else
+                        willFall = true;
+                    return ActorAnimationsGenerator.CreateWalkPath(calculatedDashTiles);
+                case DashState.Falling:
                     StopUsing();
-                else
-                {
-                    fallingFromDash = true;
-                    Debug.Log("Falling from dash");
-                }
-                return ActorAnimationsGenerator.CreateWalkPath(calculatedDashTiles);
+                    animator.State = DashState.None;
+                    // Scan for a location to drop down to.
+                    NearbyColliderSet colliders2 = UsingActor.World.GetNearbyColliders(
+                        UsingActor, 0, 30);
+                    for (int y = -2; y >= -30; y--)
+                        if (colliders2[0, y])
+                            return ActorAnimationsGenerator.CreateDropDownPath(y + 1);
+                    throw new System.Exception("FALLING EDGE CASE :(");
             }
-            else
-            {
-                Debug.Log("falling");
-                StopUsing();
-                // Scan for a location to drop down to.
-                NearbyColliderSet colliders = UsingActor.World.GetNearbyColliders(
-                    UsingActor, 0, 30);
-                for (int y = -2; y >= -30; y--)
-                    if (colliders[0, y])
-                        return ActorAnimationsGenerator.CreateDropDownPath(y + 1);
-            }
-            throw new System.Exception("oof");
+            return null;
         }
 
     }

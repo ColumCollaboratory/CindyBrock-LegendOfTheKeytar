@@ -9,11 +9,24 @@ namespace BattleRoyalRhythm.GridActors.Player
 {
     public sealed class AbilityRepulsor : ActorAbility
     {
+        private enum State : byte
+        {
+            None,
+            Repulsing
+        }
+
         [SerializeField][Min(0)] private int repulsorJumps = 1;
         [SerializeField][Min(1)] private int repulsionRadius = 1;
         [SerializeField][Min(1)] private int repulsorKnockback = 2;
 
+        [SerializeField] private AnimatorState<State> animator = null;
+
         int jumpsUsed;
+
+        protected override void PostUsingCleanUp()
+        {
+            animator.State = State.None;
+        }
 
         public override void StartUsing(int beatCount)
         {
@@ -22,6 +35,7 @@ namespace BattleRoyalRhythm.GridActors.Player
 
         protected override ActorAnimationPath UsingBeatElapsed()
         {
+            animator.State = State.Repulsing;
             StopUsing();
             NearbyColliderSet colliders = UsingActor.World.GetNearbyColliders(UsingActor, 0, 15);
             // Is the actor grounded?
@@ -50,8 +64,6 @@ namespace BattleRoyalRhythm.GridActors.Player
 
                 List<GridActor> affectedActors = UsingActor.World.GetIntersectingActors(
                     UsingActor.CurrentSurface, x1, y1, x2, y2, new List<GridActor> { UsingActor });
-
-                Debug.Log(affectedActors.Count);
 
                 foreach (IKnockbackable actor in affectedActors)
                     actor.ApplyKnockback(UsingActor.Direction == Direction.Right ? repulsionRadius : -repulsionRadius, 0);

@@ -97,39 +97,49 @@ MonoBehaviour:
   cameraDegreesPerSecond: 110
   jumpApex: 2
   meshContainer: {fileID: 1435093365417062584}
-  daAnimator: {fileID: 1864439705942465467}
+  animator: {fileID: 1864439705942465467}
   moveModeAnimator:
     boundAnimator: {fileID: 1864439705942465467}
     bindings:
     - boolName: Idle
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 0
     - boolName: Walking
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 1
     - boolName: Jumping
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 2
     - boolName: Falling
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 3
     - boolName: Dropping To Hang
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 4
     - boolName: Pulling Up
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 5
     - boolName: Ducking Down
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 6
     - boolName: Un Ducking
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 7
     - boolName: Attacking
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 8
     - boolName: Taking Damage
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 9
     state: 0
   moveContextAnimator:
@@ -137,15 +147,19 @@ MonoBehaviour:
     bindings:
     - boolName: Standing
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 0
     - boolName: Ducking
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 1
     - boolName: Hanging
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 2
     - boolName: Airborne
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 3
     state: 0
   pivotDegreesPerBeat: 180
@@ -165,6 +179,7 @@ MonoBehaviour:
   maxDropDistance: 3
   maxPullupHeight: 4
   autoStepHeight: 1
+  animationSnapHintTransform: {fileID: 289630824237759863}
 --- !u!114 &1435093365478752560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,6 +205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownBeats: 0
+  beatService: {fileID: 0}
   dashTiles: 4
   dashThroughWalls: 0
   dashThroughSpecialActors: 0
@@ -197,6 +213,22 @@ MonoBehaviour:
   enemyStunBeats: 0
   enemiesPierced: 0
   enemyKnockback: 0
+  animator:
+    boundAnimator: {fileID: 1864439705942465467}
+    bindings:
+    - boolName: 
+      hashValue: 0
+      existsInAnimator: 0
+      enumValue: 0
+    - boolName: Dash Used
+      hashValue: 0
+      existsInAnimator: 0
+      enumValue: 1
+    - boolName: 
+      hashValue: 0
+      existsInAnimator: 0
+      enumValue: 2
+    state: 0
 --- !u!114 &1435093365478752562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,6 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownBeats: 1
+  beatService: {fileID: 0}
   maxGrenades: 2
   grenadeTemplate: {fileID: 1077037783006298253, guid: 69ab8086a2a8fb744b2255e1c3a46f9d, type: 3}
   animator:
@@ -217,9 +250,11 @@ MonoBehaviour:
     bindings:
     - boolName: None
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 0
     - boolName: Bomb Used
       hashValue: 0
+      existsInAnimator: 0
       enumValue: 1
     state: 0
 --- !u!114 &1435093365478752561
@@ -235,9 +270,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownBeats: 1
+  beatService: {fileID: 0}
   repulsorJumps: 1
   repulsionRadius: 2
   repulsorKnockback: 2
+  animator:
+    boundAnimator: {fileID: 1864439705942465467}
+    bindings:
+    - boolName: 
+      hashValue: 0
+      existsInAnimator: 0
+      enumValue: 0
+    - boolName: Repulsor Used
+      hashValue: 0
+      existsInAnimator: 0
+      enumValue: 1
+    state: 0
 --- !u!114 &1435093365478752559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,6 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownBeats: 1
+  beatService: {fileID: 0}
 --- !u!114 &1654960030081364720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359,5 +408,10 @@ GameObject:
 --- !u!4 &7250541237190936542 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b0f7e1b2fe5aa4945b7a70e4080107b2, type: 3}
+  m_PrefabInstance: {fileID: 7139790537504792629}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &289630824237759863 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7426814126453349698, guid: b0f7e1b2fe5aa4945b7a70e4080107b2, type: 3}
   m_PrefabInstance: {fileID: 7139790537504792629}
   m_PrefabAsset: {fileID: 0}

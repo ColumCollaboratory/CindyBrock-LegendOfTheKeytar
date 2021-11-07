@@ -23,13 +23,10 @@ namespace BattleRoyalRhythm.UnityEditor.Drawers
         }
         #endregion
         #region Drawer Implementation
-        // 0 is returned because EditorGUILayout makes its own
-        // space and the default property height is unused.
-        public override sealed float GetPropertyHeight(SerializedProperty property, GUIContent label) => 0f;
         public override sealed void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             // Wrap this property in a drop down.
-            isExpanded = EditorGUILayout.Foldout(isExpanded, label);
+            isExpanded = EditorGUI.Foldout(position, isExpanded, label);
             if (isExpanded)
             {
                 EditorGUI.indentLevel++;
@@ -59,6 +56,7 @@ namespace BattleRoyalRhythm.UnityEditor.Drawers
                     SerializedProperty bindingProp = bindingsProp.GetArrayElementAtIndex(i);
                     SerializedProperty nameProp = bindingProp.FindPropertyRelative("boolName");
                     SerializedProperty enumProp = bindingProp.FindPropertyRelative("enumValue");
+
                     EditorGUILayout.PropertyField(nameProp, new GUIContent(names[i]));
                     // This ensures the proper enum value is bound.
                     // (this is redundant after one pass).

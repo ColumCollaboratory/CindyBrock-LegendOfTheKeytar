@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using BattleRoyalRhythm.Audio;
 
 namespace BattleRoyalRhythm.GridActors.Player
 {
@@ -12,6 +13,8 @@ namespace BattleRoyalRhythm.GridActors.Player
         [Header("Ability Cooldown")]
         [Tooltip("The number of beats between usages, relative to the end of the prior use.")]
         [SerializeField][Min(0)] private int cooldownBeats = 1;
+        // TODO this should not be a required ref here.
+        [SerializeField] private BeatService beatService = null;
         #endregion
 
         #region Initialization
@@ -46,6 +49,17 @@ namespace BattleRoyalRhythm.GridActors.Player
         /// <returns>True if the ability can be used.</returns>
         protected virtual bool IsContextuallyUsable() => true;
 
+        private void OnFollowingBeatElapsed(float beatTime)
+        {
+            PostUsingCleanUp();
+            beatService.BeatElapsed -= OnFollowingBeatElapsed;
+        }
+
+        protected virtual void PostUsingCleanUp()
+        {
+
+        }
+
         
         /// <summary>
         /// Starts usage of the ability which will last at least
@@ -66,6 +80,7 @@ namespace BattleRoyalRhythm.GridActors.Player
         public virtual void StopUsing()
         {
             InUse = false;
+            beatService.BeatElapsed += OnFollowingBeatElapsed;
         }
 
         /// <summary>

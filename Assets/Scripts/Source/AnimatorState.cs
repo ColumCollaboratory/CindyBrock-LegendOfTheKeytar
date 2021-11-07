@@ -15,8 +15,7 @@ public interface IAnimatorState { }
 /// <summary>
 /// Binds an enum directly to a corresponding set of bool parameters
 /// inside a Unity Animator. Use the State property to automatically
-/// update the appropriate animator parameters. Enums can be marked
-/// with the [Flags] attribute to toggle multiple parameters at once.
+/// update the appropriate animator parameters.
 /// </summary>
 /// <typeparam name="TEnum">The enum to use for state. Each enum value
 /// correpsonds to a bool parameter in the Unity Animator.</typeparam>
@@ -40,6 +39,10 @@ public sealed class AnimatorState<TEnum> : IAnimatorState
         /// The hash ID of the animator paramater.
         /// </summary>
         [SerializeField] public int hashValue;
+        /// <summary>
+        /// Whether this state exists in the animator.
+        /// </summary>
+        [SerializeField] public bool existsInAnimator;
         /// <summary>
         /// The bound enum value that enables this parameter.
         /// </summary>
@@ -71,11 +74,11 @@ public sealed class AnimatorState<TEnum> : IAnimatorState
         set
         {
             state = value;
-            // Update the animator, this works with normal
-            // and Flags enums.
+            // Update the animator states.
             CheckGenerateHashes();
             foreach (AnimatorBinding binding in bindings)
-                boundAnimator.SetBool(binding.hashValue, state.HasFlag(binding.enumValue));
+                if (binding.existsInAnimator)
+                    boundAnimator.SetBool(binding.hashValue, state.Equals(binding.enumValue));
         }
     }
     private void CheckGenerateHashes()
@@ -84,8 +87,23 @@ public sealed class AnimatorState<TEnum> : IAnimatorState
         // iterate through them so that future state changes
         // will not require hashing.
         if (bindings[0].hashValue == default)
+        {
             foreach (AnimatorBinding binding in bindings)
+            {
                 binding.hashValue = Animator.StringToHash(binding.boolName);
+                // Allow for parameters that don't explicitly exist
+                // in the animator (this allows a sentinel value).
+                binding.existsInAnimator = false;
+                foreach (AnimatorControllerParameter parameter in boundAnimator.parameters)
+                {
+                    if (parameter.nameHash == binding.hashValue)
+                    {
+                        binding.existsInAnimator = true;
+                        break;
+                    }
+                }
+            }
+        }
     }
     #endregion
 }

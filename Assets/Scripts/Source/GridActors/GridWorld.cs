@@ -256,7 +256,7 @@ namespace BattleRoyalRhythm.GridActors
 
         // NOTE this sweeping translation only checks for crossing seams,
         // use GetNearbyColliders to query colliders before translating.
-        private void SweepTranslate(Surface surface, Vector2 position, Vector2 translation,
+        public void SweepTranslate(Surface surface, Vector2 position, Vector2 translation,
             out Surface endingOn, out Vector2 endingLocation)
         {
             bool isRight = translation.x > 0f;

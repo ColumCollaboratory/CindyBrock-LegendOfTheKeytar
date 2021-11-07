@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BattleRoyalRhythm.Audio;
 using UnityEngine;
 
 namespace BattleRoyalRhythm.GridActors.Player
 {
     public sealed class AbilityGrenade : ActorAbility
     {
+        private enum State
+        {
+            None,
+            PlacingBomb,
+        }
+
+
         [Header("Base Grenade Attributes")]
         [Tooltip("The maximum number of grenades spawned at any given time.")]
         [SerializeField][Min(1)] private int maxGrenades = 1;
@@ -16,12 +19,15 @@ namespace BattleRoyalRhythm.GridActors.Player
         [Tooltip("The template GameObject containing a BombActor.")]
         [SerializeField] private GameObject grenadeTemplate = null;
 
+        [SerializeField] private AnimatorState<State> animator = null;
+
         private int activeGrenades;
 
         protected override void Awake()
         {
             base.Awake();
             activeGrenades = 0;
+            animator.State = State.None;
         }
 
         protected override bool IsContextuallyUsable()
@@ -31,8 +37,14 @@ namespace BattleRoyalRhythm.GridActors.Player
             return activeGrenades < maxGrenades;
         }
 
+        protected override void PostUsingCleanUp()
+        {
+            animator.State = State.None;
+        }
+
         public override void StartUsing(int beatCount)
         {
+            animator.State = State.PlacingBomb;
             // Since the grenade is thrown automatically,
             // this ability only takes one beat.
             StopUsing();

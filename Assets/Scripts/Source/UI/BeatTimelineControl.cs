@@ -54,6 +54,8 @@ namespace BattleRoyalRhythm.UI
         [SerializeField] private Sprite missSprite = null;
         [Tooltip("The sprite used to represent an upcoming or skipped input.")]
         [SerializeField] private Sprite emptySprite = null;
+        [Tooltip("The ribbon used to connect related beats.")]
+        [SerializeField] private Sprite connectorStrip = null;
         // TODO there should be tooling to automate the inspector
         // generation of this sort of mapping.
         // TODO since these icons may change per control scheme this
@@ -92,9 +94,9 @@ namespace BattleRoyalRhythm.UI
             // looping index iterators.
             icons = new TimedIcon[iconCount + maxMissSprites];
             currentBeatIndex = new IndexRange(0, iconCount - 1)
-            { LocalValue = 0 };
+            { LocalValue = Mathf.CeilToInt(exitingRangeWidth / iconGap) - 1 };
             beatFeedIndex = new IndexRange(0, iconCount - 1)
-            { LocalValue = -Mathf.CeilToInt(exitingRangeWidth / iconGap) };
+            { LocalValue = 0 };
             missFeedIndex = new IndexRange(iconCount, iconCount + maxMissSprites - 1)
             { LocalValue = 0 };
 
@@ -138,10 +140,11 @@ namespace BattleRoyalRhythm.UI
             missFeedIndex++;
         }
 
-        private void OnActionExecuted(PlayerAction obj)
+        private void OnActionExecuted(PlayerAction action, int duration)
         {
+            // TODO this will be refactored (see inspector field notes).
             Sprite sprite = null;
-            switch (obj)
+            switch (action)
             {
                 case PlayerAction.MoveLeft: sprite = leftActionSprite; break;
                 case PlayerAction.MoveRight: sprite = rightActionSprite; break;
@@ -154,7 +157,14 @@ namespace BattleRoyalRhythm.UI
                 case PlayerAction.SetGenre3: sprite = genre3ActionSprite; break;
                 case PlayerAction.SetGenre4: sprite = genre4ActionSprite; break;
             }
-            icons[currentBeatIndex].image.sprite = sprite;
+            // Set the upcoming beat actions.
+            int startIndex = currentBeatIndex;
+            for (int i = 0; i < duration; i++)
+            {
+                currentBeatIndex++;
+                icons[currentBeatIndex].image.sprite = sprite;
+            }
+            currentBeatIndex.Value = startIndex;
         }
 
         private void OnCanvasSizeChanged()

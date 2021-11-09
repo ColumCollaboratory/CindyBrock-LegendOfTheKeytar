@@ -22,6 +22,6 @@ MonoBehaviour:
   - name: Stage_3_Started
     beatsPerMinute: 100
     id: 4
-  - name: Stage_4_Started
-    beatsPerMinute: 100
+  - name: Boss_1_Started
+    beatsPerMinute: 140
     id: 1

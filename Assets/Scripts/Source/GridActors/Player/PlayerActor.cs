@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BattleRoyalRhythm.Audio;
 using BattleRoyalRhythm.Input;
+using BattleRoyalRhythm.UI;
 
 namespace BattleRoyalRhythm.GridActors.Player
 {
@@ -89,8 +90,11 @@ namespace BattleRoyalRhythm.GridActors.Player
         [SerializeField][Min(0)] private int autoStepHeight = 1;
 
         [SerializeField] private Transform animationSnapHintTransform = null;
-        private Vector3 lastFrameHintPosition;
 
+        [SerializeField] private bool inBossMode = false;
+        [SerializeField] private BeatTimelineControl beatTimeline = null;
+
+        private Vector3 lastFrameHintPosition;
         private int unDuckedHeight;
         private float targetYAxisDegrees;
         private int currentActionDuration;
@@ -241,7 +245,14 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // React to the latest input if it has
                 // been timed well enough.
                 float beatDelta = controller.LatestTimestamp - beatTime;
-                if (Mathf.Abs(beatDelta) < inputTolerance)
+                if (inBossMode)
+                {
+                    if (Mathf.Abs(beatDelta) < inputTolerance)
+                        ActionExecuted?.Invoke(controller.LatestAction, 1);
+                    else
+                        ActionExecuted?.Invoke(PlayerAction.None, 1);
+                }
+                else if (Mathf.Abs(beatDelta) < inputTolerance)
                 {
                     switch (controller.LatestAction)
                     {

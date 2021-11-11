@@ -183,11 +183,8 @@ namespace BattleRoyalRhythm.GridActors
             get => direction;
             set
             {
-                if (value != direction)
-                {
-                    direction = value;
-                    OnDirectionChanged(value);
-                }
+                direction = value;
+                OnDirectionChanged(value);
             }
         }
 

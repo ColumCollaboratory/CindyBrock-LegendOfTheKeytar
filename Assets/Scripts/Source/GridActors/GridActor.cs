@@ -113,6 +113,10 @@ namespace BattleRoyalRhythm.GridActors
         }
         #endregion
 
+        protected virtual void OnDrawGizmos()
+        {
+
+        }
 
         protected virtual void OnValidate()
         {

@@ -52,9 +52,11 @@ MonoBehaviour:
   currentSurface: {fileID: 0}
   tile: {x: 0, y: 0}
   tileHeight: 1
+  programmedTransform: {fileID: 4281292082675621582}
   World: {fileID: 0}
-  explosionRadius: 3
   damage: 5
+  pierce: 0
+  explosionRadius: 3
   stunBeats: 0
   knockbackTiles: 0
   beatsUntilExplosion: 7

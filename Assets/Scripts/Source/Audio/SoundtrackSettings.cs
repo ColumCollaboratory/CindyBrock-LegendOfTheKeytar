@@ -57,7 +57,7 @@ namespace BattleRoyalRhythm.Audio
             return null;
         }
 
-        private const string PATH = "Assets/Editor/SoundtrackSettings.asset";
+        private const string PATH = "Assets/Resources/SoundtrackSettings.asset";
 
         private static SoundtrackSettings instance;
 
@@ -66,6 +66,7 @@ namespace BattleRoyalRhythm.Audio
             // Have the settings not been initialized?
             if (instance == null)
             {
+#if UNITY_EDITOR
                 instance = AssetDatabase.LoadAssetAtPath<SoundtrackSettings>(PATH);
                 // Were there no settings to load?
                 if (instance == null)
@@ -75,9 +76,13 @@ namespace BattleRoyalRhythm.Audio
                     AssetDatabase.CreateAsset(instance, PATH);
                     AssetDatabase.SaveAssets();
                 }
+#else
+                instance = Resources.Load<SoundtrackSettings>("SoundtrackSettings");
+#endif
             }
             return instance;
         }
+#if UNITY_EDITOR
 
         /// <summary>
         /// Ensures that the naming of soundtracks is unique.
@@ -124,8 +129,10 @@ namespace BattleRoyalRhythm.Audio
                 }
             }
         }
+#endif
     }
 
+#if UNITY_EDITOR
     class SoundtrackSettingsProvider : SettingsProvider
     {
         private static SerializedObject settings;
@@ -163,4 +170,5 @@ namespace BattleRoyalRhythm.Audio
             return provider;
         }
     }
+#endif
 }

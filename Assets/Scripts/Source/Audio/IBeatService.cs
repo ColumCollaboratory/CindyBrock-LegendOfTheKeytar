@@ -34,6 +34,11 @@
         /// The current seconds per beat of the service.
         /// </summary>
         float SecondsPerBeat { get; }
+        /// <summary>
+        /// Controls the offset for when beats are processed
+        /// relative to the start of the audio track.
+        /// </summary>
+        float BeatOffset { get; set; }
         #endregion
         #region Methods Implemented
         /// <summary>

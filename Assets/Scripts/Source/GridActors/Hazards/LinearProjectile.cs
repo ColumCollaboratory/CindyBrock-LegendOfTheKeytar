@@ -147,7 +147,7 @@ namespace BattleRoyalRhythm.GridActors.Hazards
 
         private void DestroyProjectile()
         {
-            BeatService.BeatElapsed -= OnBeatElapsed;
+            World.BeatService.BeatElapsed -= OnBeatElapsed;
             World.Actors.Remove(this);
             Destroy(gameObject);
         }
@@ -156,14 +156,14 @@ namespace BattleRoyalRhythm.GridActors.Hazards
         {
             if (currentPath != null)
             {
-                if (willDestroy && BeatService.CurrentInterpolant > destroyInterpolant)
+                if (willDestroy && World.BeatService.CurrentInterpolant > destroyInterpolant)
                 {
                     DestroyProjectile();
                     currentPath = null;
                 }
                 else
                 {
-                    Vector2 thisFramePath = currentPath(BeatService.CurrentInterpolant);
+                    Vector2 thisFramePath = currentPath(World.BeatService.CurrentInterpolant);
                     World.TranslateActor(this, thisFramePath - lastFramePath);
                     lastFramePath = thisFramePath;
                 }

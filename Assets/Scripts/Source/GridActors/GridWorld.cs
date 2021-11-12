@@ -18,6 +18,8 @@ namespace BattleRoyalRhythm.GridActors
         #region Inspector Fields
         [Tooltip("The first surface centered at local zero which other surfaces will be solved from.")]
         [SerializeField] private Surface rootSurface = null;
+        [Tooltip("The beat service used by all actors in this grid world.")]
+        [SerializeField] private BeatService beatService = null;
         #endregion
 
         #region Compiled Surface Data Structures
@@ -59,10 +61,9 @@ namespace BattleRoyalRhythm.GridActors
 
         private List<GridActor> actors;
 
-        public IBeatService BeatService;
+        public IBeatService BeatService => beatService;
 
         public List<GridActor> Actors => actors;
-
 
         /// <summary>
         /// Gets the nearby static colliders around an actor. This method should be used

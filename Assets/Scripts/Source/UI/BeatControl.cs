@@ -38,13 +38,13 @@ namespace BattleRoyalRhythm.UI
             player.BeatLate += OnBeatLate;
         }
 
-        private void OnBeatEarly()
+        private void OnBeatEarly(float offset)
         {
             timingWrongImage.enabled = true;
             timingWrongImage.sprite = tooEarlyTexture;
             StartCoroutine(ResetTimingWrongImage());
         }
-        private void OnBeatLate()
+        private void OnBeatLate(float offset)
         {
             timingWrongImage.enabled = true;
             timingWrongImage.sprite = tooLateTexture;

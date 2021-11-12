@@ -100,6 +100,9 @@ namespace BattleRoyalRhythm.GridActors
         public NearbyColliderSet GetNearbyColliders(GridActor actor,
             int tilesLeft, int tilesRight, int tilesUp, int tilesDown, List<GridActor> ignoredActors = null)
         {
+            if (ignoredActors == null)
+                ignoredActors = new List<GridActor>();
+            ignoredActors.Add(actor);
             #region Error Checking
             if (tilesLeft < 0)
                 throw new ArgumentOutOfRangeException("tilesLeft", "Tile values cannot be negative.");
@@ -113,6 +116,8 @@ namespace BattleRoyalRhythm.GridActors
             // Create a new array sized to store the
             // resulting nearby colliders.
             bool[,] nearbyColliders = new bool[
+                1 + tilesLeft + tilesRight, 1 + tilesDown + tilesUp];
+            CollisionDirectionMask[,] nearbyDirections = new CollisionDirectionMask[
                 1 + tilesLeft + tilesRight, 1 + tilesDown + tilesUp];
             #region State Setup
             // x and y will track the local surface tile
@@ -141,20 +146,34 @@ namespace BattleRoyalRhythm.GridActors
                     // If this tile is out of range then
                     // mark it as a solid collider.
                     if (x < 1 || y < 1 ||
-                        x > surface.LengthX || y > surface.LengthY)
+                        x > surface.LengthX || y > surface.LengthY ||
+                        colliders[x - 1, y - 1])
+                    {
                         nearbyColliders[tilesLeft + dX, tilesDown + dY] = true;
-                    // Otherwise sample the collider on the surface.
-                    else
-                        nearbyColliders[tilesLeft + dX, tilesDown + dY] = colliders[x - 1, y - 1];
+                        nearbyDirections[tilesLeft + dX, tilesDown + dY] = CollisionDirectionMask.Everything;
+                    }
                     // Check if any actors are blocking this tile.
-                    if (ignoredActors == null)
-                        ignoredActors = new List<GridActor>();
                     if (!nearbyColliders[tilesLeft + dX, tilesDown + dY])
-                        foreach (GridActor actor in Actors)
-                            if (!ignoredActors.Contains(actor))
-                                if (actor.CurrentSurface == surface)
-                                    if (actor.IsIntersecting(new Vector2Int(x, y)))
-                                        nearbyColliders[tilesLeft + dX, tilesDown + dY] = true;
+                    {
+                        foreach (GridActor otherActor in Actors)
+                        {
+                            if (!ignoredActors.Contains(otherActor))
+                            {
+                                if (otherActor.CurrentSurface == surface)
+                                {
+                                    if ((otherActor.BlocksTags & actor.Tags) > 0)
+                                    {
+                                        if (otherActor.IsIntersecting(new Vector2Int(x, y)))
+                                        {
+                                            nearbyColliders[tilesLeft + dX, tilesDown + dY] = true;
+                                            nearbyDirections[tilesLeft + dX, tilesDown + dY] |=
+                                                otherActor.BlocksDirections;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             // Sweep at the actor elevation towards the right
@@ -179,7 +198,7 @@ namespace BattleRoyalRhythm.GridActors
             }
             #endregion
             // Compile and return the results.
-            return new NearbyColliderSet(nearbyColliders, tilesLeft, tilesDown);
+            return new NearbyColliderSet(tilesLeft, tilesDown, nearbyColliders, nearbyDirections);
         }
 
 
@@ -237,7 +256,7 @@ namespace BattleRoyalRhythm.GridActors
 
         // NOTE this sweeping translation only checks for crossing seams,
         // use GetNearbyColliders to query colliders before translating.
-        private void SweepTranslate(Surface surface, Vector2 position, Vector2 translation,
+        public void SweepTranslate(Surface surface, Vector2 position, Vector2 translation,
             out Surface endingOn, out Vector2 endingLocation)
         {
             bool isRight = translation.x > 0f;

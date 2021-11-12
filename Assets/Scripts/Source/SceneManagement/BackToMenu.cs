@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using BattleRoyalRhythm.GridActors;
 
-public class BackToMenu : MonoBehaviour
+public class BackToMenu : GridTrigger
 {
-    private void OnTriggerEnter(Collider other)
+
+    protected override sealed void OnActorEnter(GridActor actorEntered)
     {
         SceneManager.LoadScene(0);
     }

@@ -46,15 +46,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 588073fd432acfb49adc597ac15fe20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tags: 8
+  blocksTags: 0
+  blocksDirections: 0
   currentSurface: {fileID: 0}
   tile: {x: 0, y: 0}
   tileHeight: 1
+  programmedTransform: {fileID: 4281292082675621582}
   World: {fileID: 0}
-  explosionRadius: 3
   damage: 5
+  pierce: 0
+  explosionRadius: 3
   stunBeats: 0
   knockbackTiles: 0
-  beatsUntilExplosion: 4
+  beatsUntilExplosion: 7
   animator: {fileID: 3957056792127913817}
   explosionParticles: {fileID: 7486014435862875958}
   bombMesh: {fileID: 8399910766921617426}
@@ -4976,7 +4981,7 @@ Transform:
   m_GameObject: {fileID: 8189554935072574063}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -0.5, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalScale: {x: 0.635, y: 0.635, z: 0.635}
   m_Children:
   - {fileID: 2027507443492977508}
   m_Father: {fileID: 1077037783006298252}

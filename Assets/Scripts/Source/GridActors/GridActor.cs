@@ -77,7 +77,7 @@ namespace BattleRoyalRhythm.GridActors
 
         #region Scene Editing State
         // Store the locked transform values.
-        private ProgrammedTransform programmedTransform;
+        [SerializeField] private ProgrammedTransform programmedTransform;
         #endregion
 
         public void RefreshPosition()
@@ -88,8 +88,10 @@ namespace BattleRoyalRhythm.GridActors
                     Mathf.Clamp(location.x, 0.5f, currentSurface.LengthX + 0.5f),
                     Mathf.Clamp(location.y, 0.5f, currentSurface.LengthY + 0.5f));
                 Vector2 newLoc = new Vector2(location.x - 0.5f, location.y - 0.5f);
+#if UNITY_EDITOR
                 if (programmedTransform == null)
                     Initialize();
+#endif
                 programmedTransform.Position = currentSurface.GetLocation(newLoc);
                 programmedTransform.Rotation = Quaternion.LookRotation(currentSurface.GetRight(newLoc), currentSurface.GetUp(newLoc));
             }
@@ -99,6 +101,11 @@ namespace BattleRoyalRhythm.GridActors
         #region Enforced Transform Lock
         protected virtual void OnEnable() => Initialize();
         protected virtual void Reset() => Initialize();
+        protected virtual void OnDestroy()
+        {
+            if (!Application.isPlaying)
+                DestroyImmediate(programmedTransform);
+        }
         private void Initialize()
         {
             programmedTransform = GetComponent<ProgrammedTransform>();
@@ -106,13 +113,12 @@ namespace BattleRoyalRhythm.GridActors
                 programmedTransform = gameObject.AddComponent<ProgrammedTransform>();
             programmedTransform.CurrentVisibility = ProgrammedTransform.Visibility.Hidden;
         }
-        protected virtual void OnDestroy()
-        {
-            if (!Application.isPlaying)
-                DestroyImmediate(programmedTransform);
-        }
         #endregion
 
+        protected virtual void OnDrawGizmos()
+        {
+
+        }
 
         protected virtual void OnValidate()
         {
@@ -126,7 +132,12 @@ namespace BattleRoyalRhythm.GridActors
             }
         }
 #else
+        protected virtual void OnEnable()
+        {
+            location = Tile;
+        }
         protected virtual void OnValidate() { }
+        protected virtual void OnDestroy() { }
 #endif
 
         public virtual event ActorRemoved Destroyed;
@@ -183,11 +194,8 @@ namespace BattleRoyalRhythm.GridActors
             get => direction;
             set
             {
-                if (value != direction)
-                {
-                    direction = value;
-                    OnDirectionChanged(value);
-                }
+                direction = value;
+                OnDirectionChanged(value);
             }
         }
 

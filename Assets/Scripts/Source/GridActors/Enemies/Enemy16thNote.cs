@@ -31,8 +31,6 @@ namespace BattleRoyalRhythm.GridActors.Enemies
 
         [SerializeField][Min(0f)] private float meleeDamage = 1f;
 
-        [SerializeField] private BeatService beatService = null;
-
         [Header("Enemy State")]
         [SerializeField][ReadonlyField] private GridActor target = null;
 
@@ -48,7 +46,7 @@ namespace BattleRoyalRhythm.GridActors.Enemies
             if (Application.isPlaying)
             {
                 cachedForcedState = null;
-                beatService.BeatElapsed += OnBeatElapsed;
+                World.BeatService.BeatElapsed += OnBeatElapsed;
                 animator.State = BehaviourState.Idle;
                 // Look for a nearby target to approach.
                 // TODO should be more generalized (maybe using
@@ -193,7 +191,7 @@ namespace BattleRoyalRhythm.GridActors.Enemies
         private void FinalizeDeath()
         {
             Destroyed?.Invoke(this);
-            beatService.BeatElapsed -= OnBeatElapsed;
+            World.BeatService.BeatElapsed -= OnBeatElapsed;
             Destroy(gameObject);
         }
 
@@ -223,7 +221,7 @@ namespace BattleRoyalRhythm.GridActors.Enemies
         {
             if (currentPath != null)
             {
-                Vector2 position = currentPath(beatService.CurrentInterpolant);
+                Vector2 position = currentPath(World.BeatService.CurrentInterpolant);
                 World.TranslateActor(this, position - lastFramePath);
 
                 lastFramePath = position;

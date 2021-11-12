@@ -76,7 +76,7 @@ namespace BattleRoyalRhythm.GridActors.Player
         [SerializeField] private AnimatorState<ActionContext> moveContextAnimator = null;
         [SerializeField][Min(0f)] private float pivotDegreesPerBeat = 180f;
 
-        [SerializeField] private BeatService beatService = null;
+        //[SerializeField] private BeatService beatService = null;
         [SerializeField][SoundtrackID] private int soundtrackSet = 0;
         [SerializeField] private GenreAbilityPair[] genres = null;
         [Header("Automatic Actions")]
@@ -162,13 +162,12 @@ namespace BattleRoyalRhythm.GridActors.Player
             {
                 unDuckedHeight = TileHeight;
 
-                World.BeatService = beatService;
                 activeGenre = 0;
                 currentAnimations = new Queue<BeatAnimation>();
-                beatService.BeatOffset = -inputTolerance * 0.5f;
-                beatService.BeatElapsed += OnBeatElapsed;
+                World.BeatService.BeatOffset = -inputTolerance * 0.5f;
+                World.BeatService.BeatElapsed += OnBeatElapsed;
                 SoundtrackSet levelSet = SoundtrackSettings.Load().GetSetByID(soundtrackSet);
-                beatService.SetBeatSoundtrack(levelSet);
+                World.BeatService.SetBeatSoundtrack(levelSet);
 
                 // Set the animator such that 60 frames (1 second)
                 // elapses in one beat.
@@ -370,9 +369,9 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // in use already.
                 if (!genres[activeGenre].ability.InUse)
                 {
-                    if (genres[activeGenre].ability.IsUsable(beatService.CurrentBeatCount))
+                    if (genres[activeGenre].ability.IsUsable(World.BeatService.CurrentBeatCount))
                     {
-                        genres[activeGenre].ability.StartUsing(beatService.CurrentBeatCount);
+                        genres[activeGenre].ability.StartUsing(World.BeatService.CurrentBeatCount);
                         ActorAnimationPath path = genres[activeGenre].ability.ElapseBeat();
                         if (path != null)
                             currentAnimations.Enqueue(new BeatAnimation(path));
@@ -400,7 +399,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                     // Update the audio switch in Wwise.
                     // TODO this should be abstracted to not
                     // be wwise specific.
-                    AkSoundEngine.SetSwitch("Level_1", genres[genre].wwiseGenreTarget, beatService.gameObject);
+                    AkSoundEngine.SetState("Level_1", genres[genre].wwiseGenreTarget);
                     activeGenre = genre;
                 }
             }
@@ -701,7 +700,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 {
                     // Request the next animation location.
                     Vector2 toLocation = currentAnimations.Peek().Path
-                        (beatService.CurrentInterpolant);
+                        (World.BeatService.CurrentInterpolant);
                     // Apply the translation to the actor.
                     World.TranslateActor(this, toLocation - lastAnimationFrame);
                     lastAnimationFrame = toLocation;
@@ -735,7 +734,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 meshContainer.localRotation = Quaternion.RotateTowards(
                     meshContainer.localRotation,
                     Quaternion.AngleAxis(targetYAxisDegrees, Vector3.up),
-                    Time.deltaTime * pivotDegreesPerBeat * (1f / beatService.SecondsPerBeat));
+                    Time.deltaTime * pivotDegreesPerBeat * (1f / World.BeatService.SecondsPerBeat));
             }
         }
 

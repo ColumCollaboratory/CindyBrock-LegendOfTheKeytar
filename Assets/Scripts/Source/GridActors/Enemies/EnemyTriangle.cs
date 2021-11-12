@@ -18,7 +18,6 @@ namespace BattleRoyalRhythm.GridActors.Enemies
         }
 
         [Header("Actor Animation")]
-        [SerializeField] private BeatService beatService = null;
         [SerializeField] private Animator animator = null;
         [SerializeField] private AnimatorState<State> animatorBinding = null;
         [SerializeField] private Transform animationPivot = null;
@@ -66,7 +65,7 @@ namespace BattleRoyalRhythm.GridActors.Enemies
 
         private void Start()
         {
-            beatService.BeatElapsed += OnBeatElapsed;
+            World.BeatService.BeatElapsed += OnBeatElapsed;
             animatorBinding.State = State.Idle;
             // TODO get rid of this coroutine hack;
             // caused by script execution order issue.
@@ -77,12 +76,12 @@ namespace BattleRoyalRhythm.GridActors.Enemies
             yield return null;
             // Adjust the animator speed so it matches
             // the BPM of the current stage.
-            animator.speed = 1f / beatService.SecondsPerBeat;
+            animator.speed = 1f / World.BeatService.SecondsPerBeat;
         }
 
         protected override void OnDestroy()
         {
-            beatService.BeatElapsed -= OnBeatElapsed;
+            World.BeatService.BeatElapsed -= OnBeatElapsed;
             base.OnDestroy();
         }
 
@@ -127,7 +126,7 @@ namespace BattleRoyalRhythm.GridActors.Enemies
                 newProjectile.Location = Tile;
                 newProjectile.Direction = Direction;
                 newProjectile.IgnoredActors.Add(this);
-                newProjectile.InitalizeProjectile(beatService, World);
+                newProjectile.InitalizeProjectile(World);
                 return;
             }
 
@@ -242,7 +241,7 @@ namespace BattleRoyalRhythm.GridActors.Enemies
             // Update the animation of the transform.
             if (currentPath != null)
             {
-                Vector2 path = currentPath(beatService.CurrentInterpolant);
+                Vector2 path = currentPath(World.BeatService.CurrentInterpolant);
                 World.TranslateActor(this, path - lastFramePath);
                 lastFramePath = path;
             }

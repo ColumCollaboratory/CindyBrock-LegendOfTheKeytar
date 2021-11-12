@@ -13,9 +13,10 @@ namespace BattleRoyalRhythm.GridActors.Player
         [Header("Ability Cooldown")]
         [Tooltip("The number of beats between usages, relative to the end of the prior use.")]
         [SerializeField][Min(0)] private int cooldownBeats = 1;
-        // TODO this should not be a required ref here.
-        [SerializeField] private BeatService beatService = null;
         #endregion
+
+        private GridActor actor;
+        protected GridWorld World => actor.World;
 
         #region Initialization
         protected virtual void Awake()
@@ -23,9 +24,15 @@ namespace BattleRoyalRhythm.GridActors.Player
             // Ensure the cooldown is off
             // when the gameplay starts.
             lastUseBeatCount = -cooldownBeats;
+            AssignToActor(gameObject.GetComponent<GridActor>());
         }
         #endregion
 
+
+        public void AssignToActor(GridActor actor)
+        {
+            this.actor = actor;
+        }
 
 
         private int lastUseBeatCount;
@@ -52,7 +59,7 @@ namespace BattleRoyalRhythm.GridActors.Player
         private void OnFollowingBeatElapsed(float beatTime)
         {
             PostUsingCleanUp();
-            beatService.BeatElapsed -= OnFollowingBeatElapsed;
+            World.BeatService.BeatElapsed -= OnFollowingBeatElapsed;
         }
 
         protected virtual void PostUsingCleanUp()
@@ -80,7 +87,7 @@ namespace BattleRoyalRhythm.GridActors.Player
         public virtual void StopUsing()
         {
             InUse = false;
-            beatService.BeatElapsed += OnFollowingBeatElapsed;
+            World.BeatService.BeatElapsed += OnFollowingBeatElapsed;
         }
 
         /// <summary>

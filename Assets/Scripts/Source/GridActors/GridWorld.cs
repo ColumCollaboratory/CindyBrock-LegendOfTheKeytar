@@ -1,16 +1,18 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using BattleRoyalRhythm.Audio;
 using BattleRoyalRhythm.Surfaces;
-using System;
 
 namespace BattleRoyalRhythm.GridActors
 {
+    // Core implementation for the grid world.
     /// <summary>
     /// Holds a collection of surfaces and actors that move on those
     /// surfaces. Actors can see other actors in the same Grid World.
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class GridWorld : MonoBehaviour
+    public sealed partial class GridWorld : MonoBehaviour
     {
 
         #region Inspector Fields
@@ -55,6 +57,11 @@ namespace BattleRoyalRhythm.GridActors
         private Dictionary<Surface, SurfaceSeams> surfaceSeams;
         private Dictionary<Surface, bool[,]> surfaceColliders;
 
+        private List<GridActor> actors;
+
+        public IBeatService BeatService;
+
+        public List<GridActor> Actors => actors;
 
 
         /// <summary>
@@ -70,9 +77,10 @@ namespace BattleRoyalRhythm.GridActors
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when tile values are negative.</exception>
         public NearbyColliderSet GetNearbyColliders(GridActor actor,
-            int tilesHorizontal, int tilesVertical)
+            int tilesHorizontal, int tilesVertical, List<GridActor> ignoredActors = null)
         {
-            return GetNearbyColliders(actor, tilesHorizontal, tilesHorizontal, tilesVertical, tilesVertical);
+            return GetNearbyColliders(actor,
+                tilesHorizontal, tilesHorizontal, tilesVertical, tilesVertical, ignoredActors);
         }
 
         /// <summary>
@@ -90,8 +98,11 @@ namespace BattleRoyalRhythm.GridActors
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when tile values are negative.</exception>
         public NearbyColliderSet GetNearbyColliders(GridActor actor,
-            int tilesLeft, int tilesRight, int tilesUp, int tilesDown)
+            int tilesLeft, int tilesRight, int tilesUp, int tilesDown, List<GridActor> ignoredActors = null)
         {
+            if (ignoredActors == null)
+                ignoredActors = new List<GridActor>();
+            ignoredActors.Add(actor);
             #region Error Checking
             if (tilesLeft < 0)
                 throw new ArgumentOutOfRangeException("tilesLeft", "Tile values cannot be negative.");
@@ -105,6 +116,8 @@ namespace BattleRoyalRhythm.GridActors
             // Create a new array sized to store the
             // resulting nearby colliders.
             bool[,] nearbyColliders = new bool[
+                1 + tilesLeft + tilesRight, 1 + tilesDown + tilesUp];
+            CollisionDirectionMask[,] nearbyDirections = new CollisionDirectionMask[
                 1 + tilesLeft + tilesRight, 1 + tilesDown + tilesUp];
             #region State Setup
             // x and y will track the local surface tile
@@ -133,11 +146,34 @@ namespace BattleRoyalRhythm.GridActors
                     // If this tile is out of range then
                     // mark it as a solid collider.
                     if (x < 1 || y < 1 ||
-                        x > surface.LengthX || y > surface.LengthY)
+                        x > surface.LengthX || y > surface.LengthY ||
+                        colliders[x - 1, y - 1])
+                    {
                         nearbyColliders[tilesLeft + dX, tilesDown + dY] = true;
-                    // Otherwise sample the collider on the surface.
-                    else
-                        nearbyColliders[tilesLeft + dX, tilesDown + dY] = colliders[x - 1, y - 1];
+                        nearbyDirections[tilesLeft + dX, tilesDown + dY] = CollisionDirectionMask.Everything;
+                    }
+                    // Check if any actors are blocking this tile.
+                    if (!nearbyColliders[tilesLeft + dX, tilesDown + dY])
+                    {
+                        foreach (GridActor otherActor in Actors)
+                        {
+                            if (!ignoredActors.Contains(otherActor))
+                            {
+                                if (otherActor.CurrentSurface == surface)
+                                {
+                                    if ((otherActor.BlocksTags & actor.Tags) > 0)
+                                    {
+                                        if (otherActor.IsIntersecting(new Vector2Int(x, y)))
+                                        {
+                                            nearbyColliders[tilesLeft + dX, tilesDown + dY] = true;
+                                            nearbyDirections[tilesLeft + dX, tilesDown + dY] |=
+                                                otherActor.BlocksDirections;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             // Sweep at the actor elevation towards the right
@@ -162,7 +198,34 @@ namespace BattleRoyalRhythm.GridActors
             }
             #endregion
             // Compile and return the results.
-            return new NearbyColliderSet(nearbyColliders, tilesLeft, tilesDown);
+            return new NearbyColliderSet(tilesLeft, tilesDown, nearbyColliders, nearbyDirections);
+        }
+
+
+        public List<GridActor> GetIntersectingActors(Surface surface, int x1, int y1, int x2, int y2, List<GridActor> ignoredActors = null)
+        {
+            List<GridActor> intersectingActors = new List<GridActor>();
+            foreach (GridActor actor in Actors)
+            {
+                if (ignoredActors == null || !ignoredActors.Contains(actor))
+                {
+                    if (actor.CurrentSurface == surface)
+                    {
+                        for (int x = x1; x <= x2; x++)
+                        {
+                            for (int y = y1; y <= y2; y++)
+                            {
+                                if (actor.IsIntersecting(new Vector2Int(x, y)))
+                                {
+                                    intersectingActors.Add(actor);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return intersectingActors;
         }
 
 
@@ -193,7 +256,7 @@ namespace BattleRoyalRhythm.GridActors
 
         // NOTE this sweeping translation only checks for crossing seams,
         // use GetNearbyColliders to query colliders before translating.
-        private void SweepTranslate(Surface surface, Vector2 position, Vector2 translation,
+        public void SweepTranslate(Surface surface, Vector2 position, Vector2 translation,
             out Surface endingOn, out Vector2 endingLocation)
         {
             bool isRight = translation.x > 0f;
@@ -309,7 +372,7 @@ namespace BattleRoyalRhythm.GridActors
             return false;
         }
 
-#region Surfaces Initialization
+        #region Surfaces Initialization
         private void Awake()
         {
             // Compile the designer data down to a more graph
@@ -319,7 +382,7 @@ namespace BattleRoyalRhythm.GridActors
             Surface[] surfaces = GetComponentsInChildren<Surface>();
             foreach (Surface surface in surfaces)
             {
-#region Process Seams
+                #region Process Seams
                 // These lists will accumulate seams extracted
                 // from the constraints processed from the scene.
                 List<Seam> leftSeams = new List<Seam>();
@@ -445,8 +508,8 @@ namespace BattleRoyalRhythm.GridActors
                 // Document all seams for this surface.
                 surfaceSeams.Add(surface, new SurfaceSeams(
                     leftSeams.ToArray(), rightSeams.ToArray(), doorSeams.ToArray()));
-#endregion
-#region Process Static Colliders
+                #endregion
+                #region Process Static Colliders
                 // Is there a designer specified layout?
                 StaticBlockLayout layout =
                     surface.gameObject.GetComponent<StaticBlockLayout>();
@@ -456,32 +519,84 @@ namespace BattleRoyalRhythm.GridActors
                 else
                     surfaceColliders.Add(surface,
                         new bool[surface.LengthX, surface.LengthY]);
-#endregion
+                #endregion
             }
-            // Give all actors a reference to this world.
+            // Orient all actors to this grid world.
+            actors = new List<GridActor>();
             foreach (GridActor actor in GetComponentsInChildren<GridActor>())
+            {
                 actor.World = this;
+                actors.Add(actor);
+            }
         }
-#endregion
+        #endregion
 
+
+
+    }
 
 #if UNITY_EDITOR
-#region Gizmos Drawing
+    /// <summary>
+    /// Describes preferences for the displaying the grid world
+    /// inside the Unity Editor.
+    /// </summary>
+    public interface IGridWorldPreferences
+    {
+        #region Style Properties
+        /// <summary>
+        /// When true grid gizmos and meshes should be drawn
+        /// to assist the designer.
+        /// </summary>
+        bool ShowGuidesInSceneView { get; }
+        /// <summary>
+        /// When true grid gizmos and meshes should persist
+        /// during play mode.
+        /// </summary>
+        bool ShowGuidesInPlayMode { get; }
+        /// <summary>
+        /// The color preference for the grid wireframe.
+        /// </summary>
+        Color WireColor { get; }
+        /// <summary>
+        /// The color preference for the grid fill.
+        /// </summary>
+        Color FillColor { get; }
+        #endregion
+    }
+    // Editor specific implementation for the grid world.
+    public sealed partial class GridWorld
+    {
+        #region Editor State
+        [SerializeField][HideInInspector] private GridWorldInspectorState editorPreferences;
+        /// <summary>
+        /// The editor preferences for this grid world.
+        /// </summary>
+        public IGridWorldPreferences EditorPreferences
+        {
+            get => editorPreferences;
+            set => editorPreferences = value as GridWorldInspectorState;
+        }
+        #endregion
+        #region Gizmos Drawing
         private List<Vector3[]> stitchArrowPolylines;
         private void OnDrawGizmos()
         {
-            // Draw the stitching arrows if they have
-            // been generated.
-            if (stitchArrowPolylines != null)
+            if ((Application.isPlaying && EditorPreferences.ShowGuidesInPlayMode) ||
+                (!Application.isPlaying && EditorPreferences.ShowGuidesInSceneView))
             {
-                Gizmos.color = Color.green;
-                foreach (Vector3[] polyline in stitchArrowPolylines)
-                    for (int i = 1; i < polyline.Length; i++)
-                        Gizmos.DrawLine(polyline[i - 1], polyline[i]);
+                // Draw the stitching arrows if they have
+                // been generated.
+                if (stitchArrowPolylines != null)
+                {
+                    Gizmos.color = Color.green;
+                    foreach (Vector3[] polyline in stitchArrowPolylines)
+                        for (int i = 1; i < polyline.Length; i++)
+                            Gizmos.DrawLine(polyline[i - 1], polyline[i]);
+                }
             }
         }
-#endregion
-#region Editor Surface Constraints
+        #endregion
+        #region Editor Surface Constraints
         /// <summary>
         /// Starting from the root surface, resolves the transform
         /// layout of all surfaces in the scene. Should be called
@@ -512,21 +627,21 @@ namespace BattleRoyalRhythm.GridActors
             // just clutter the scope.
             void ProcessConstraint(Surface from, Surface to, StitchingConstraint constraint)
             {
-#region Invalid Cases Check
+                #region Invalid Cases Check
                 // Break the recursive function if this surface links
                 // to itself (stack overflow), or if the specified
                 // surface is null (not yet specified).
                 if (constraint.other == null || from == constraint.other)
                     return;
-#endregion
-#region Circular Constraint Setup
+                #endregion
+                #region Circular Constraint Setup
                 // Grab the initial state of the transform
                 // to solve so we can check if it matches previously
                 // solved constraints in a circular loop.
                 Vector3 expectedPosition = to.transform.position;
                 Quaternion expectedRotation = to.transform.rotation;
-#endregion
-#region Direction Conditions Setup
+                #endregion
+                #region Direction Conditions Setup
                 // Get the sampling points for merging these two
                 // surfaces together, as well as an angle offset and
                 // added translation for the link type.
@@ -567,8 +682,8 @@ namespace BattleRoyalRhythm.GridActors
                         addedAngle = -90.0f;
                         break;
                 }
-#endregion
-#region Solve Constraint Transform
+                #endregion
+                #region Solve Constraint Transform
                 // Zero out the transform that we will snap, so
                 // that we don't have to deal with offsets.
                 to.SetTransform(Vector3.zero, Quaternion.identity);
@@ -590,8 +705,8 @@ namespace BattleRoyalRhythm.GridActors
                     from.GetLocation(fromSample) - to.GetLocation(toSample)
                         + fromUp * constraint.yStep,
                     to.transform.rotation);
-#endregion
-#region Circular Constraint Check
+                #endregion
+                #region Circular Constraint Check
                 // If this surface has already been locked
                 // by another constraint, compare the outcome
                 // of the two constraints.
@@ -620,8 +735,8 @@ namespace BattleRoyalRhythm.GridActors
                         foreach (StitchingConstraint link in to.surfaceLinks)
                             ProcessConstraint(to, link.other, link);
                 }
-#endregion
-#region Generate Gizmo Arrows
+                #endregion
+                #region Generate Gizmo Arrows
                 float ARROW_SIZE = 0.25f;
                 // Get the range to draw the arrows in,
                 // accounting for the y shift.
@@ -835,7 +950,7 @@ namespace BattleRoyalRhythm.GridActors
                             break;
                     }
                 }
-#endregion
+                #endregion
             }
             // Finally update the position and orientation of
             // any grid actors in the editor, to match the new
@@ -872,7 +987,40 @@ namespace BattleRoyalRhythm.GridActors
             // Finally revalidate the calling surface.
             changedSurface.ValidateConstraints();
         }
-#endregion
-#endif
+        #endregion
     }
+
+    /// <summary>
+    /// POCO class that stores the inspector state for
+    /// the grid world.
+    /// </summary>
+    [Serializable]
+    public sealed class GridWorldInspectorState : IGridWorldPreferences
+    {
+        #region State Fields
+        public bool showEditorProperties;
+        public bool showGuidesInSceneView;
+        public bool showGuidesInPlayMode;
+        public Color wireColor;
+        public Color fillColor;
+        // Accessors for other inspectors.
+        public bool ShowGuidesInSceneView => showGuidesInSceneView;
+        public bool ShowGuidesInPlayMode => showGuidesInPlayMode;
+        public Color WireColor => wireColor;
+        public Color FillColor => fillColor;
+        #endregion
+        #region Constructor / Default Values
+        public GridWorldInspectorState()
+        {
+            // Set the default foldout state.
+            showEditorProperties = false;
+            // Set default editor preferences.
+            showGuidesInSceneView = true;
+            showGuidesInPlayMode = true;
+            wireColor = Color.gray;
+            fillColor = Color.magenta;
+        }
+        #endregion
+    }
+#endif
 }

@@ -10,6 +10,8 @@ public class SceneIntegration : MonoBehaviour
     private GameObject gamePanel;
     [SerializeField]
     private GameObject creditsPanel;
+    [SerializeField]
+    private GameObject instructionsPanel;
 
     public void ChangeScene(string nextLevel)
     {
@@ -28,6 +30,21 @@ public class SceneIntegration : MonoBehaviour
 
             gamePanel.SetActive(true);
             creditsPanel.SetActive(false);
+        }
+    }
+
+    public void ToggleInstructions()
+    {
+        if (gamePanel.activeSelf == true)
+        {
+            gamePanel.SetActive(false);
+            instructionsPanel.SetActive(true);
+        }
+        else
+        {
+
+            gamePanel.SetActive(true);
+            instructionsPanel.SetActive(false);
         }
     }
 }

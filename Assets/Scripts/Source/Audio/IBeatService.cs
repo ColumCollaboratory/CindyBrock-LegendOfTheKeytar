@@ -7,6 +7,7 @@
     /// <param name="beatTime">The exact time of the beat.</param>
     public delegate void BeatElapsedHandler(float beatTime);
     #endregion
+
     /// <summary>
     /// Provides an update routine that is called every time
     /// a beat elapses in a playing song.
@@ -24,6 +25,22 @@
         /// The current 0-1 interpolant between beats.
         /// </summary>
         float CurrentInterpolant { get; }
+        // NOTE this is not overflow-proof.
+        /// <summary>
+        /// The current beat that this service is on since starting.
+        /// </summary>
+        int CurrentBeatCount { get; }
+        /// <summary>
+        /// The current seconds per beat of the service.
+        /// </summary>
+        float SecondsPerBeat { get; }
+        #endregion
+        #region Methods Implemented
+        /// <summary>
+        /// Sets the soundtrack to be used for the beat.
+        /// </summary>
+        /// <param name="set">The soundtrack set.</param>
+        void SetBeatSoundtrack(SoundtrackSet set);
         #endregion
     }
 }

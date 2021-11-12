@@ -16,8 +16,7 @@ namespace BattleRoyalRhythm.Audio
         private float currentInterpolant;
         public override float CurrentInterpolant => currentInterpolant;
 
-        #region Beat Interval State
-        #endregion
+        public override float SecondsPerBeat => millisPerBeat / 1000f;
 
         public override event BeatElapsedHandler BeatElapsed;
 
@@ -27,14 +26,7 @@ namespace BattleRoyalRhythm.Audio
 
         private float millisPerBeat = 1f;
 
-        public void SetBeatFromEvent(string eventName, float bpm)
-        {
-            millisPerBeat = 60000f / bpm;
-            beatMusicID = AkSoundEngine.PostEvent(
-                eventName, gameObject,
-                (uint)AkCallbackType.AK_EnableGetSourcePlayPosition,
-                WwiseCallback, null);
-        }
+
         // This callback is needed for Wwise to wwork.
         private void WwiseCallback(object in_cookie, AkCallbackType in_type, AkCallbackInfo in_info) { }
 
@@ -42,18 +34,31 @@ namespace BattleRoyalRhythm.Audio
         {
             AkSoundEngine.GetSourcePlayPosition(beatMusicID, out playPosition);
 
-            currentInterpolant = (playPosition % millisPerBeat) / millisPerBeat;
+            currentInterpolant = ((playPosition + BeatOffset / 1000f) % millisPerBeat) / millisPerBeat;
 
 
-            // Check if a beat has elapsed.
-            if (currentInterpolant < lastInterpolant)
+            // Check if a beat has elapsed. An epsilon value
+            // is used here as a hotfix for some weird bug where
+            // an interpolant is calculated as slightly less than the prior frame.
+            if (lastInterpolant - currentInterpolant > 0.1f)
             {
+                CurrentBeatCount++;
                 // Increment the elapsed beat and
                 // notify listeners of the service.
-                BeatElapsed?.Invoke(Mathf.Lerp(lastFixedTime, Time.fixedTime, Mathf.InverseLerp(lastInterpolant, currentInterpolant + 1f, 1f)));
+                BeatElapsed?.Invoke(Mathf.Lerp(lastFixedTime, Time.fixedTime,
+                    Mathf.InverseLerp(lastInterpolant, currentInterpolant + 1f, 1f)));
             }
             lastInterpolant = currentInterpolant;
-            lastFixedTime = Time.fixedDeltaTime;
+            lastFixedTime = Time.fixedTime;
+        }
+
+        public override void SetBeatSoundtrack(SoundtrackSet set)
+        {
+            millisPerBeat = 60000f / set.BeatsPerMinute;
+            beatMusicID = AkSoundEngine.PostEvent(
+                set.name, gameObject,
+                (uint)AkCallbackType.AK_EnableGetSourcePlayPosition,
+                WwiseCallback, null);
         }
     }
 }

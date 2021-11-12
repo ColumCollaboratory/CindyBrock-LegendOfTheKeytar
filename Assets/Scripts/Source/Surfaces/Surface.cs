@@ -2,6 +2,7 @@ using UnityEngine;
 using BattleRoyalRhythm.GridActors;
 #if UNITY_EDITOR
 using UnityEditor;
+using Tools;
 #endif
 
 namespace BattleRoyalRhythm.Surfaces
@@ -34,8 +35,7 @@ namespace BattleRoyalRhythm.Surfaces
 #if UNITY_EDITOR
         #region Scene Editing State
         // Store the locked transform values.
-        private Vector3 currentPosition;
-        private Quaternion currentRotation;
+        private ProgrammedTransform programmedTransform;
         // Store the local wireframe.
         private Vector3[][] localWireframe;
         // Store prior field state so we can
@@ -72,11 +72,10 @@ namespace BattleRoyalRhythm.Surfaces
         /// <param name="rotation">The rotation of the transform.</param>
         public void SetTransform(Vector3 position, Quaternion rotation)
         {
-            currentPosition = position;
-            currentRotation = rotation;
-            transform.position = position;
-            transform.rotation = rotation;
-            transform.localScale = Vector3.one;
+            if (programmedTransform == null)
+                Initialize();
+            programmedTransform.Position = position;
+            programmedTransform.Rotation = rotation;
         }
         /// <summary>
         /// Does a line cast againt the surface checking for a hit tile.
@@ -142,21 +141,28 @@ namespace BattleRoyalRhythm.Surfaces
         // Handle the gizmo drawing for surfaces.
         private void OnDrawGizmos()
         {
-            // Set the color for the wireframe
-            // based on if it is selected.
-            bool isSelected = Selection.Contains(transform.gameObject);
-            Gizmos.color = (isSelected ? Color.yellow : Color.gray);
-            // Draw the wireframe.
-            if (localWireframe != null)
+            GridWorld world = GetComponentInParent<GridWorld>();
+            if (world != null)
             {
-                for (int i = 0; i < localWireframe.Length; i++)
+                IGridWorldPreferences preferences = world.EditorPreferences;
+
+                if ((!Application.isPlaying && preferences.ShowGuidesInSceneView) ||
+                    (Application.isPlaying && preferences.ShowGuidesInPlayMode))
                 {
-                    Vector3 previousPoint = transform.TransformPoint(localWireframe[i][0]);
-                    for (int j = 1; j < localWireframe[i].Length; j++)
+                    Gizmos.color = preferences.WireColor;
+                    // Draw the wireframe.
+                    if (localWireframe != null)
                     {
-                        Vector3 nextPoint = transform.TransformPoint(localWireframe[i][j]);
-                        Gizmos.DrawLine(previousPoint, nextPoint);
-                        previousPoint = nextPoint;
+                        for (int i = 0; i < localWireframe.Length; i++)
+                        {
+                            Vector3 previousPoint = transform.TransformPoint(localWireframe[i][0]);
+                            for (int j = 1; j < localWireframe[i].Length; j++)
+                            {
+                                Vector3 nextPoint = transform.TransformPoint(localWireframe[i][j]);
+                                Gizmos.DrawLine(previousPoint, nextPoint);
+                                previousPoint = nextPoint;
+                            }
+                        }
                     }
                 }
             }
@@ -236,30 +242,18 @@ namespace BattleRoyalRhythm.Surfaces
         }
         #endregion
         #region Enforced Transform Lock
-        private void OnEnable()
+        private void OnEnable() => Initialize();
+        private void Reset() => Initialize();
+        private void Initialize()
         {
-            // Conceal the transform.
-            transform.hideFlags = HideFlags.HideInInspector;
+            programmedTransform = GetComponent<ProgrammedTransform>();
+            if (programmedTransform == null)
+                programmedTransform = gameObject.AddComponent<ProgrammedTransform>();
+            programmedTransform.CurrentVisibility = ProgrammedTransform.Visibility.Hidden;
         }
-        private void Reset()
+        private void OnDestroy()
         {
-            // Conceal the transform.
-            transform.hideFlags = HideFlags.HideInInspector;
-        }
-        private void Update()
-        {
-            // Lock out any value changes.
-            if (transform.position != currentPosition)
-                transform.position = currentPosition;
-            if (transform.rotation != currentRotation)
-                transform.rotation = currentRotation;
-            if (transform.localScale != Vector3.one)
-                transform.localScale = Vector3.one;
-        }
-        private void OnDisable()
-        {
-            // Reveal the transform.
-            transform.hideFlags = HideFlags.None;
+            DestroyImmediate(programmedTransform);
         }
         #endregion
 #endif

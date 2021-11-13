@@ -12,7 +12,7 @@ Andrew Forster
 
 ### Art Team
 Justin Goode - Characters\
-Bryana Volke - Environments\
+Bryana Volk - Environments\
 Jonathon Gilmer - UI
 
 ### Design Team

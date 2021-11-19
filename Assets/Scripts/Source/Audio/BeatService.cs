@@ -15,6 +15,12 @@ namespace BattleRoyalRhythm.Audio
         public abstract event BeatElapsedHandler BeatElapsed;
         #endregion
 
+        [Tooltip("Controls how often the player can make an action.")]
+        [SerializeField][Min(1)] private int beatsPerAction = 1;
+
+
+        protected int BeatsPerAction => beatsPerAction;
+
         public int CurrentBeatCount { get; protected set; }
         public float BeatOffset { get; set; }
 

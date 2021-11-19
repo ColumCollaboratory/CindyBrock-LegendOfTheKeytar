@@ -190,12 +190,12 @@ namespace BattleRoyalRhythm.GridActors.Enemies
         }
         private void FinalizeDeath()
         {
-            Destroyed?.Invoke(this);
+            RemovedFromGrid?.Invoke(this);
             World.BeatService.BeatElapsed -= OnBeatElapsed;
             Destroy(gameObject);
         }
 
-        public override event ActorRemoved Destroyed;
+        public override event ActorRemovedHandler RemovedFromGrid;
 
         private void ExecuteWalk()
         {

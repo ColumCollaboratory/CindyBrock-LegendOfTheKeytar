@@ -81,13 +81,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4973b5e2f2571a042ae1e3279ec987b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  beatsPerAction: 1
+  actionOffset: 0
   tags: 1
   blocksTags: 4
   blocksDirections: 11
   currentSurface: {fileID: 0}
+  direction: 1
   tile: {x: 3, y: 7}
+  exactLocation: {x: 3, y: 7}
   tileHeight: 2
-  World: {fileID: 0}
+  programmedTransform: {fileID: 0}
   duckingTileHeight: 1
   maxHealth: 100
   health: 100
@@ -163,7 +167,6 @@ MonoBehaviour:
       enumValue: 3
     state: 0
   pivotDegreesPerBeat: 180
-  beatService: {fileID: 0}
   soundtrackSet: 3
   genres:
   - wwiseGenreTarget: _Level_1_Chiptune
@@ -180,6 +183,8 @@ MonoBehaviour:
   maxPullupHeight: 4
   autoStepHeight: 1
   animationSnapHintTransform: {fileID: 289630824237759863}
+  inBossMode: 0
+  beatTimeline: {fileID: 0}
 --- !u!114 &1435093365478752560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,7 +210,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownBeats: 0
-  beatService: {fileID: 0}
   dashTiles: 4
   dashThroughWalls: 0
   dashThroughSpecialActors: 0
@@ -242,7 +246,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownBeats: 1
-  beatService: {fileID: 0}
   maxGrenades: 2
   grenadeTemplate: {fileID: 1077037783006298253, guid: 69ab8086a2a8fb744b2255e1c3a46f9d, type: 3}
   animator:
@@ -270,7 +273,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownBeats: 1
-  beatService: {fileID: 0}
   repulsorJumps: 1
   repulsionRadius: 2
   repulsorKnockback: 2
@@ -299,7 +301,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownBeats: 1
-  beatService: {fileID: 0}
 --- !u!114 &1654960030081364720
 MonoBehaviour:
   m_ObjectHideFlags: 0

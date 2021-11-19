@@ -51,12 +51,12 @@ namespace BattleRoyalRhythm.GridActors.Player
             // Spawn the bomb actor.
             BombActor newBomb = Instantiate(grenadeTemplate).GetComponent<BombActor>();
             // Spawn the bomb at the actor location.
-            newBomb.World = UsingActor.World;
+            newBomb.InitializeGrid(UsingActor.World);
             newBomb.BeatService = UsingActor.World.BeatService;
             newBomb.CurrentSurface = UsingActor.CurrentSurface;
-            newBomb.Location = UsingActor.Location;
+            newBomb.Tile = UsingActor.Tile;
             UsingActor.World.Actors.Add(newBomb);
-            newBomb.Destroyed += OnBombDestroyed;
+            newBomb.RemovedFromGrid += OnBombDestroyed;
         }
 
         private void OnBombDestroyed(GridActor bomb)

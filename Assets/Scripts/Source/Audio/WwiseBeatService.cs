@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using AK.Wwise;
+using Tools;
 
 namespace BattleRoyalRhythm.Audio
 {
@@ -20,7 +21,7 @@ namespace BattleRoyalRhythm.Audio
 
         public override event BeatElapsedHandler BeatElapsed;
 
-        [SerializeField] private int playPosition = 1;
+        [SerializeField][ReadonlyField] private int playPosition = 1;
 
         private uint beatMusicID;
 
@@ -45,8 +46,11 @@ namespace BattleRoyalRhythm.Audio
                 CurrentBeatCount++;
                 // Increment the elapsed beat and
                 // notify listeners of the service.
-                BeatElapsed?.Invoke(Mathf.Lerp(lastFixedTime, Time.fixedTime,
-                    Mathf.InverseLerp(lastInterpolant, currentInterpolant + 1f, 1f)));
+                if (CurrentBeatCount % BeatsPerAction == 0)
+                {
+                    BeatElapsed?.Invoke(Mathf.Lerp(lastFixedTime, Time.fixedTime,
+                        Mathf.InverseLerp(lastInterpolant, currentInterpolant + 1f, 1f)));
+                }
             }
             lastInterpolant = currentInterpolant;
             lastFixedTime = Time.fixedTime;

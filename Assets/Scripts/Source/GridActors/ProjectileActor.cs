@@ -30,9 +30,9 @@ namespace BattleRoyalRhythm.GridActors
             IgnoredActors = new List<GridActor>();
         }
 
-        public void InitalizeProjectile(GridWorld world)
+        public override void InitializeGrid(GridWorld world)
         {
-            World = world;
+            base.InitializeGrid(world);
             world.Actors.Add(this);
             World.BeatService.BeatElapsed += OnBeatElapsed;
             OnBeatElapsed(0f);

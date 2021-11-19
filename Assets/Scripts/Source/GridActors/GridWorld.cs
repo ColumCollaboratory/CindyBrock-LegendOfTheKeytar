@@ -526,7 +526,7 @@ namespace BattleRoyalRhythm.GridActors
             actors = new List<GridActor>();
             foreach (GridActor actor in GetComponentsInChildren<GridActor>())
             {
-                actor.World = this;
+                actor.InitializeGrid(this);
                 actors.Add(actor);
             }
         }

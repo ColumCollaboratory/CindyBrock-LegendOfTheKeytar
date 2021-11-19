@@ -28,7 +28,7 @@ namespace BattleRoyalRhythm.GridActors
         [SerializeField] private Transform bombMesh = null;
         #endregion
 
-        public override sealed event ActorRemoved Destroyed;
+        public override sealed event ActorRemovedHandler RemovedFromGrid;
 
         private IBeatService beatService;
         public IBeatService BeatService
@@ -67,7 +67,7 @@ namespace BattleRoyalRhythm.GridActors
                     // TODO implement other effects here.
                 }
                 // Remove this actor from the context of the grid.
-                Destroyed?.Invoke(this);
+                RemovedFromGrid?.Invoke(this);
                 World.Actors.Remove(this);
                 beatService.BeatElapsed -= DEPRECATED_BEAT_ELAPSED;
                 // Start the explosion effect.

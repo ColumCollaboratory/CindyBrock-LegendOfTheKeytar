@@ -122,11 +122,11 @@ namespace BattleRoyalRhythm.GridActors.Enemies
                 // Spawn a bullet.
                 ProjectileActor newProjectile = Instantiate(projectileTemplate).
                     GetComponent<ProjectileActor>();
+                newProjectile.InitializeGrid(World);
                 newProjectile.CurrentSurface = CurrentSurface;
-                newProjectile.Location = Tile;
+                newProjectile.Tile = Tile;
                 newProjectile.Direction = Direction;
                 newProjectile.IgnoredActors.Add(this);
-                newProjectile.InitalizeProjectile(World);
                 return;
             }
 

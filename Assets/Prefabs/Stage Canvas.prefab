@@ -52,7 +52,7 @@ MonoBehaviour:
   beatService: {fileID: 0}
   playerActor: {fileID: 0}
   beatReticle: {fileID: 2186732923070128937}
-  iconGap: 150
+  iconGap: 250
   exitingRangeWidth: 300
   enteringRangeWidth: 1000
   exitingIconsOpacity:

@@ -215,31 +215,34 @@ namespace BattleRoyalRhythm.UI
 
         private void OnBeatElapsed(float beatTime)
         {
-            // Age all icons so they move to the
-            // next span during the following cycle.
-            for (int i = 0; i < icons.Length; i++)
-                icons[i].beatAge++;
-            // Loop one of the icons back around.
-            icons[beatFeedIndex].image.sprite = emptySprite;
-            icons[beatFeedIndex].beatAge = feedAge;
-            // Handle beat feeding.
-            if (fedBeats > 0)
-                fedBeats--;
-            if (upcomingActions.Count > 0)
+            if (playerActor.IsActionBeat)
             {
-                fedBeats++;
-                icons[beatFeedIndex].image.sprite = GetSprite(upcomingActions[0]);
-                upcomingActions.RemoveAt(0);
+                // Age all icons so they move to the
+                // next span during the following cycle.
+                for (int i = 0; i < icons.Length; i++)
+                    icons[i].beatAge++;
+                // Loop one of the icons back around.
+                icons[beatFeedIndex].image.sprite = emptySprite;
+                icons[beatFeedIndex].beatAge = feedAge;
+                // Handle beat feeding.
+                if (fedBeats > 0)
+                    fedBeats--;
+                if (upcomingActions.Count > 0)
+                {
+                    fedBeats++;
+                    icons[beatFeedIndex].image.sprite = GetSprite(upcomingActions[0]);
+                    upcomingActions.RemoveAt(0);
+                }
+                // Increment and loop the pool indices.
+                currentBeatIndex++;
+                beatFeedIndex++;
             }
-            // Increment and loop the pool indices.
-            currentBeatIndex++;
-            beatFeedIndex++;
         }
 
         private void Update()
         {
             // Position and apply fade to the beat icons.
-            float interpolant = beatService.CurrentInterpolant;
+            float interpolant = playerActor.GetActionInterpolant();
             foreach (TimedIcon icon in icons)
             {
                 // Calculate the x position of this sprite.

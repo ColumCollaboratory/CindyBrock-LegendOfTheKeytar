@@ -165,13 +165,12 @@ namespace BattleRoyalRhythm.GridActors.Player
                 activeGenre = 0;
                 currentAnimations = new Queue<BeatAnimation>();
                 World.BeatService.BeatOffset = -inputTolerance * 0.5f;
-                World.BeatService.BeatElapsed += OnBeatElapsed;
                 SoundtrackSet levelSet = SoundtrackSettings.Load().GetSetByID(soundtrackSet);
                 World.BeatService.SetBeatSoundtrack(levelSet);
 
                 // Set the animator such that 60 frames (1 second)
                 // elapses in one beat.
-                animator.speed = levelSet.BeatsPerMinute / 60f;
+                animator.speed = levelSet.BeatsPerMinute / 60f / beatsPerAction;
 
                 moveModeAnimator.State = ActionState.Idle;
                 moveContextAnimator.State = ActionContext.Standing;
@@ -190,15 +189,16 @@ namespace BattleRoyalRhythm.GridActors.Player
             Direction = Direction.Right;
         }
 
-
-        private void OnBeatElapsed(float beatTime)
+        protected override void OnBeatElapsed(float beatTime)
         {
+            base.OnBeatElapsed(beatTime);
             // Finalize the prior animation if there was one.
             if (currentAnimations.Count > 0)
             {
                 Vector2 toLocation = currentAnimations.Peek().Path(1f);
                 // Apply the translation to the actor.
                 World.TranslateActor(this, toLocation - lastAnimationFrame);
+                lastAnimationFrame = Vector2.zero;
                 currentAnimations.Dequeue();
             }
             // HOTFIX; this allows longer actions to take more beats.
@@ -239,7 +239,7 @@ namespace BattleRoyalRhythm.GridActors.Player
 
             int directionStep = Direction is Direction.Right ? 1 : -1;
 
-            if (!movementOverriden)
+            if (!movementOverriden && IsActionBeat)
             {
                 // React to the latest input if it has
                 // been timed well enough.
@@ -446,7 +446,7 @@ namespace BattleRoyalRhythm.GridActors.Player
             {
                 bool facingRight = Direction is Direction.Right;
                 stateThisFrame = ActionState.PullingUp;
-                currentActionDuration = 2;
+                currentActionDuration = 4;
                 moveContextAnimator.State = ActionContext.Standing;
                 nextState = ActionState.Idle;
                 animationSnapState = SnapState.AwaitingForwardSnap;
@@ -558,14 +558,16 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Properly orient the direction.
                 Direction = directionStep is 1 ? Direction.Right : Direction.Left;
                 stateThisFrame = ActionState.Walking;
-                currentActionDuration = 1;
+                currentActionDuration = 2;
                 moveContextAnimator.State = ActionContext.Standing;
                 animationSnapState = SnapState.None;
                 nextState = ActionState.Idle;
                 // Create the animations.
                 currentAnimations.Clear();
                 currentAnimations.Enqueue(new BeatAnimation(
-                    ActorAnimationsGenerator.CreateWalkPath(directionStep)));
+                    ActorAnimationsGenerator.CreateWalkPath(directionStep * 0.5f)));
+                currentAnimations.Enqueue(new BeatAnimation(
+                    ActorAnimationsGenerator.CreateWalkPath(directionStep * 0.5f)));
             }
             #endregion
 
@@ -689,6 +691,7 @@ namespace BattleRoyalRhythm.GridActors.Player
             }
             #endregion
         }
+
 
         private void Update()
         {

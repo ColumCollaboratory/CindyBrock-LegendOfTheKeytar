@@ -25,7 +25,7 @@ namespace BattleRoyalRhythm.GridActors
         /// <param name="moveX">The x distance to move.</param>
         /// <param name="moveY">The y distance to move.</param>
         /// <returns>An animation path.</returns>
-        public static ActorAnimationPath CreateWalkPath(int moveX, int moveY = 0)
+        public static ActorAnimationPath CreateWalkPath(float moveX, float moveY = 0)
         {
             // Store the end location and lerp towards it.
             Vector2 end = new Vector2(moveX, moveY);

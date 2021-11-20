@@ -33,7 +33,7 @@ namespace BattleRoyalRhythm.GridActors.Player
             jumpsUsed = 0;
         }
 
-        protected override ActorAnimationPath UsingBeatElapsed()
+        protected override BeatAction UsingBeatElapsed()
         {
             animator.State = State.Repulsing;
             StopUsing();

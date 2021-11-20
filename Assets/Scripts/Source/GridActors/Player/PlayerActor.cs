@@ -4,9 +4,30 @@ using UnityEngine;
 using BattleRoyalRhythm.Audio;
 using BattleRoyalRhythm.Input;
 using BattleRoyalRhythm.UI;
+using BattleRoyalRhythm.Collections;
 
 namespace BattleRoyalRhythm.GridActors.Player
 {
+
+    public sealed class BeatAction
+    {
+        public BeatAction(int duration)
+        {
+            Path = null;
+            Duration = duration;
+        }
+
+        public BeatAction(ActorAnimationPath path, int duration)
+        {
+            Path = path;
+            Duration = duration;
+        }
+
+        public int Duration { get; }
+        public ActorAnimationPath Path { get; }
+    }
+
+
     /// <summary>
     /// The actor that controls the main player character.
     /// </summary>
@@ -72,13 +93,14 @@ namespace BattleRoyalRhythm.GridActors.Player
 
         [SerializeField] private Transform meshContainer = null;
         [SerializeField] private Animator animator = null;
+        [SerializeField] private EnumMap<ActionState, int> actionDurations = null;
         [SerializeField] private AnimatorState<ActionState> moveModeAnimator = null;
         [SerializeField] private AnimatorState<ActionContext> moveContextAnimator = null;
         [SerializeField][Min(0f)] private float pivotDegreesPerBeat = 180f;
 
-        //[SerializeField] private BeatService beatService = null;
         [SerializeField][SoundtrackID] private int soundtrackSet = 0;
         [SerializeField] private GenreAbilityPair[] genres = null;
+
         [Header("Automatic Actions")]
         [Tooltip("The minimum number of tiles the player can jump along the x-axis.")]
         [SerializeField][Min(2)] private int minJumpX = 2;
@@ -97,15 +119,15 @@ namespace BattleRoyalRhythm.GridActors.Player
         private Vector3 lastFrameHintPosition;
         private int unDuckedHeight;
         private float targetYAxisDegrees;
-        private int currentActionDuration;
         private int activeGenre;
         private bool wasInputLastBeat;
         private bool abilityInUse;
         private Vector2 lastAnimationFrame;
         private Vector3 snapBeatLocation;
-        private Queue<BeatAnimation> currentAnimations;
+        private Queue<BeatAction> queuedActions;
         private ActionState nextState;
         private ActionState stateThisFrame;
+        private int currentActionProgress;
 
         public event Action<float> BeatEarly;
         public event Action<float> BeatLate;
@@ -130,23 +152,37 @@ namespace BattleRoyalRhythm.GridActors.Player
             }
         }
 
-
-        private sealed class BeatAnimation
-        {
-            public BeatAnimation(ActorAnimationPath path, bool animatorOverrides = false)
-            {
-                Path = path;
-                AnimatorOverrides = animatorOverrides;
-            }
-
-            public ActorAnimationPath Path { get; }
-            public bool AnimatorOverrides { get; }
-        }
-
-
         public float Health => health;
 
         public float MaxHealth => maxHealth;
+
+        public int[] GetCurrentActionGaps(int numberOfBeats)
+        {
+            // TODO this code is not optimized.
+            List<int> gaps = new List<int>();
+            bool isFirstAction = true;
+            int beatsAccounted = 0;
+            foreach (BeatAction action in queuedActions)
+            {
+                if (isFirstAction)
+                {
+                    beatsAccounted += action.Duration - currentActionProgress;
+                    gaps.Add(action.Duration - currentActionProgress);
+                    isFirstAction = false;
+                }
+                else
+                {
+                    beatsAccounted += action.Duration;
+                    gaps.Add(action.Duration);
+                }
+            }
+            while (beatsAccounted < numberOfBeats)
+            {
+                beatsAccounted += actionDurations[ActionState.Idle];
+                gaps.Add(actionDurations[ActionState.Idle]);
+            }
+            return gaps.ToArray();
+        }
 
 
         protected override void OnValidate()
@@ -163,14 +199,16 @@ namespace BattleRoyalRhythm.GridActors.Player
                 unDuckedHeight = TileHeight;
 
                 activeGenre = 0;
-                currentAnimations = new Queue<BeatAnimation>();
+                queuedActions = new Queue<BeatAction>();
                 World.BeatService.BeatOffset = -inputTolerance * 0.5f;
+                World.BeatService.BeatElapsed += OnBeatElapsed;
                 SoundtrackSet levelSet = SoundtrackSettings.Load().GetSetByID(soundtrackSet);
                 World.BeatService.SetBeatSoundtrack(levelSet);
 
+
                 // Set the animator such that 60 frames (1 second)
                 // elapses in one beat.
-                animator.speed = levelSet.BeatsPerMinute / 60f / beatsPerAction;
+                animator.speed = levelSet.BeatsPerMinute / 60f;
 
                 moveModeAnimator.State = ActionState.Idle;
                 moveContextAnimator.State = ActionContext.Standing;
@@ -189,21 +227,25 @@ namespace BattleRoyalRhythm.GridActors.Player
             Direction = Direction.Right;
         }
 
-        protected override void OnBeatElapsed(float beatTime)
+        private void OnBeatElapsed(float beatTime)
         {
-            base.OnBeatElapsed(beatTime);
             // Finalize the prior animation if there was one.
-            if (currentAnimations.Count > 0)
+            if (queuedActions.Count > 0)
             {
-                Vector2 toLocation = currentAnimations.Peek().Path(1f);
-                // Apply the translation to the actor.
-                World.TranslateActor(this, toLocation - lastAnimationFrame);
-                lastAnimationFrame = Vector2.zero;
-                currentAnimations.Dequeue();
+                BeatAction currentAction = queuedActions.Peek();
+                currentActionProgress++;
+                if (currentActionProgress >= currentAction.Duration)
+                {
+                    Vector2 toLocation = queuedActions.Peek().Path(1f);
+                    // Apply the translation to the actor.
+                    World.TranslateActor(this, toLocation - lastAnimationFrame);
+                    lastAnimationFrame = Vector2.zero;
+                    queuedActions.Dequeue();
+                    currentActionProgress = 0;
+                }
             }
             // HOTFIX; this allows longer actions to take more beats.
-            currentActionDuration--;
-            if (currentActionDuration > 0)
+            if (currentActionProgress > 0)
                 return;
 
             animator.SetTrigger("Beat Elapsed");
@@ -228,10 +270,10 @@ namespace BattleRoyalRhythm.GridActors.Player
                     abilityInUse = false;
                 else
                 {
-                    ActorAnimationPath path = genres[activeGenre].ability.ElapseBeat();
-                    if (path != null)
+                    BeatAction action = genres[activeGenre].ability.ElapseBeat();
+                    if (action != null)
                     {
-                        currentAnimations.Enqueue(new BeatAnimation(path));
+                        queuedActions.Enqueue(action);
                         movementOverriden = true;
                     }
                 }
@@ -239,8 +281,9 @@ namespace BattleRoyalRhythm.GridActors.Player
 
             int directionStep = Direction is Direction.Right ? 1 : -1;
 
-            if (!movementOverriden && IsActionBeat)
+            if (!movementOverriden)
             {
+
                 // React to the latest input if it has
                 // been timed well enough.
                 float beatDelta = controller.LatestTimestamp - beatTime;
@@ -270,9 +313,9 @@ namespace BattleRoyalRhythm.GridActors.Player
                         case PlayerAction.SetGenre3: ProcessSetGenre(2); break;
                         case PlayerAction.SetGenre4: ProcessSetGenre(3); break;
                     }
-                    if (currentAnimations.Count != 0)
+                    if (queuedActions.Count != 0)
                     {
-                        ActionExecuted?.Invoke(controller.LatestAction, currentActionDuration);
+                        ActionExecuted?.Invoke(controller.LatestAction, queuedActions.Peek().Duration);
                     }
                     wasInputLastBeat = true;
                 }
@@ -287,7 +330,9 @@ namespace BattleRoyalRhythm.GridActors.Player
                         wasInputLastBeat = false;
                     }
                 }
+
             }
+
             moveModeAnimator.State = stateThisFrame;
             if (stateThisFrame is ActionState.Falling)
             {
@@ -372,17 +417,19 @@ namespace BattleRoyalRhythm.GridActors.Player
                     if (genres[activeGenre].ability.IsUsable(World.BeatService.CurrentBeatCount))
                     {
                         genres[activeGenre].ability.StartUsing(World.BeatService.CurrentBeatCount);
-                        ActorAnimationPath path = genres[activeGenre].ability.ElapseBeat();
-                        if (path != null)
-                            currentAnimations.Enqueue(new BeatAnimation(path));
+                        BeatAction action = genres[activeGenre].ability.ElapseBeat();
+                        if (action != null)
+                            queuedActions.Enqueue(action);
                         abilityInUse = true;
                     }
                 }
             }
             void ExecuteAttack()
             {
+                queuedActions.Enqueue(new BeatAction(
+                    null,
+                    actionDurations[ActionState.Attacking]));
                 stateThisFrame = ActionState.Attacking;
-                currentActionDuration = 2;
                 animationSnapState = SnapState.None;
             }
             void ProcessSetGenre(int genre)
@@ -390,7 +437,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // If a different genre is selected;
                 if (activeGenre != genre)
                 {
-                    currentActionDuration = 1;
+                    queuedActions.Enqueue(new BeatAction(1));
                     animationSnapState = SnapState.None;
                     // Interrupt the current ability if
                     // it is in use.
@@ -415,10 +462,13 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Reset to the normal height.
                 TileHeight = unDuckedHeight;
                 // Update the animation state.
+                queuedActions.Enqueue(new BeatAction(
+                    actionDurations[ActionState.UnDucking]));
+
                 stateThisFrame = ActionState.UnDucking;
-                currentActionDuration = 1;
-                moveContextAnimator.State = ActionContext.Standing;
                 nextState = ActionState.Idle;
+
+                moveContextAnimator.State = ActionContext.Standing;
                 animationSnapState = SnapState.None;
             }
             void ExecuteDuck()
@@ -427,7 +477,8 @@ namespace BattleRoyalRhythm.GridActors.Player
                 TileHeight = duckingTileHeight;
                 // Update the animation state.
                 stateThisFrame = ActionState.DuckingDown;
-                currentActionDuration = 1;
+                queuedActions.Enqueue(new BeatAction(
+                    actionDurations[ActionState.DuckingDown]));
                 moveContextAnimator.State = ActionContext.Ducking;
                 nextState = ActionState.Idle;
                 animationSnapState = SnapState.None;
@@ -446,14 +497,14 @@ namespace BattleRoyalRhythm.GridActors.Player
             {
                 bool facingRight = Direction is Direction.Right;
                 stateThisFrame = ActionState.PullingUp;
-                currentActionDuration = 4;
                 moveContextAnimator.State = ActionContext.Standing;
                 nextState = ActionState.Idle;
                 animationSnapState = SnapState.AwaitingForwardSnap;
                 // Create the animations.
-                currentAnimations.Clear();
-                currentAnimations.Enqueue(new BeatAnimation(
-                    ActorAnimationsGenerator.CreatePullUpPath(!facingRight, TileHeight), true));
+                queuedActions.Clear();
+                queuedActions.Enqueue(new BeatAction(
+                    ActorAnimationsGenerator.CreatePullUpPath(!facingRight, TileHeight),
+                    actionDurations[ActionState.PullingUp]));
 
                 lastFrameHintPosition = animationSnapHintTransform.localPosition;
             }
@@ -469,16 +520,17 @@ namespace BattleRoyalRhythm.GridActors.Player
             {
                 // Set the current and next state.
                 stateThisFrame = ActionState.Jumping;
-                currentActionDuration = 1;
                 moveContextAnimator.State = ActionContext.Airborne;
                 nextState = ActionState.Falling;
                 animationSnapState = SnapState.None;
                 // Generate the animations.
-                currentAnimations.Clear();
-                currentAnimations.Enqueue(new BeatAnimation(
-                    ActorAnimationsGenerator.CreateJumpUpPath(jumpApex)));
-                currentAnimations.Enqueue(new BeatAnimation(
-                    ActorAnimationsGenerator.CreateJumpUpPath(-jumpApex)));
+                queuedActions.Clear();
+                queuedActions.Enqueue(new BeatAction(
+                    ActorAnimationsGenerator.CreateJumpUpPath(jumpApex),
+                    actionDurations[ActionState.Jumping]));
+                queuedActions.Enqueue(new BeatAction(
+                    ActorAnimationsGenerator.CreateJumpUpPath(-jumpApex),
+                    actionDurations[ActionState.Falling]));
             }
             #endregion
 
@@ -500,14 +552,14 @@ namespace BattleRoyalRhythm.GridActors.Player
             {
                 // Set the current state.
                 stateThisFrame = ActionState.Falling;
-                currentActionDuration = 1;
                 moveContextAnimator.State = ActionContext.Standing;
                 nextState = ActionState.Idle;
                 animationSnapState = SnapState.None;
                 // Create the animations.
-                currentAnimations.Clear();
-                currentAnimations.Enqueue(new BeatAnimation(
-                    ActorAnimationsGenerator.CreateDropDownPath(dropHeight + 1)));
+                queuedActions.Clear();
+                queuedActions.Enqueue(new BeatAction(
+                    ActorAnimationsGenerator.CreateDropDownPath(dropHeight + 1),
+                    actionDurations[ActionState.Falling]));
             }
             #endregion
 
@@ -524,19 +576,19 @@ namespace BattleRoyalRhythm.GridActors.Player
                 Direction = facingRight ? Direction.Left : Direction.Right;
                 // Set the current and upcoming state.
                 stateThisFrame = ActionState.DroppingToHang;
-                currentActionDuration = 2;
                 animationSnapState = SnapState.AwaitingBackSnap;
                 moveContextAnimator.State = ActionContext.Hanging;
                 nextState = ActionState.Idle;
                 // Generate the animations.
-                currentAnimations.Clear();
-                currentAnimations.Enqueue(new BeatAnimation(
-                    ActorAnimationsGenerator.CreateHangDownPath(facingRight, TileHeight)));
+                queuedActions.Clear();
+                queuedActions.Enqueue(new BeatAction(
+                    ActorAnimationsGenerator.CreateHangDownPath(facingRight, TileHeight),
+                    actionDurations[ActionState.DroppingToHang]));
 
                 Surfaces.Surface endSurface;
                 Vector2 endLocation;
                 World.SweepTranslate(CurrentSurface, Location,
-                    currentAnimations.Peek().Path(1f),
+                    queuedActions.Peek().Path(1f),
                     out endSurface,
                     out endLocation);
                 snapBeatLocation = endSurface.GetLocation(endLocation - Vector2.one * 0.5f);
@@ -558,16 +610,14 @@ namespace BattleRoyalRhythm.GridActors.Player
                 // Properly orient the direction.
                 Direction = directionStep is 1 ? Direction.Right : Direction.Left;
                 stateThisFrame = ActionState.Walking;
-                currentActionDuration = 2;
                 moveContextAnimator.State = ActionContext.Standing;
                 animationSnapState = SnapState.None;
                 nextState = ActionState.Idle;
                 // Create the animations.
-                currentAnimations.Clear();
-                currentAnimations.Enqueue(new BeatAnimation(
-                    ActorAnimationsGenerator.CreateWalkPath(directionStep * 0.5f)));
-                currentAnimations.Enqueue(new BeatAnimation(
-                    ActorAnimationsGenerator.CreateWalkPath(directionStep * 0.5f)));
+                queuedActions.Clear();
+                queuedActions.Enqueue(new BeatAction(
+                    ActorAnimationsGenerator.CreateWalkPath(directionStep),
+                    actionDurations[ActionState.Walking]));
             }
             #endregion
 
@@ -603,14 +653,14 @@ namespace BattleRoyalRhythm.GridActors.Player
                 Direction = Direction.Right;
                 // Set current and next state.
                 stateThisFrame = ActionState.Walking;
-                currentActionDuration = 1;
                 animationSnapState = SnapState.None;
                 moveContextAnimator.State = ActionContext.Standing;
                 nextState = ActionState.Idle;
                 // Create the animations.
-                currentAnimations.Clear();
-                currentAnimations.Enqueue(new BeatAnimation(
-                    ActorAnimationsGenerator.CreateWalkPath(directionStep, atHeight)));
+                queuedActions.Clear();
+                queuedActions.Enqueue(new BeatAction(
+                    ActorAnimationsGenerator.CreateWalkPath(directionStep, atHeight),
+                    actionDurations[ActionState.Walking]));
             }
             #endregion
 
@@ -643,15 +693,15 @@ namespace BattleRoyalRhythm.GridActors.Player
                             if (colliders[x, y - 1, CollisionDirectionMask.Down] && Mathf.Abs(x) >= minJumpX)
                             {
                                 stateThisFrame = ActionState.Jumping;
-                                currentActionDuration = 1;
                                 animationSnapState = SnapState.None;
                                 moveContextAnimator.State = ActionContext.Airborne;
                                 nextState = ActionState.Falling;
 
-                                currentAnimations.Clear();
+                                queuedActions.Clear();
                                 List<ActorAnimationPath> jumpArc = ActorAnimationsGenerator.CreateJumpPaths(x, y, height);
-                                foreach (ActorAnimationPath path in jumpArc)
-                                    currentAnimations.Enqueue(new BeatAnimation(path));
+                                queuedActions.Enqueue(new BeatAction(jumpArc[0], actionDurations[ActionState.Jumping]));
+                                for (int i = 1; i < jumpArc.Count; i++)
+                                    queuedActions.Enqueue(new BeatAction(jumpArc[i], actionDurations[ActionState.Falling]));
                                 return true;
                             }
                         }
@@ -680,14 +730,14 @@ namespace BattleRoyalRhythm.GridActors.Player
             {
                 // Set the animation state.
                 stateThisFrame = ActionState.Jumping;
-                currentActionDuration = 1;
                 moveContextAnimator.State = ActionContext.Hanging;
                 nextState = ActionState.Idle;
                 animationSnapState = SnapState.None;
                 // Create the animation paths.
-                currentAnimations.Clear();
-                currentAnimations.Enqueue(new BeatAnimation(
-                    ActorAnimationsGenerator.CreateJumpUpPath(height - TileHeight)));
+                queuedActions.Clear();
+                queuedActions.Enqueue(new BeatAction(
+                    ActorAnimationsGenerator.CreateJumpUpPath(height - TileHeight),
+                    actionDurations[ActionState.Jumping]));
             }
             #endregion
         }
@@ -699,11 +749,13 @@ namespace BattleRoyalRhythm.GridActors.Player
             {
                 // Are there animations to execute
                 // during this beat?
-                if (currentAnimations.Count > 0)
+                if (queuedActions.Count > 0)
                 {
+                    BeatAction currentAction = queuedActions.Peek();
                     // Request the next animation location.
-                    Vector2 toLocation = currentAnimations.Peek().Path
-                        (World.BeatService.CurrentInterpolant);
+                    Vector2 toLocation = currentAction.Path
+                        ((currentActionProgress + World.BeatService.CurrentInterpolant)
+                            / currentAction.Duration);
                     // Apply the translation to the actor.
                     World.TranslateActor(this, toLocation - lastAnimationFrame);
                     lastAnimationFrame = toLocation;

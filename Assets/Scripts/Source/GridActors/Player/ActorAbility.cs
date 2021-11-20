@@ -94,7 +94,7 @@ namespace BattleRoyalRhythm.GridActors.Player
         /// Elapses a beat for the ability.
         /// </summary>
         /// <returns>An actor animation path, or null if the ability does not animate the actor.</returns>
-        public ActorAnimationPath ElapseBeat()
+        public BeatAction ElapseBeat()
         {
             lastUseBeatCount++;
             return UsingBeatElapsed();
@@ -103,7 +103,7 @@ namespace BattleRoyalRhythm.GridActors.Player
         /// Called whenever the beat elapses for this ability.
         /// </summary>
         /// <returns>An actor animation path, or null if the ability does not animate the actor.</returns>
-        protected virtual ActorAnimationPath UsingBeatElapsed() => null;
+        protected virtual BeatAction UsingBeatElapsed() => null;
 
         /// <summary>
         /// The actor that is using this ability.

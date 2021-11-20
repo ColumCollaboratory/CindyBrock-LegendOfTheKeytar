@@ -96,7 +96,7 @@ namespace BattleRoyalRhythm.GridActors.Player
 
         private bool willFall;
 
-        protected override sealed ActorAnimationPath UsingBeatElapsed()
+        protected override sealed BeatAction UsingBeatElapsed()
         {
             if (willFall)
                 animator.State = DashState.Falling;
@@ -112,7 +112,8 @@ namespace BattleRoyalRhythm.GridActors.Player
                         StopUsing();
                     else
                         willFall = true;
-                    return ActorAnimationsGenerator.CreateWalkPath(calculatedDashTiles);
+                    return new BeatAction(
+                        ActorAnimationsGenerator.CreateWalkPath(calculatedDashTiles), 1);
                 case DashState.Falling:
                     StopUsing();
                     animator.State = DashState.None;
@@ -121,7 +122,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                         UsingActor, 0, 30);
                     for (int y = -2; y >= -30; y--)
                         if (colliders2[0, y])
-                            return ActorAnimationsGenerator.CreateDropDownPath(y + 1);
+                            return new BeatAction(ActorAnimationsGenerator.CreateDropDownPath(y + 1), 1);
                     throw new System.Exception("FALLING EDGE CASE :(");
             }
             return null;

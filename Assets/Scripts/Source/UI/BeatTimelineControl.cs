@@ -54,8 +54,10 @@ namespace BattleRoyalRhythm.UI
         [SerializeField][Min(1)] private int maxMissSprites = 10;
         [Tooltip("The sprite used when an input is missed.")]
         [SerializeField] private Sprite missSprite = null;
+        [Tooltip("The sprite used to represent an upcoming beat that an input will not fall on.")]
+        [SerializeField] private Sprite emptyBeatSprite = null;
         [Tooltip("The sprite used to represent an upcoming or skipped input.")]
-        [SerializeField] private Sprite emptySprite = null;
+        [SerializeField] private Sprite emptyInputSprite = null;
         [Tooltip("The ribbon used to connect related beats.")]
         [SerializeField] private Sprite connectorStrip = null;
         // TODO there should be tooling to automate the inspector
@@ -130,7 +132,7 @@ namespace BattleRoyalRhythm.UI
 
             // Populate the beat images.
             beatFeedIndex.For((int i) =>
-                icons[i] = GenerateIcon(-(i - beatFeedIndex.Min), emptySprite));
+                icons[i] = GenerateIcon(-(i - beatFeedIndex.Min), emptyBeatSprite));
             // Populate the miss images.
             missFeedIndex.For((int i) =>
                 icons[i] = GenerateIcon(-feedAge, missSprite));
@@ -169,7 +171,7 @@ namespace BattleRoyalRhythm.UI
         private Sprite GetSprite(PlayerAction action)
         {
             // TODO this will be refactored (see inspector field notes).
-            Sprite sprite = emptySprite;
+            Sprite sprite = emptyInputSprite;
             switch (action)
             {
                 case PlayerAction.MoveLeft: sprite = leftActionSprite; break;
@@ -191,10 +193,16 @@ namespace BattleRoyalRhythm.UI
             Sprite sprite = GetSprite(action);
             // Set the upcoming beat actions.
             int startIndex = currentBeatIndex;
-            for (int i = 0; i < duration; i++)
+            currentBeatIndex++;
+            icons[currentBeatIndex].image.sprite = sprite;
+            foreach (int gap in playerActor.GetCurrentActionGaps(6))
             {
-                currentBeatIndex++;
-                icons[currentBeatIndex].image.sprite = sprite;
+                for (int i = 0; i < gap; i++)
+                {
+                    currentBeatIndex++;
+                    icons[currentBeatIndex].image.sprite = emptyBeatSprite;
+                }
+                icons[currentBeatIndex].image.sprite = emptyInputSprite;
             }
             currentBeatIndex.Value = startIndex;
         }
@@ -215,34 +223,33 @@ namespace BattleRoyalRhythm.UI
 
         private void OnBeatElapsed(float beatTime)
         {
-            if (playerActor.IsActionBeat)
+
+            // Age all icons so they move to the
+            // next span during the following cycle.
+            for (int i = 0; i < icons.Length; i++)
+                icons[i].beatAge++;
+            // Loop one of the icons back around.
+            icons[beatFeedIndex].image.sprite = emptyBeatSprite;
+            icons[beatFeedIndex].beatAge = feedAge;
+            // Handle beat feeding.
+            if (fedBeats > 0)
+                fedBeats--;
+            if (upcomingActions.Count > 0)
             {
-                // Age all icons so they move to the
-                // next span during the following cycle.
-                for (int i = 0; i < icons.Length; i++)
-                    icons[i].beatAge++;
-                // Loop one of the icons back around.
-                icons[beatFeedIndex].image.sprite = emptySprite;
-                icons[beatFeedIndex].beatAge = feedAge;
-                // Handle beat feeding.
-                if (fedBeats > 0)
-                    fedBeats--;
-                if (upcomingActions.Count > 0)
-                {
-                    fedBeats++;
-                    icons[beatFeedIndex].image.sprite = GetSprite(upcomingActions[0]);
-                    upcomingActions.RemoveAt(0);
-                }
-                // Increment and loop the pool indices.
-                currentBeatIndex++;
-                beatFeedIndex++;
+                fedBeats++;
+                icons[beatFeedIndex].image.sprite = GetSprite(upcomingActions[0]);
+                upcomingActions.RemoveAt(0);
             }
+            // Increment and loop the pool indices.
+            currentBeatIndex++;
+            beatFeedIndex++;
+
         }
 
         private void Update()
         {
             // Position and apply fade to the beat icons.
-            float interpolant = playerActor.GetActionInterpolant();
+            float interpolant = beatService.CurrentInterpolant;
             foreach (TimedIcon icon in icons)
             {
                 // Calculate the x position of this sprite.

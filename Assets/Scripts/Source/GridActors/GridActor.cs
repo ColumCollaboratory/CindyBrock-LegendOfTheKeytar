@@ -54,13 +54,6 @@ namespace BattleRoyalRhythm.GridActors
     public abstract class GridActor : MonoBehaviour
     {
         #region Common Inspector Fields
-        [Header("Beat Action Frequency")]
-        [Tooltip("The number of beats between each action that this actor takes.")]
-        [SerializeField][Min(1)] protected int beatsPerAction = 1;
-        [Tooltip("Offsets the action when created (only matters if beats per action greater than one).")]
-        [SerializeField][Min(0)] private int actionOffset = 0;
-        [Tooltip("")]
-        [SerializeField][ReadonlyField] private int beatsUntilNextAction = 0;
         [Header("Actor Interaction")]
         [Tooltip("The tags associated with this actor.")]
         [SerializeField] private ActorTag tags = default;
@@ -239,7 +232,6 @@ namespace BattleRoyalRhythm.GridActors
 
         protected virtual void OnValidate()
         {
-            beatsUntilNextAction = Mathf.Max(beatsPerAction - actionOffset, 0);
             exactLocation = Tile;
             if (currentSurface != null)
             {
@@ -263,7 +255,6 @@ namespace BattleRoyalRhythm.GridActors
         {
             World = world;
             Direction = direction;
-            World.BeatService.BeatElapsed += OnBeatElapsed;
         }
         /// <summary>
         /// Returns true if the grid actor intersects
@@ -285,24 +276,5 @@ namespace BattleRoyalRhythm.GridActors
         /// </summary>
         /// <param name="direction">The updated direction of the actor.</param>
         protected virtual void OnDirectionChanged(Direction direction) { }
-
-        public float GetActionInterpolant()
-        {
-            return ((beatsPerAction - beatsUntilNextAction) + World.BeatService.CurrentInterpolant) / beatsPerAction;
-        }
-
-
-        public bool IsActionBeat { get; private set; }
-        protected virtual void OnBeatElapsed(float beatTime)
-        {
-            beatsUntilNextAction--;
-            if (beatsUntilNextAction <= 0)
-            {
-                IsActionBeat = true;
-                beatsUntilNextAction = beatsPerAction;
-            }
-            else
-                IsActionBeat = false;
-        }
     }
 }

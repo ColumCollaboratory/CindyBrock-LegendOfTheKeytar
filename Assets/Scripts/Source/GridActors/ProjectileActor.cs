@@ -25,19 +25,16 @@ namespace BattleRoyalRhythm.GridActors
         [Tooltip("The number of enemies this projectile pierces.")]
         [SerializeField][Min(0)] protected int pierce = 0;
 
-        protected BeatService BeatService { get; private set; }
-
         protected virtual void Awake()
         {
             IgnoredActors = new List<GridActor>();
         }
 
-        public void InitalizeProjectile(BeatService service, GridWorld world)
+        public void InitalizeProjectile(GridWorld world)
         {
             World = world;
             world.Actors.Add(this);
-            BeatService = service;
-            service.BeatElapsed += OnBeatElapsed;
+            World.BeatService.BeatElapsed += OnBeatElapsed;
             OnBeatElapsed(0f);
         }
 

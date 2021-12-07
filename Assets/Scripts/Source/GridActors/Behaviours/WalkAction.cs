@@ -19,7 +19,7 @@ namespace BattleRoyalRhythm.GridActors.Behaviours
         [SerializeField] private Bounds1DInt walkDistanceRange = new Bounds1DInt(1, 1);
         [Header("Walk Duration")]
         [Tooltip("The number of tiles passed in one beat. Fractional values will complete before the end of a beat.")]
-        [SerializeField][Min(1f)] private float speed = 1f;
+        [SerializeField][Min(0f)] private float speed = 1f;
         #endregion
         #region Action Context State
         private sealed class Context : ContextBase
@@ -44,7 +44,7 @@ namespace BattleRoyalRhythm.GridActors.Behaviours
             // Scan for open walking space and
             // available floor tiles to move on.
             int walk = 0;
-            for (int i = 1; i < walkDistanceRange.Max; i++)
+            for (int i = 1; i <= walkDistanceRange.Max; i++)
             {
                 walk = i * direction;
                 if (colliders.AnyInside(walk, 0, walk, withActor.TileHeight - 1) ||
@@ -90,9 +90,14 @@ namespace BattleRoyalRhythm.GridActors.Behaviours
             // Clamp the distance if this motion reaches the
             // target tile earlier than the beat.
             if (context.Distance > 0f)
+            {
                 distanceTraveled = Mathf.Min(context.Distance, distanceTraveled);
+            }
             else
+            {
+                distanceTraveled *= -1f;
                 distanceTraveled = Mathf.Max(context.Distance, distanceTraveled);
+            }
             return Vector2.right * distanceTraveled;
         }
         #endregion

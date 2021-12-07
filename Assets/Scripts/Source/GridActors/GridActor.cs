@@ -227,7 +227,57 @@ namespace BattleRoyalRhythm.GridActors
 
         protected virtual void OnDrawGizmos()
         {
+            // Draw the actor hitbox and facing direction.
+            if (CurrentSurface != null)
+            {
+                // Drawing parameters.
+                Vector2 boxOffset = Vector2.one * 0.05f;
+                float arrowRadius = 0.3f;
+                int segments = 4;
+                Gizmos.color = Color.yellow;
 
+                // Polyline drawer; TODO should be abstracted
+                // as a utility function.
+                void DrawLine(Vector2 start, Vector2 end)
+                {
+                    Vector3 previousPoint = CurrentSurface.GetLocation(start);
+                    for (int i = 1; i <= segments; i++)
+                    {
+                        Vector3 currentPoint = CurrentSurface.GetLocation(
+                            Vector2.Lerp(start, end, (float)i / segments));
+                        Gizmos.DrawLine(previousPoint, currentPoint);
+                        previousPoint = currentPoint;
+                    }
+                }
+
+                // Draw the hitbox.
+                Vector2 cornerA = Location - Vector2.one + boxOffset;
+                Vector2 cornerC = Location + Vector2.up * (TileHeight - 1) - boxOffset;
+                Vector2 cornerB = new Vector2(cornerC.x, cornerA.y);
+                Vector2 cornerD = new Vector2(cornerA.x, cornerC.y);
+                DrawLine(cornerA, cornerB);
+                DrawLine(cornerB, cornerC);
+                DrawLine(cornerC, cornerD);
+                DrawLine(cornerD, cornerA);
+
+                // Draw the facing arrow.
+                Vector2 center = Location - Vector2.one * 0.5f;
+                Vector2 top = center + Vector2.up * arrowRadius;
+                Vector2 right = center + Vector2.right * arrowRadius;
+                Vector2 bottom = center + Vector2.down * arrowRadius;
+                Vector2 left = center + Vector2.left * arrowRadius;
+                DrawLine(left, right);
+                if (Direction is Direction.Right)
+                {
+                    DrawLine(top, right);
+                    DrawLine(bottom, right);
+                }
+                else
+                {
+                    DrawLine(top, left);
+                    DrawLine(bottom, left);
+                }
+            }
         }
 
         protected virtual void OnValidate()

@@ -82,11 +82,24 @@ namespace BattleRoyalRhythm.UI
         [SerializeField][SoundtrackID] private int wwiseEvent = 0;
         [SerializeField] private SoundtrackMetaData[] tracks = null;
 
+        [SerializeField] private PlaylistTrackControl trackControlTemplate = null;
+
         private void Start()
         {
             autoplayEnabled = new bool[tracks.Length];
-            for (int i = 0; i < tracks.Length; i++)
+            if (tracks.Length > 0)
+            {
+                trackControlTemplate.SetMetaData(1, tracks[0]);
+            }
+            for (int i = 1; i < tracks.Length; i++)
+            {
+                PlaylistTrackControl clone =
+                    Instantiate(trackControlTemplate.gameObject).
+                    GetComponent<PlaylistTrackControl>();
+                clone.transform.parent = trackControlTemplate.transform.parent;
+                clone.SetMetaData(i + 1, tracks[i]);
                 autoplayEnabled[i] = true;
+            }
 
             SoundtrackSettings settings = SoundtrackSettings.Load();
             SoundtrackSet even = settings.GetSetByID(wwiseEvent);

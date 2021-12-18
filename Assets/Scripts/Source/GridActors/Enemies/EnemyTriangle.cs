@@ -115,6 +115,7 @@ namespace BattleRoyalRhythm.GridActors.Enemies
             }
 
             actionDuration--;
+
             // TODO ABSOLUTELY HORRENDOUS HOTFIX
             // should use switch or tree structure
             if (actionDuration > 0)
@@ -122,11 +123,11 @@ namespace BattleRoyalRhythm.GridActors.Enemies
                 // Spawn a bullet.
                 ProjectileActor newProjectile = Instantiate(projectileTemplate).
                     GetComponent<ProjectileActor>();
-                newProjectile.InitializeGrid(World);
                 newProjectile.CurrentSurface = CurrentSurface;
                 newProjectile.Tile = Tile;
                 newProjectile.Direction = Direction;
                 newProjectile.IgnoredActors.Add(this);
+                newProjectile.InitializeGrid(World);
                 return;
             }
 

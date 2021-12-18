@@ -236,10 +236,13 @@ namespace BattleRoyalRhythm.GridActors.Player
                 currentActionProgress++;
                 if (currentActionProgress >= currentAction.Duration)
                 {
-                    Vector2 toLocation = queuedActions.Peek().Path(1f);
-                    // Apply the translation to the actor.
-                    World.TranslateActor(this, toLocation - lastAnimationFrame);
-                    lastAnimationFrame = Vector2.zero;
+                    if (currentAction.Path != null)
+                    {
+                        Vector2 toLocation = currentAction.Path(1f);
+                        // Apply the translation to the actor.
+                        World.TranslateActor(this, toLocation - lastAnimationFrame);
+                        lastAnimationFrame = Vector2.zero;
+                    }
                     queuedActions.Dequeue();
                     currentActionProgress = 0;
                 }
@@ -752,13 +755,16 @@ namespace BattleRoyalRhythm.GridActors.Player
                 if (queuedActions.Count > 0)
                 {
                     BeatAction currentAction = queuedActions.Peek();
-                    // Request the next animation location.
-                    Vector2 toLocation = currentAction.Path
-                        ((currentActionProgress + World.BeatService.CurrentInterpolant)
-                            / currentAction.Duration);
-                    // Apply the translation to the actor.
-                    World.TranslateActor(this, toLocation - lastAnimationFrame);
-                    lastAnimationFrame = toLocation;
+                    if (currentAction.Path != null)
+                    {
+                        // Request the next animation location.
+                        Vector2 toLocation = currentAction.Path
+                            ((currentActionProgress + World.BeatService.CurrentInterpolant)
+                                / currentAction.Duration);
+                        // Apply the translation to the actor.
+                        World.TranslateActor(this, toLocation - lastAnimationFrame);
+                        lastAnimationFrame = toLocation;
+                    }
                 }
 
                 // Apply override for animation states that move the transform.

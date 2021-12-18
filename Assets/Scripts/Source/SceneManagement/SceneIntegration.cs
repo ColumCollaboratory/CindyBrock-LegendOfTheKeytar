@@ -12,6 +12,10 @@ public class SceneIntegration : MonoBehaviour
     private GameObject creditsPanel;
     [SerializeField]
     private GameObject instructionsPanel;
+    [SerializeField]
+    private GameObject jukeboxPanel;
+    [SerializeField]
+    private GameObject settingsPanel;
 
     public void ChangeScene(string nextLevel)
     {
@@ -46,5 +50,44 @@ public class SceneIntegration : MonoBehaviour
             gamePanel.SetActive(true);
             instructionsPanel.SetActive(false);
         }
+    }
+
+    public void ToggleSettings()
+    {
+        if (gamePanel.activeSelf == true)
+        {
+            gamePanel.SetActive(false);
+            settingsPanel.SetActive(true);
+        }
+        else
+        {
+
+            gamePanel.SetActive(true);
+            settingsPanel.SetActive(false);
+        }
+    }
+
+    public void ToggleJukebox()
+    {
+        if (gamePanel.activeSelf == true)
+        {
+            gamePanel.SetActive(false);
+            jukeboxPanel.SetActive(true);
+        }
+        else
+        {
+
+            gamePanel.SetActive(true);
+            jukeboxPanel.SetActive(false);
+        }
+    }
+
+    public void Quit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

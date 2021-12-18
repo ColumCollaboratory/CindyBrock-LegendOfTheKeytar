@@ -94,7 +94,7 @@ namespace BattleRoyalRhythm.UI
             for (int i = 1; i < tracks.Length; i++)
             {
                 PlaylistTrackControl clone =
-                    Instantiate(trackControlTemplate.gameObject).
+                    Instantiate(trackControlTemplate.gameObject, trackControlTemplate.transform.parent).
                     GetComponent<PlaylistTrackControl>();
                 clone.transform.parent = trackControlTemplate.transform.parent;
                 clone.SetMetaData(i + 1, tracks[i]);

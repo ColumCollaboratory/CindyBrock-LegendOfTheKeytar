@@ -2120,7 +2120,6 @@
 													<AudioSourceRef Name="CCC_GJ2021_BossBattle MainTheme_Synthwave_v1d" ID="{803269C6-3E33-4ABC-8625-E40C879044F8}"/>
 												</MusicClip>
 											</ClipList>
-											<ReferenceList/>
 										</MusicTrackSequence>
 									</SequenceList>
 								</MusicTrack>
@@ -2254,7 +2253,6 @@
 													</PropertyCurveList>
 												</MusicClip>
 											</ClipList>
-											<ReferenceList/>
 										</MusicTrackSequence>
 									</SequenceList>
 								</MusicTrack>
@@ -2390,7 +2388,6 @@
 													</PropertyCurveList>
 												</MusicClip>
 											</ClipList>
-											<ReferenceList/>
 										</MusicTrackSequence>
 									</SequenceList>
 								</MusicTrack>
@@ -2460,7 +2457,6 @@
 													<AudioSourceRef Name="Oh Yeah, Great Name - EDM" ID="{FAE0F93B-17F2-4175-91C6-1FAE14252CB6}"/>
 												</MusicClip>
 											</ClipList>
-											<ReferenceList/>
 										</MusicTrackSequence>
 									</SequenceList>
 								</MusicTrack>
@@ -2516,7 +2512,6 @@
 													<AudioSourceRef Name="Dan_-_Boss_Battle_Remix_Lo-Fi" ID="{E774AE34-E754-4B4F-9F4F-798069ED8A20}"/>
 												</MusicClip>
 											</ClipList>
-											<ReferenceList/>
 										</MusicTrackSequence>
 									</SequenceList>
 								</MusicTrack>
@@ -2650,7 +2645,6 @@
 													</PropertyCurveList>
 												</MusicClip>
 											</ClipList>
-											<ReferenceList/>
 										</MusicTrackSequence>
 									</SequenceList>
 								</MusicTrack>
@@ -2784,7 +2778,6 @@
 													</PropertyCurveList>
 												</MusicClip>
 											</ClipList>
-											<ReferenceList/>
 										</MusicTrackSequence>
 									</SequenceList>
 								</MusicTrack>
@@ -2915,7 +2908,6 @@
 													</PropertyCurveList>
 												</MusicClip>
 											</ClipList>
-											<ReferenceList/>
 										</MusicTrackSequence>
 									</SequenceList>
 								</MusicTrack>
@@ -2990,7 +2982,6 @@
 													<AudioSourceRef Name="Folk_Country Level 1 Remix" ID="{664184F8-C06E-4B96-892A-459FDDA002EE}"/>
 												</MusicClip>
 											</ClipList>
-											<ReferenceList/>
 										</MusicTrackSequence>
 									</SequenceList>
 								</MusicTrack>
@@ -3060,7 +3051,6 @@
 													<AudioSourceRef Name="Dan - Super Keytario Bros - LoFi" ID="{6036FA77-2120-48E2-A554-48F34F91875A}"/>
 												</MusicClip>
 											</ClipList>
-											<ReferenceList/>
 										</MusicTrackSequence>
 									</SequenceList>
 								</MusicTrack>
@@ -3135,7 +3125,6 @@
 													<AudioSourceRef Name="Super Keytario Bros" ID="{F4174426-BAF2-449A-B813-63E0B2F88034}"/>
 												</MusicClip>
 											</ClipList>
-											<ReferenceList/>
 										</MusicTrackSequence>
 									</SequenceList>
 								</MusicTrack>
@@ -3266,7 +3255,6 @@
 													</PropertyCurveList>
 												</MusicClip>
 											</ClipList>
-											<ReferenceList/>
 										</MusicTrackSequence>
 									</SequenceList>
 								</MusicTrack>

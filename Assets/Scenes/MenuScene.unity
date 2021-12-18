@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -154,7 +154,7 @@ RectTransform:
   - {fileID: 1936095931}
   - {fileID: 1269382111}
   - {fileID: 611114994}
-  - {fileID: 698140717}
+  - {fileID: 2098803700}
   m_Father: {fileID: 1505925157}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -442,11 +442,11 @@ RectTransform:
   m_Father: {fileID: 668967833}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 500, y: 0}
-  m_SizeDelta: {x: 380, y: 0}
-  m_Pivot: {x: 0, y: 0.5}
+  m_SizeDelta: {x: 380, y: 50}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &51406235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1019,15 +1019,42 @@ MonoBehaviour:
   defaultLoopMode: 0
   wwiseEvent: 5
   tracks:
-  - wwiseStateName: 
-    trackName: Hello 1
-    artists: Artists 1
-  - wwiseStateName: 
-    trackName: Hello 2
-    artists: Artists 2
-  - wwiseStateName: 
-    trackName: Hello3
-    artists: Artists 3
+  - wwiseStateName: Boss_CartoonMix
+    trackName: Boss - Cartoon Mix
+    artists: Yigit K Guc
+  - wwiseStateName: Boss_ChillwaveMix
+    trackName: Boss - Chillwave Mix
+    artists: ???
+  - wwiseStateName: Boss_ChiptuneMix
+    trackName: Boss - Chiptune Mix
+    artists: ???
+  - wwiseStateName: Boss_ClassicalMix
+    trackName: Boss - Classical Mix
+    artists: ???
+  - wwiseStateName: Boss_DubstepMix
+    trackName: Boss - Dubstep Mix
+    artists: ???
+  - wwiseStateName: Boss_FolkMix
+    trackName: Boss - Folk Mix
+    artists: ???
+  - wwiseStateName: Boss_LofiMix
+    trackName: Boss - Lo-Fi Mix
+    artists: Dan Wessels
+  - wwiseStateName: Boss_MetalMix
+    trackName: Boss - Metal Mix
+    artists: ???
+  - wwiseStateName: Stage1_ChiptuneMix
+    trackName: Stage 1 - Chiptune Mix
+    artists: ???
+  - wwiseStateName: Stage1_FolkMix
+    trackName: Stage 1 - Folk Mix
+    artists: ???
+  - wwiseStateName: Stage1_LofiMix
+    trackName: Stage 1 - Lo-Fi Mix
+    artists: Dan Wessels
+  - wwiseStateName: Stage1_MetalMix
+    trackName: Stage 1 - Metal Mix
+    artists: ???
   trackControlTemplate: {fileID: 668967834}
 --- !u!1 &581652229
 GameObject:
@@ -1207,11 +1234,11 @@ RectTransform:
   m_Father: {fileID: 698140717}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 50}
-  m_Pivot: {x: 0.5, y: 1}
+  m_SizeDelta: {x: 880, y: 50}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &668967834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1297,18 +1324,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 698140716}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 668967833}
-  m_Father: {fileID: 29781352}
-  m_RootOrder: 3
+  m_Father: {fileID: 2098803700}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -50}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &698140718
 MonoBehaviour:
@@ -1323,14 +1350,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 698140717}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
   m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 0}
+  m_Viewport: {fileID: 2098803700}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
   m_HorizontalScrollbarVisibility: 0
@@ -1931,7 +1958,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1505925157
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2233,11 +2260,11 @@ RectTransform:
   m_Father: {fileID: 668967833}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 120, y: 0}
-  m_Pivot: {x: 0, y: 0.5}
+  m_SizeDelta: {x: 120, y: 50}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &1612746235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2632,11 +2659,11 @@ RectTransform:
   m_Father: {fileID: 668967833}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 0, y: 50}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &1787399376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2854,11 +2881,11 @@ RectTransform:
   m_Father: {fileID: 668967833}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 120, y: 0}
-  m_SizeDelta: {x: 380, y: 0}
-  m_Pivot: {x: 0, y: 0.5}
+  m_SizeDelta: {x: 380, y: 50}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &1886194932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3132,6 +3159,57 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &2098803699
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2098803700}
+  - component: {fileID: 2098803701}
+  m_Layer: 5
+  m_Name: Song Rows Mask
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2098803700
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098803699}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 698140717}
+  m_Father: {fileID: 29781352}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -25}
+  m_SizeDelta: {x: 0, y: -50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2098803701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098803699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Softness: {x: 0, y: 0}
 --- !u!1 &2105371499
 GameObject:
   m_ObjectHideFlags: 0

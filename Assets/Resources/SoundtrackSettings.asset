@@ -25,3 +25,6 @@ MonoBehaviour:
   - name: Boss_1_Started
     beatsPerMinute: 140
     id: 1
+  - name: Jukebox_Started
+    beatsPerMinute: 0
+    id: 5

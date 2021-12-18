@@ -130,9 +130,11 @@ MonoBehaviour:
   blocksTags: 0
   blocksDirections: 0
   currentSurface: {fileID: 0}
+  direction: 1
   tile: {x: 9, y: 2}
-  tileHeight: 2
-  World: {fileID: 0}
+  exactLocation: {x: 9, y: 2}
+  tileHeight: 1
+  programmedTransform: {fileID: 3036232566102278413}
   damage: 1
   pierce: 0
   tilesPerBeat: 2

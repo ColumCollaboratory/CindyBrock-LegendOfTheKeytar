@@ -24,7 +24,7 @@ public class SceneIntegration : MonoBehaviour
 
     public void ToggleCredits()
     {
-        if (gamePanel.activeSelf == true)
+        if (gamePanel.activeInHierarchy == true)
         {
             gamePanel.SetActive(false);
             creditsPanel.SetActive(true);
@@ -39,7 +39,7 @@ public class SceneIntegration : MonoBehaviour
 
     public void ToggleInstructions()
     {
-        if (gamePanel.activeSelf == true)
+        if (gamePanel.activeInHierarchy == true)
         {
             gamePanel.SetActive(false);
             instructionsPanel.SetActive(true);
@@ -54,7 +54,7 @@ public class SceneIntegration : MonoBehaviour
 
     public void ToggleSettings()
     {
-        if (gamePanel.activeSelf == true)
+        if (gamePanel.activeInHierarchy == true)
         {
             gamePanel.SetActive(false);
             settingsPanel.SetActive(true);
@@ -69,7 +69,7 @@ public class SceneIntegration : MonoBehaviour
 
     public void ToggleJukebox()
     {
-        if (gamePanel.activeSelf == true)
+        if (gamePanel.activeInHierarchy == true)
         {
             gamePanel.SetActive(false);
             jukeboxPanel.SetActive(true);

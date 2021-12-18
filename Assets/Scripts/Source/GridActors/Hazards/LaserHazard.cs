@@ -17,8 +17,6 @@ namespace BattleRoyalRhythm.GridActors.Hazards
             Vertical
         }
 
-        [SerializeField] private BeatService beatService = null;
-
         [Header("Laser Positioning")]
         [SerializeField] private LaserDirection direction = LaserDirection.Horizontal;
         // TODO this should be inferred.
@@ -88,7 +86,7 @@ namespace BattleRoyalRhythm.GridActors.Hazards
             renderer.SetPositions(new Vector3[] { start, end });
 
             // Subscribe to the beat service.
-            beatService.BeatElapsed += OnBeatElapsed;
+            World.BeatService.BeatElapsed += OnBeatElapsed;
             isOn = true;
             beatIndex = 0;
         }

@@ -11,8 +11,6 @@ namespace BattleRoyalRhythm.GridActors
     public abstract class GridTrigger : GridActor
     {
         #region Inspector Fields
-        [Tooltip("The beat service that this trigger binds to.")]
-        [SerializeField] private BeatService beatService = null;
         [Tooltip("Whether this trigger is currently active.")]
         [SerializeField][ReadonlyField] private bool triggerEnabled = true;
         #endregion
@@ -28,12 +26,12 @@ namespace BattleRoyalRhythm.GridActors
             {
                 ignoredActors = new List<GridActor>() { this };
                 ActorsInTrigger = new List<GridActor>();
-                beatService.BeatElapsed += OnBeatElapsed;
+                World.BeatService.BeatElapsed += OnBeatElapsed;
             }
         }
         protected override void OnDestroy()
         {
-            beatService.BeatElapsed -= OnBeatElapsed;
+            World.BeatService.BeatElapsed -= OnBeatElapsed;
             base.OnDestroy();
         }
         #endregion
@@ -54,9 +52,9 @@ namespace BattleRoyalRhythm.GridActors
                 {
                     triggerEnabled = value;
                     if (triggerEnabled)
-                        beatService.BeatElapsed += OnBeatElapsed;
+                        World.BeatService.BeatElapsed += OnBeatElapsed;
                     else
-                        beatService.BeatElapsed -= OnBeatElapsed;
+                        World.BeatService.BeatElapsed -= OnBeatElapsed;
                 }
             }
         }

@@ -14,6 +14,38 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="Boss_1_Started" ID="{43FD0070-B873-4A22-9509-A0AA751682C4}">
+					<ChildrenList>
+						<Action Name="" ID="{82B3C89D-E6A3-48B7-9A5E-00A1B58114DF}" ShortID="365312618">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="_Boss_Metal" ID="{28056C51-30B2-4809-B00E-D8B94820A000}" WorkUnitID="{428C572B-37FD-4865-8029-8C5AA1AC1474}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Jukebox_Started" ID="{A2EE42CE-F8D3-4A44-906D-3AA5A6D3538B}">
+					<ChildrenList>
+						<Action Name="" ID="{1B22A3B7-BA6D-4E90-BA93-A44A27D7C195}" ShortID="970521891">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="22"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+						<Action Name="" ID="{DB778665-48C4-4606-A2D1-23A85E241CDC}" ShortID="953145151">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Soundtrack" ID="{F3723EB5-4651-4140-95E5-FE3135F89906}" WorkUnitID="{428C572B-37FD-4865-8029-8C5AA1AC1474}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

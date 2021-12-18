@@ -12,6 +12,22 @@
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
 				</SoundBank>
+				<SoundBank Name="Boss_Stage" ID="{C7CF7CEF-4466-470E-A5B7-DA2254B5A6D7}">
+					<ObjectInclusionList>
+						<ObjectRef Name="_Boss_Metal" ID="{28056C51-30B2-4809-B00E-D8B94820A000}" WorkUnitID="{428C572B-37FD-4865-8029-8C5AA1AC1474}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Boss_1_Started" ID="{43FD0070-B873-4A22-9509-A0AA751682C4}" WorkUnitID="{F0C2C92E-79CE-4146-AB1E-CEB286462955}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Main_Menu" ID="{D207F1DB-172A-4C1B-B791-E7CC2C377A62}">
+					<ObjectInclusionList>
+						<ObjectRef Name="Soundtrack" ID="{F3723EB5-4651-4140-95E5-FE3135F89906}" WorkUnitID="{428C572B-37FD-4865-8029-8C5AA1AC1474}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Jukebox_Started" ID="{A2EE42CE-F8D3-4A44-906D-3AA5A6D3538B}" WorkUnitID="{F0C2C92E-79CE-4146-AB1E-CEB286462955}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
 			</ChildrenList>
 		</WorkUnit>
 	</SoundBanks>

@@ -2026,6 +2026,1267 @@
 						</MusicPlaylistItem>
 					</Playlist>
 				</MusicPlaylistContainer>
+				<MusicPlaylistContainer Name="Soundtrack" ID="{F3723EB5-4651-4140-95E5-FE3135F89906}" ShortID="583037588">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<MusicSegment Name="Soundtrack" ID="{6875746F-B39F-44F6-A2ED-42114A4E61D1}" ShortID="216216534">
+							<PropertyList>
+								<Property Name="EndPosition" Type="Real64" Value="137147.913267488"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<MusicTrack Name="Boss_ChillwaveMix" ID="{89699260-0E69-49A8-B97F-97C5B8D08EFF}" ShortID="549614279">
+									<PropertyList>
+										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>5</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+										</Reference>
+										<Reference Name="DefaultSwitchOrState">
+											<ObjectRef Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+										</Reference>
+										<Reference Name="SwitchGroupOrStateGroup">
+											<ObjectRef Name="Soundtrack" ID="{B5CEF756-B899-4240-9142-806DB0E5F5D5}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="CCC_GJ2021_BossBattle MainTheme_Synthwave_v1d" ID="{803269C6-3E33-4ABC-8625-E40C879044F8}">
+											<Language>SFX</Language>
+											<AudioFile>CCC_GJ2021_BossBattle MainTheme_Synthwave_v1d.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="326071135"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{499D7BEF-0FDD-4D02-AFCA-ED3ABEE7F9B7}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{A52AC588-2089-41A1-BCB8-D30B4E2E71D1}">
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{1DA7EBF5-24FD-498E-9026-C9F39E8106CE}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="5"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<SequenceList>
+										<MusicTrackSequence Name="" ID="{8FA6DA77-15F4-4450-AEE1-F062BB61FD1C}">
+											<ClipList>
+												<MusicClip Name="CCC_GJ2021_BossBattle MainTheme_Synthwave_v1d" ID="{C9DC3144-D2CD-4924-B831-3862EFCDE635}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="85714.2708333333"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="102.099087726732"/>
+													</PropertyList>
+													<AudioSourceRef Name="CCC_GJ2021_BossBattle MainTheme_Synthwave_v1d" ID="{803269C6-3E33-4ABC-8625-E40C879044F8}"/>
+												</MusicClip>
+											</ClipList>
+										</MusicTrackSequence>
+									</SequenceList>
+								</MusicTrack>
+								<MusicTrack Name="Boss_ChiptuneMix" ID="{FB6C2FC8-FC7D-40F2-866F-8861C66F8964}" ShortID="687948037">
+									<PropertyList>
+										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>4</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+										</Reference>
+										<Reference Name="DefaultSwitchOrState">
+											<ObjectRef Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+										</Reference>
+										<Reference Name="SwitchGroupOrStateGroup">
+											<ObjectRef Name="Soundtrack" ID="{B5CEF756-B899-4240-9142-806DB0E5F5D5}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Oh Yeah, Great Name - Chiptune" ID="{8E634560-7188-4BF8-9ABC-2AD39A83C3E4}">
+											<Language>SFX</Language>
+											<AudioFile>Oh Yeah, Great Name - Chiptune.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="62170045"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{0A02CC54-B255-4397-9955-E9A3752A9452}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{12705361-EBCC-4F77-9B7D-BA6088329EB5}">
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{C4DD2A11-0DF1-4E5E-9DE1-AD3961A03EBB}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="5"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<SequenceList>
+										<MusicTrackSequence Name="" ID="{200BC9EE-9DF1-45DD-8A39-B08785B355FB}">
+											<ClipList>
+												<MusicClip Name="Oh Yeah, Great Name - Chiptune" ID="{34E19CE7-D58C-4D91-ACB4-2E5807B7EC97}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="85727.0695239431"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="178.673403521854"/>
+													</PropertyList>
+													<AudioSourceRef Name="Oh Yeah, Great Name - Chiptune" ID="{8E634560-7188-4BF8-9ABC-2AD39A83C3E4}"/>
+													<PropertyCurveList>
+														<PropertyCurve PropertyName="Highpass">
+															<Curve Name="" ID="{18E2A9C4-7AB5-414B-A8BD-8E127D42EDB6}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.72707</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Lowpass">
+															<Curve Name="" ID="{5E386963-CAA8-4A63-AE66-AED47F5574D0}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.72707</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Volume">
+															<Curve Name="" ID="{674E4BD8-44C5-4633-B623-6970B141B765}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="3"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.72707</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+													</PropertyCurveList>
+												</MusicClip>
+											</ClipList>
+										</MusicTrackSequence>
+									</SequenceList>
+								</MusicTrack>
+								<MusicTrack Name="Boss_MetalMix" ID="{36E4D38F-EEEC-49B4-A56C-B39C186CF38E}" ShortID="594676588">
+									<PropertyList>
+										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-1</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+										</Reference>
+										<Reference Name="DefaultSwitchOrState">
+											<ObjectRef Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+										</Reference>
+										<Reference Name="SwitchGroupOrStateGroup">
+											<ObjectRef Name="Soundtrack" ID="{B5CEF756-B899-4240-9142-806DB0E5F5D5}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Boss Battle Theme - Metal_Full" ID="{EE040D3B-7360-4AC3-BE52-AD49BC22AE73}">
+											<Language>SFX</Language>
+											<AudioFile>Boss Battle Theme - Metal_Full.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="273840888"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{03A600F8-5032-43B3-A44A-BD6395F05339}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{185C7262-BAAB-4AC8-925C-FBD5B15EC7D5}">
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{B3ED944E-7063-4EA7-BDE4-17155C8E6C05}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="5"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<SequenceList>
+										<MusicTrackSequence Name="" ID="{76277C1E-6605-451C-B7B7-837C3119597E}">
+											<ClipList>
+												<MusicClip Name="Boss Battle Theme - Metal_Full" ID="{18BE5C25-B006-4331-A1CA-E5B6C74F7DE7}">
+													<PropertyList>
+														<Property Name="BeginTrimOffset" Type="Real64" Value="366.797350756171"/>
+														<Property Name="EndTrimOffset" Type="Real64" Value="86105.4119086934"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="153.148631590157"/>
+														<Property Name="PlayAt" Type="Real64" Value="-366.797350756171"/>
+													</PropertyList>
+													<AudioSourceRef Name="Boss Battle Theme - Metal_Full" ID="{EE040D3B-7360-4AC3-BE52-AD49BC22AE73}"/>
+													<PropertyCurveList>
+														<PropertyCurve PropertyName="Highpass">
+															<Curve Name="" ID="{A9320FC4-7DB0-4A0C-B1FE-9D1FBD0AD574}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0.3668</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>86.10541</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Lowpass">
+															<Curve Name="" ID="{BDEF3832-ACDE-4B2C-B89B-7EFCA16D1740}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0.3668</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>86.10541</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Volume">
+															<Curve Name="" ID="{8EDE7D44-DBE9-4232-9513-EFE946EE3EFA}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="3"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0.3668</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>86.10541</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+													</PropertyCurveList>
+												</MusicClip>
+											</ClipList>
+										</MusicTrackSequence>
+									</SequenceList>
+								</MusicTrack>
+								<MusicTrack Name="Boss_DubstepMix" ID="{07EED234-75EC-49CE-929F-0B33BD84CE70}" ShortID="620945188">
+									<PropertyList>
+										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+										</Reference>
+										<Reference Name="DefaultSwitchOrState">
+											<ObjectRef Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+										</Reference>
+										<Reference Name="SwitchGroupOrStateGroup">
+											<ObjectRef Name="Soundtrack" ID="{B5CEF756-B899-4240-9142-806DB0E5F5D5}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Oh Yeah, Great Name - EDM" ID="{FAE0F93B-17F2-4175-91C6-1FAE14252CB6}">
+											<Language>SFX</Language>
+											<AudioFile>Oh Yeah, Great Name - EDM.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="737322985"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{F45F445A-A9BB-4C53-A37A-D7868F1958E4}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{EEDB49CC-DF38-4F3D-BF51-A59C593354E3}">
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{4981CCAF-D412-4D96-ABD1-F83D1F5A29FF}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="3"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<SequenceList>
+										<MusicTrackSequence Name="" ID="{12164445-3BC0-4A60-AC5E-E89D54B64E79}">
+											<ClipList>
+												<MusicClip Name="Oh Yeah, Great Name - EDM" ID="{FCC9A38C-735E-47C9-8ECE-3BF89EB1C6E1}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="85714.2857142857"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="490.018148820323"/>
+													</PropertyList>
+													<AudioSourceRef Name="Oh Yeah, Great Name - EDM" ID="{FAE0F93B-17F2-4175-91C6-1FAE14252CB6}"/>
+												</MusicClip>
+											</ClipList>
+										</MusicTrackSequence>
+									</SequenceList>
+								</MusicTrack>
+								<MusicTrack Name="Boss_LofiMix" ID="{945BA281-860A-41A2-AB6A-A4BFE82A632D}" ShortID="874213891">
+									<PropertyList>
+										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+										</Reference>
+										<Reference Name="DefaultSwitchOrState">
+											<ObjectRef Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+										</Reference>
+										<Reference Name="SwitchGroupOrStateGroup">
+											<ObjectRef Name="Soundtrack" ID="{B5CEF756-B899-4240-9142-806DB0E5F5D5}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Dan_-_Boss_Battle_Remix_Lo-Fi" ID="{E774AE34-E754-4B4F-9F4F-798069ED8A20}">
+											<Language>SFX</Language>
+											<AudioFile>Dan_-_Boss_Battle_Remix_Lo-Fi.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="616268771"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{82CFEFD4-DC0C-468C-9986-504F6074C6E6}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{A1EAAAA3-E617-4313-A292-AAC89134495F}">
+													<TransitionInfo/>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<SequenceList>
+										<MusicTrackSequence Name="" ID="{DCB745DF-77B4-4297-8369-3A2FB61B75B1}">
+											<ClipList>
+												<MusicClip Name="Dan_-_Boss_Battle_Remix_Lo-Fi" ID="{EAE5C414-C8E4-4542-B3F6-3DD7AF7BA890}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="86142.875"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="653.357531760434"/>
+													</PropertyList>
+													<AudioSourceRef Name="Dan_-_Boss_Battle_Remix_Lo-Fi" ID="{E774AE34-E754-4B4F-9F4F-798069ED8A20}"/>
+												</MusicClip>
+											</ClipList>
+										</MusicTrackSequence>
+									</SequenceList>
+								</MusicTrack>
+								<MusicTrack Name="Boss_FolkMix" ID="{6A657949-7965-4746-9135-4A04A5BAAAC4}" ShortID="817995743">
+									<PropertyList>
+										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>7</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+										</Reference>
+										<Reference Name="DefaultSwitchOrState">
+											<ObjectRef Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+										</Reference>
+										<Reference Name="SwitchGroupOrStateGroup">
+											<ObjectRef Name="Soundtrack" ID="{B5CEF756-B899-4240-9142-806DB0E5F5D5}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Folk Remix (BOSS)" ID="{32A9E1AA-6410-4529-B584-476AAD21A719}">
+											<Language>SFX</Language>
+											<AudioFile>Folk Remix (BOSS).wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="5380953"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{293B7250-91A8-4CE2-BF03-48D3982BB535}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{B18156D7-0744-470D-94FC-BF59F54D297D}">
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{EDB63CAA-5E3C-4162-9FDC-CE8B5990F473}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="3"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<SequenceList>
+										<MusicTrackSequence Name="" ID="{37E59E16-B9B0-4EA7-ABF5-A62889C8CF4D}">
+											<ClipList>
+												<MusicClip Name="Folk Remix (BOSS)" ID="{CEB35521-1548-483A-9215-9D65D31003BB}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="85720.7707111293"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="30.944607383135"/>
+													</PropertyList>
+													<AudioSourceRef Name="Folk Remix (BOSS)" ID="{32A9E1AA-6410-4529-B584-476AAD21A719}"/>
+													<PropertyCurveList>
+														<PropertyCurve PropertyName="Highpass">
+															<Curve Name="" ID="{D00D2D16-CEC4-43B1-A514-A927665FA56A}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.72077</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Lowpass">
+															<Curve Name="" ID="{2A6BB67E-5AFF-48EE-92D0-67A574F29C61}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.72077</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Volume">
+															<Curve Name="" ID="{B698EB33-F45F-4B2C-A2B9-33D523772C3E}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="3"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.72077</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+													</PropertyCurveList>
+												</MusicClip>
+											</ClipList>
+										</MusicTrackSequence>
+									</SequenceList>
+								</MusicTrack>
+								<MusicTrack Name="Boss_ClassicalMix" ID="{68BAF2FD-1352-4020-97E2-7C49E239CA64}" ShortID="360098858">
+									<PropertyList>
+										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>7</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+										</Reference>
+										<Reference Name="DefaultSwitchOrState">
+											<ObjectRef Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+										</Reference>
+										<Reference Name="SwitchGroupOrStateGroup">
+											<ObjectRef Name="Soundtrack" ID="{B5CEF756-B899-4240-9142-806DB0E5F5D5}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Boss Battle - Classical Arrangement v1_3 0826AR_Full Mix" ID="{2495A5E8-FCA3-4D10-94F0-57E7BA5C5E78}">
+											<Language>SFX</Language>
+											<AudioFile>Boss Battle - Classical Arrangement v1.3 0826AR_Full Mix.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="410214300"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{E984C4F1-EF55-464E-BBA8-93EBCC37F4D6}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{71E5FD2C-7C72-4F69-8037-79E46A136BDC}">
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{00EEE571-F1F2-4403-BE34-0C4285DB1FD1}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="3"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<SequenceList>
+										<MusicTrackSequence Name="" ID="{2928E11C-2385-4598-9130-12F6123B83B5}">
+											<ClipList>
+												<MusicClip Name="Boss Battle - Classical Arrangement v1_3 0826AR_Full Mix" ID="{122B7244-BBC3-428B-8157-B6B4415C7D42}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="85760.3805430458"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="117.512095040496"/>
+													</PropertyList>
+													<AudioSourceRef Name="Boss Battle - Classical Arrangement v1_3 0826AR_Full Mix" ID="{2495A5E8-FCA3-4D10-94F0-57E7BA5C5E78}"/>
+													<PropertyCurveList>
+														<PropertyCurve PropertyName="Highpass">
+															<Curve Name="" ID="{9BA50825-35E8-4ED5-BAE5-4C5592CB17AA}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.76038</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Lowpass">
+															<Curve Name="" ID="{61D54013-2F95-4F3C-8C50-7C947F32C8CC}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.76038</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Volume">
+															<Curve Name="" ID="{75C8A440-3131-41FE-AA06-267F0D86E44D}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="3"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>85.76038</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+													</PropertyCurveList>
+												</MusicClip>
+											</ClipList>
+										</MusicTrackSequence>
+									</SequenceList>
+								</MusicTrack>
+								<MusicTrack Name="Boss_CartoonMix" ID="{C1047167-D6F3-4991-A173-B4A92071EBE5}" ShortID="404408789">
+									<PropertyList>
+										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+										</Reference>
+										<Reference Name="DefaultSwitchOrState">
+											<ObjectRef Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+										</Reference>
+										<Reference Name="SwitchGroupOrStateGroup">
+											<ObjectRef Name="Soundtrack" ID="{B5CEF756-B899-4240-9142-806DB0E5F5D5}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Yigit - Boss Battle Remix (Cartoon)" ID="{59FA15F1-18F3-47A3-9D6E-10517DEEA9F2}">
+											<Language>SFX</Language>
+											<AudioFile>Yigit - Boss Battle Remix (Cartoon).wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="867812406"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{B6B4F042-FF9D-4776-AAEF-057140351906}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{8FC51EB4-31E1-4B5C-A00E-6B0644941587}">
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{78F4ED75-D60F-4891-90CA-E0A419D6E66C}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="3"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<SequenceList>
+										<MusicTrackSequence Name="" ID="{439E3370-29B1-4F75-A898-770C370AE80C}">
+											<ClipList>
+												<MusicClip Name="Yigit - Boss Battle Remix (Cartoon)" ID="{63C52CA4-C08C-417E-ABD6-E3E978D7C488}">
+													<PropertyList>
+														<Property Name="BeginTrimOffset" Type="Real64" Value="386.807592289385"/>
+														<Property Name="EndTrimOffset" Type="Real64" Value="86108.7156215689"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="38.6807592289406"/>
+														<Property Name="PlayAt" Type="Real64" Value="-386.807592289385"/>
+													</PropertyList>
+													<AudioSourceRef Name="Yigit - Boss Battle Remix (Cartoon)" ID="{59FA15F1-18F3-47A3-9D6E-10517DEEA9F2}"/>
+													<PropertyCurveList>
+														<PropertyCurve PropertyName="Highpass">
+															<Curve Name="" ID="{DA78F503-3616-43A2-9745-FA9CA130E57A}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0.38681</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>86.10872</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Lowpass">
+															<Curve Name="" ID="{BAFC5EE2-8020-483B-A6A8-C4C115D210FD}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0.38681</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>86.10872</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Volume">
+															<Curve Name="" ID="{52AF839F-9C37-40CF-BEED-A7F81D8A846D}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="3"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0.38681</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>86.10872</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+													</PropertyCurveList>
+												</MusicClip>
+											</ClipList>
+										</MusicTrackSequence>
+									</SequenceList>
+								</MusicTrack>
+								<MusicTrack Name="Stage1_FolkMix" ID="{C831FD42-F2F1-451C-965D-8A9DDE454111}" ShortID="223483590">
+									<PropertyList>
+										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>9</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+										</Reference>
+										<Reference Name="DefaultSwitchOrState">
+											<ObjectRef Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+										</Reference>
+										<Reference Name="SwitchGroupOrStateGroup">
+											<ObjectRef Name="Soundtrack" ID="{B5CEF756-B899-4240-9142-806DB0E5F5D5}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Folk_Country Level 1 Remix" ID="{664184F8-C06E-4B96-892A-459FDDA002EE}">
+											<Language>SFX</Language>
+											<AudioFile>Folk_Country Level 1 Remix.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="442896284"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{AE757E55-5596-4919-8DE6-49A9DC4512B5}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{5DCF5945-A3E1-4188-BD68-8406BE1AF36D}">
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{F159A1F4-B18D-43D3-BD64-1D3C563008C0}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="3"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<SequenceList>
+										<MusicTrackSequence Name="" ID="{E6010ED9-D6F4-4AAD-9ED4-4E3BF6A7394B}">
+											<ClipList>
+												<MusicClip Name="Folk_Country Level 1 Remix" ID="{CC14773F-7737-44D5-A6C3-5A778DE90F18}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="137142.854166667"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="254.913851025209"/>
+													</PropertyList>
+													<AudioSourceRef Name="Folk_Country Level 1 Remix" ID="{664184F8-C06E-4B96-892A-459FDDA002EE}"/>
+												</MusicClip>
+											</ClipList>
+										</MusicTrackSequence>
+									</SequenceList>
+								</MusicTrack>
+								<MusicTrack Name="Stage1_LofiMix" ID="{B3FF48AC-88A5-4E7E-A6EA-CE84D12EF97C}" ShortID="893668476">
+									<PropertyList>
+										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+										</Reference>
+										<Reference Name="DefaultSwitchOrState">
+											<ObjectRef Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+										</Reference>
+										<Reference Name="SwitchGroupOrStateGroup">
+											<ObjectRef Name="Soundtrack" ID="{B5CEF756-B899-4240-9142-806DB0E5F5D5}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Dan - Super Keytario Bros - LoFi" ID="{6036FA77-2120-48E2-A554-48F34F91875A}">
+											<Language>SFX</Language>
+											<AudioFile>Dan - Super Keytario Bros - LoFi.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="772760074"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{85FE65F9-28A6-4667-BBA7-0A8A8F3A1FDA}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{26F2EA8B-7290-47A9-8C51-257F16E82F3B}">
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{A16E7738-775E-4E7C-B013-C67ABD2F5AA2}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="3"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<SequenceList>
+										<MusicTrackSequence Name="" ID="{91F59614-30AA-4718-8781-605253487881}">
+											<ClipList>
+												<MusicClip Name="Dan - Super Keytario Bros - LoFi" ID="{B330DA5A-F216-421C-B347-ADC958C2E6D5}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="137142.875"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="254.913851025223"/>
+													</PropertyList>
+													<AudioSourceRef Name="Dan - Super Keytario Bros - LoFi" ID="{6036FA77-2120-48E2-A554-48F34F91875A}"/>
+												</MusicClip>
+											</ClipList>
+										</MusicTrackSequence>
+									</SequenceList>
+								</MusicTrack>
+								<MusicTrack Name="Stage1_ChiptuneMix" ID="{BF939226-4F84-4526-AE91-E680E34210E6}" ShortID="592374390">
+									<PropertyList>
+										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>6</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+										</Reference>
+										<Reference Name="DefaultSwitchOrState">
+											<ObjectRef Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+										</Reference>
+										<Reference Name="SwitchGroupOrStateGroup">
+											<ObjectRef Name="Soundtrack" ID="{B5CEF756-B899-4240-9142-806DB0E5F5D5}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Super Keytario Bros" ID="{F4174426-BAF2-449A-B813-63E0B2F88034}">
+											<Language>SFX</Language>
+											<AudioFile>Super Keytario Bros.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="813663554"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{FAF3A793-15EC-475E-A026-2445E0EF12FC}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{CCBEE594-FE66-4745-A567-4D6E0B409D87}">
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{9D55BA7A-618B-46BA-BD1A-A6E9D52279A6}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="3"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<SequenceList>
+										<MusicTrackSequence Name="" ID="{DE759CA0-CDEA-4667-85D4-4EF912DBE6C9}">
+											<ClipList>
+												<MusicClip Name="Super Keytario Bros" ID="{45BD00ED-BE3C-4712-8AA8-642B6544CC8C}">
+													<PropertyList>
+														<Property Name="EndTrimOffset" Type="Real64" Value="137142.857142857"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutMode" Type="int16" Value="0"/>
+													</PropertyList>
+													<AudioSourceRef Name="Super Keytario Bros" ID="{F4174426-BAF2-449A-B813-63E0B2F88034}"/>
+												</MusicClip>
+											</ClipList>
+										</MusicTrackSequence>
+									</SequenceList>
+								</MusicTrack>
+								<MusicTrack Name="Stage1_MetalMix" ID="{17E449A8-2767-459E-A7BD-E1961F358596}" ShortID="994545096">
+									<PropertyList>
+										<Property Name="MusicTrackType" Type="int16" Value="3"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D6B19EFE-E9C4-4D10-AA1B-59B48D28F231}"/>
+										</Reference>
+										<Reference Name="DefaultSwitchOrState">
+											<ObjectRef Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{4F0941C4-306A-426E-98FC-4DB3D6552344}"/>
+										</Reference>
+										<Reference Name="SwitchGroupOrStateGroup">
+											<ObjectRef Name="Soundtrack" ID="{B5CEF756-B899-4240-9142-806DB0E5F5D5}" WorkUnitID="{BCA2DC31-1FC3-4FB2-801E-A53C8F4BA6C4}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Level 1 - Metal Remix" ID="{6CB20B6F-462D-4FE7-A7A4-7BD7494A45A8}">
+											<Language>SFX</Language>
+											<AudioFile>Level 1 - Metal Remix.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="323793861"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{36265D09-32BC-45DA-812C-B6C02541C43E}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{22C0E652-9770-411F-95DF-838151208515}">
+													<PropertyList>
+														<Property Name="EnableSourceFadeOut" Type="bool" Value="True"/>
+														<Property Name="ExitSourceAt" Type="int16" Value="0"/>
+													</PropertyList>
+													<TransitionInfo>
+														<SourceFadeOut>
+															<MusicFade Name="Source Fade-out" ID="{A4D639C8-A5C4-4C72-979A-0265F244DCDC}">
+																<PropertyList>
+																	<Property Name="FadeCurve" Type="int16" Value="3"/>
+																	<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+																	<Property Name="FadeType" Type="int16" Value="1"/>
+																</PropertyList>
+															</MusicFade>
+														</SourceFadeOut>
+													</TransitionInfo>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<SequenceList>
+										<MusicTrackSequence Name="" ID="{BD0D48ED-2496-45FD-9D2D-7B4376C04873}">
+											<ClipList>
+												<MusicClip Name="Level 1 - Metal Remix" ID="{9A5870CF-8560-4AF1-AAB1-AE743E8ED17A}">
+													<PropertyList>
+														<Property Name="BeginTrimOffset" Type="Real64" Value="1685.10638297873"/>
+														<Property Name="EndTrimOffset" Type="Real64" Value="138833.019650467"/>
+														<Property Name="FadeInMode" Type="int16" Value="0"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="49.4775308962562"/>
+														<Property Name="PlayAt" Type="Real64" Value="-1685.10638297873"/>
+													</PropertyList>
+													<AudioSourceRef Name="Level 1 - Metal Remix" ID="{6CB20B6F-462D-4FE7-A7A4-7BD7494A45A8}"/>
+													<PropertyCurveList>
+														<PropertyCurve PropertyName="Highpass">
+															<Curve Name="" ID="{46272C89-386C-49E4-89EF-4AC0E123B83E}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>1.68511</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>138.83302</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Lowpass">
+															<Curve Name="" ID="{A5585EF4-5A5C-4245-8F94-E5F7105A3750}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="1"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>1.68511</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>138.83302</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+														<PropertyCurve PropertyName="Volume">
+															<Curve Name="" ID="{AE78741C-7DAD-4EDC-8626-8A75CEB6C9D4}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="3"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>1.68511</XPos>
+																		<YPos>0</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>138.83302</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</PropertyCurve>
+													</PropertyCurveList>
+												</MusicClip>
+											</ClipList>
+										</MusicTrackSequence>
+									</SequenceList>
+								</MusicTrack>
+							</ChildrenList>
+							<CueList>
+								<MusicCue Name="Entry Cue" ID="{E7AC7648-931E-4A2B-90D8-DBD2FE57922E}"/>
+								<MusicCue Name="Exit Cue" ID="{A400C880-A1B4-4875-9F10-92996BB23AE2}">
+									<PropertyList>
+										<Property Name="CueType" Type="int16" Value="1"/>
+										<Property Name="TimeMs" Type="Real64" Value="1000"/>
+									</PropertyList>
+								</MusicCue>
+							</CueList>
+						</MusicSegment>
+					</ChildrenList>
+					<TransitionList>
+						<MusicTransition Name="Root" ID="{05213AAE-C2DD-42C5-BC51-55AC159902FB}">
+							<PropertyList>
+								<Property Name="IsFolder" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<MusicTransition Name="Transition" ID="{74BA2908-024B-44D6-BF24-0BDFCDA65AA3}">
+									<TransitionInfo/>
+								</MusicTransition>
+							</ChildrenList>
+							<TransitionInfo/>
+						</MusicTransition>
+					</TransitionList>
+					<Playlist>
+						<MusicPlaylistItem Name="" ID="{8DE72EE0-0467-4D53-9976-3EF4C8D52014}" ShortID="538844315"/>
+					</Playlist>
+				</MusicPlaylistContainer>
 			</ChildrenList>
 		</WorkUnit>
 	</InteractiveMusic>

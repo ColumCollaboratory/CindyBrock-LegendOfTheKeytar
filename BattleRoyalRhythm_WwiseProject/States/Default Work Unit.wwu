@@ -80,6 +80,23 @@
 						<State Name="_Level3_Folk" ID="{27A43175-DD58-4890-BF21-C19D4A8FB946}"/>
 					</ChildrenList>
 				</StateGroup>
+				<StateGroup Name="Soundtrack" ID="{B5CEF756-B899-4240-9142-806DB0E5F5D5}">
+					<ChildrenList>
+						<State Name="None" ID="{38D6CFD6-D5C1-48D5-AD31-8B252C69B8E2}"/>
+						<State Name="Boss_CartoonMix" ID="{191C55FD-117D-4FA9-9FC4-11D4C8A68645}"/>
+						<State Name="Boss_ChillwaveMix" ID="{33C9DAEE-D4A1-4CB6-AAF7-6244D165E445}"/>
+						<State Name="Boss_ChiptuneMix" ID="{41848BC5-DF32-4FF3-83CD-A331284B44E6}"/>
+						<State Name="Boss_ClassicalMix" ID="{63C37013-FB7C-4125-94FB-0EF91FD9A15C}"/>
+						<State Name="Boss_DubstepMix" ID="{D2465391-EC24-4D6C-9EC4-CCC6BB1B53E2}"/>
+						<State Name="Boss_FolkMix" ID="{D60DE937-40C4-49DB-8980-2A5096C0E940}"/>
+						<State Name="Boss_LofiMix" ID="{0C0B37C0-A6D0-4192-A55D-8BEAE699D526}"/>
+						<State Name="Boss_MetalMix" ID="{E18A7510-9AF1-4714-8F7E-202E4B433339}"/>
+						<State Name="Stage1_ChiptuneMix" ID="{5F6E9A3B-37AC-4C0D-B511-6F8A6AC18BB4}"/>
+						<State Name="Stage1_FolkMix" ID="{81C5E153-93D8-4E64-9545-E74CC8194810}"/>
+						<State Name="Stage1_LofiMix" ID="{52F89109-56F1-4E71-85EE-FC91BB9EFB93}"/>
+						<State Name="Stage1_MetalMix" ID="{FE82D57B-7E9D-4498-AE8D-1D0AD19F4079}"/>
+					</ChildrenList>
+				</StateGroup>
 			</ChildrenList>
 		</WorkUnit>
 	</States>

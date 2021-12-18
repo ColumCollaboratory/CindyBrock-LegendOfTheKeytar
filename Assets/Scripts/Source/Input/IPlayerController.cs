@@ -9,6 +9,7 @@ namespace BattleRoyalRhythm.Input
     /// </summary>
     public enum PlayerAction : byte
     {
+        None,
         SetGenre1,
         SetGenre2,
         SetGenre3,

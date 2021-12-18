@@ -1,0 +1,198 @@
+fileFormatVersion: 2
+guid: 28e91b59a6fcf8e45ad7f05ed3ebe5aa
+ModelImporter:
+  serializedVersion: 20200
+  internalIDToNameTable:
+  - first:
+      74: -2958972485772775548
+    second: signal
+  - first:
+      74: 5123395526820482033
+    second: keytar_base|air_bomb_place_path
+  - first:
+      74: 6431831052537080055
+    second: keytar_base|bomb_air_placement
+  - first:
+      74: 2986061418732905204
+    second: rig|air_bomb_place_path
+  - first:
+      74: 1110994458230256070
+    second: rig|air_spin_attack
+  - first:
+      74: -6043891381178541508
+    second: rig|attack_01
+  - first:
+      74: 4835424700204929119
+    second: rig|bomb_air_placement
+  - first:
+      74: -2976641901129916541
+    second: rig|dash
+  - first:
+      74: 6696205667786300157
+    second: rig|grab_climb_up
+  - first:
+      74: 242238402538845990
+    second: rig|hero_die_01
+  - first:
+      74: 9085615936204121697
+    second: rig|hero_die_02
+  - first:
+      74: -1342690528950004600
+    second: rig|hero_ducking
+  - first:
+      74: 5103359316560575608
+    second: rig|hero_ducking_idle
+  - first:
+      74: -1448470122867742449
+    second: rig|Idle_001
+  - first:
+      74: -5395354463405799138
+    second: rig|jump
+  - first:
+      74: 5361694534514757654
+    second: rig|jump_climax
+  - first:
+      74: -2664413647227326127
+    second: rig|jump_drop_bomb
+  - first:
+      74: 5235811481190403564
+    second: rig|jump_grab
+  - first:
+      74: -3749883429244592195
+    second: rig|landing
+  - first:
+      74: -3432795275086282825
+    second: rig|place_bomb
+  - first:
+      74: -6372808901393006100
+    second: rig|repulsor_blast
+  - first:
+      74: -7422358904102453377
+    second: rig|repulsor_jump
+  - first:
+      74: -238604031608593303
+    second: rig|take_damage
+  - first:
+      74: -6585772531312735796
+    second: rig|tpose
+  - first:
+      74: 2982955500637902885
+    second: rig|walk
+  - first:
+      74: -4299646452212055295
+    second: Armature|air_bomb_place_path
+  - first:
+      74: 1682897371343186246
+    second: Armature|attack_01
+  - first:
+      74: -6548239396145045102
+    second: Armature|bomb_air_placement
+  - first:
+      74: 1980081924304739062
+    second: eye.R|air_bomb_place_path
+  - first:
+      74: 6743868925144761437
+    second: eye.R|bomb_air_placement
+  - first:
+      74: 8278306750221574473
+    second: eye.L|air_bomb_place_path
+  - first:
+      74: -5492434129463436501
+    second: eye.L|bomb_air_placement
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

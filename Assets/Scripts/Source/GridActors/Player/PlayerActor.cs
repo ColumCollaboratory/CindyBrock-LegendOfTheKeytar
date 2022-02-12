@@ -449,7 +449,7 @@ namespace BattleRoyalRhythm.GridActors.Player
                     // Update the audio switch in Wwise.
                     // TODO this should be abstracted to not
                     // be wwise specific.
-                    AkSoundEngine.SetState("Level_1", genres[genre].wwiseGenreTarget);
+                    //AkSoundEngine.SetState("Level_1", genres[genre].wwiseGenreTarget);
                     activeGenre = genre;
                 }
             }

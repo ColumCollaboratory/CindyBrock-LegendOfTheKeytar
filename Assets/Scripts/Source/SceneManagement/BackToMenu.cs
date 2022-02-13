@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
-using BattleRoyalRhythm.GridActors;
+using CindyBrock.GridActors;
 
 public class BackToMenu : GridTrigger
 {

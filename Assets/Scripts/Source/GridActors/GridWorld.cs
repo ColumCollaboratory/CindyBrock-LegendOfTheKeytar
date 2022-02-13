@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using BattleRoyalRhythm.Audio;
-using BattleRoyalRhythm.Surfaces;
+using CindyBrock.Audio;
+using CindyBrock.Surfaces;
 
-namespace BattleRoyalRhythm.GridActors
+namespace CindyBrock.GridActors
 {
     // Core implementation for the grid world.
     /// <summary>

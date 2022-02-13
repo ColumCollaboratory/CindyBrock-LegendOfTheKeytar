@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using BattleRoyalRhythm.Collections;
+using CindyBrock.Collections;
 
-namespace BattleRoyalRhythm.UnityEditor.Drawers
+namespace CindyBrock.UnityEditor.Drawers
 {
     [CustomPropertyDrawer(typeof(IEnumMap), true)]
     public sealed class EnumMapDrawer : PropertyDrawer

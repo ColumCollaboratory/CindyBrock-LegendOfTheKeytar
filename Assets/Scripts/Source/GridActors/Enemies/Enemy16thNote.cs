@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using BattleRoyalRhythm.Audio;
+using CindyBrock.Audio;
 using Tools;
-using BattleRoyalRhythm.GridActors.Player;
+using CindyBrock.GridActors.Player;
 
-namespace BattleRoyalRhythm.GridActors.Enemies
+namespace CindyBrock.GridActors.Enemies
 {
 
     public sealed class Enemy16thNote : GridActor, IDamageable

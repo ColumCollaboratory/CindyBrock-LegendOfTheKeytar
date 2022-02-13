@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors.Hazards
+namespace CindyBrock.GridActors.Hazards
 {
 
     public class RepulsableProp : GridActor, IKnockbackable

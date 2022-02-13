@@ -1,10 +1,10 @@
-using BattleRoyalRhythm.Audio;
+using CindyBrock.Audio;
 using System.Collections;
 using System.Collections.Generic;
 using Tools;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors.Behaviours
+namespace CindyBrock.GridActors.Behaviours
 {
     /// <summary>
     /// On the first beat elapsed, attempts to execute

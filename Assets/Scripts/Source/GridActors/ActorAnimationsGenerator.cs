@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors
+namespace CindyBrock.GridActors
 {
     #region Animation Delegates
     /// <summary>

@@ -1,8 +1,8 @@
-﻿using BattleRoyalRhythm.Audio;
+﻿using CindyBrock.Audio;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors
+namespace CindyBrock.GridActors
 {
     /// <summary>
     /// This grid actor can take damage from

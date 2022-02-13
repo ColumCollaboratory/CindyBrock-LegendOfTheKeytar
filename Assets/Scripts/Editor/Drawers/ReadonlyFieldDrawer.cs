@@ -2,7 +2,7 @@
 using UnityEditor;
 using Tools;
 
-namespace BattleRoyalRhythm.UnityEditor.Drawers
+namespace CindyBrock.UnityEditor.Drawers
 {
     /// <summary>
     /// Disables editing for this field.

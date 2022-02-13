@@ -1,10 +1,10 @@
-using BattleRoyalRhythm.GridActors.Player;
+using CindyBrock.GridActors.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BattleRoyalRhythm.UI
+namespace CindyBrock.UI
 {
     public class HealthControl : MonoBehaviour
     {

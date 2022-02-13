@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.Audio
+namespace CindyBrock.Audio
 {
     /// <summary>
     /// Represents a set of tracks that correspond to

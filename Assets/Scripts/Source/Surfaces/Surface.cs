@@ -1,11 +1,11 @@
 using UnityEngine;
-using BattleRoyalRhythm.GridActors;
+using CindyBrock.GridActors;
 #if UNITY_EDITOR
 using UnityEditor;
 using Tools;
 #endif
 
-namespace BattleRoyalRhythm.Surfaces
+namespace CindyBrock.Surfaces
 {
 #if UNITY_EDITOR
     #region Scene Editing Delegates

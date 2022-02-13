@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using BattleRoyalRhythm.Audio;
-using BattleRoyalRhythm.Input;
-using BattleRoyalRhythm.UI;
-using BattleRoyalRhythm.Collections;
+using CindyBrock.Audio;
+using CindyBrock.Input;
+using CindyBrock.UI;
+using CindyBrock.Collections;
 
-namespace BattleRoyalRhythm.GridActors.Player
+namespace CindyBrock.GridActors.Player
 {
 
     public sealed class BeatAction

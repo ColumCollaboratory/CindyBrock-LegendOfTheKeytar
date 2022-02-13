@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors.Hazards
+namespace CindyBrock.GridActors.Hazards
 {
     public sealed class LinearProjectile : ProjectileActor
     {

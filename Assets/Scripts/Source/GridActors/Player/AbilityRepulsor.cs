@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors.Player
+namespace CindyBrock.GridActors.Player
 {
     public sealed class AbilityRepulsor : ActorAbility
     {

@@ -1,7 +1,7 @@
-﻿using BattleRoyalRhythm.Audio;
+﻿using CindyBrock.Audio;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors.Player
+namespace CindyBrock.GridActors.Player
 {
     public sealed class AbilityGrenade : ActorAbility
     {

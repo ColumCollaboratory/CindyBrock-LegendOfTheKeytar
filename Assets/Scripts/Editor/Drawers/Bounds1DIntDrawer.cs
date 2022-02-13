@@ -2,7 +2,7 @@
 using UnityEditor;
 using Tools;
 
-namespace BattleRoyalRhythm.UnityEditor.Drawers
+namespace CindyBrock.UnityEditor.Drawers
 {
     /// <summary>
     /// Draws a bounds 1D range in the inspector,

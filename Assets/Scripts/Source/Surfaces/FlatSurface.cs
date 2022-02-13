@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BattleRoyalRhythm.Surfaces
+namespace CindyBrock.Surfaces
 {
     /// <summary>
     /// A surface that extends along a flat plane.

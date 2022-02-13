@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-using BattleRoyalRhythm.Audio;
+using CindyBrock.Audio;
 using Tools;
-using BattleRoyalRhythm.GridActors.Player;
+using CindyBrock.GridActors.Player;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace BattleRoyalRhythm.GridActors.Enemies
+namespace CindyBrock.GridActors.Enemies
 {
     public sealed class EnemyTriangle : GridActor, IDamageable
     {

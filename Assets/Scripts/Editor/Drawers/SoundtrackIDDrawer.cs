@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using BattleRoyalRhythm.Audio;
+using CindyBrock.Audio;
 
-namespace BattleRoyalRhythm.UnityEditor.Drawers
+namespace CindyBrock.UnityEditor.Drawers
 {
     /// <summary>
     /// Creates a drop down based on the soundtrack settings

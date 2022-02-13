@@ -1,9 +1,9 @@
-using BattleRoyalRhythm.Surfaces;
+using CindyBrock.Surfaces;
 using System;
 using Tools;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors
+namespace CindyBrock.GridActors
 {
     [Flags]
     public enum ActorTag

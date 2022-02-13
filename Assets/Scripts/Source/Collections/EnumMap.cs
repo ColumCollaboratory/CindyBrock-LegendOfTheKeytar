@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.Collections
+namespace CindyBrock.Collections
 {
     #region Interface Wrapper
     /// <summary>

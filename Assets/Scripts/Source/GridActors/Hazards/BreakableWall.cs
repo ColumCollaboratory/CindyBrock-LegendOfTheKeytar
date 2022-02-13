@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors.Hazards
+namespace CindyBrock.GridActors.Hazards
 {
 
     public sealed class BreakableWall : GridActor, IDamageable

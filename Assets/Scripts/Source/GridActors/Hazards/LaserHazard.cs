@@ -1,9 +1,9 @@
-using BattleRoyalRhythm.Audio;
+using CindyBrock.Audio;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors.Hazards
+namespace CindyBrock.GridActors.Hazards
 {
     [RequireComponent(typeof(LineRenderer))]
     /// <summary>

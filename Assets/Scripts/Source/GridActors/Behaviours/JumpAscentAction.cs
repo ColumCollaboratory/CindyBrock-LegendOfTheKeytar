@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Tools;
 
-namespace BattleRoyalRhythm.GridActors.Behaviours
+namespace CindyBrock.GridActors.Behaviours
 {
     [CreateAssetMenu(
         fileName = "Jump Ascent Action",

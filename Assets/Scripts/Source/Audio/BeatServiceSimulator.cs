@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Tools;
 
-namespace BattleRoyalRhythm.Audio
+namespace CindyBrock.Audio
 {
     /// <summary>
     /// Simulates a beat service timing mechanism. This is

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors
+namespace CindyBrock.GridActors
 {
     public sealed class NearbyColliderSet
     {

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using BattleRoyalRhythm.Input;
-using BattleRoyalRhythm.UI;
-using BattleRoyalRhythm.GridActors.Player;
+using CindyBrock.Input;
+using CindyBrock.UI;
+using CindyBrock.GridActors.Player;
 
-namespace BattleRoyalRhythm.Audio
+namespace CindyBrock.Audio
 {
     public sealed class BossActionSheetRecorder : MonoBehaviour
     {

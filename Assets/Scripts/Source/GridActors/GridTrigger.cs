@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using BattleRoyalRhythm.Audio;
+using CindyBrock.Audio;
 using Tools;
 
-namespace BattleRoyalRhythm.GridActors
+namespace CindyBrock.GridActors
 {
     /// <summary>
     /// Base Implementation for a grid trigger.

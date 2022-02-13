@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using BattleRoyalRhythm.Collections;
+using CindyBrock.Collections;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-namespace BattleRoyalRhythm.Surfaces
+namespace CindyBrock.Surfaces
 {
     /// <summary>
     /// Contains a static block layout for a surface, and

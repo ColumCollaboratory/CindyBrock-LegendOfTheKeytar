@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors.Player
+namespace CindyBrock.GridActors.Player
 {
     public sealed class AbilityDash : ActorAbility
     {

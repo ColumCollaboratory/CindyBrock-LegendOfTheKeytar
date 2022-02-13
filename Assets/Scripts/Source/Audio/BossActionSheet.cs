@@ -1,8 +1,8 @@
 using UnityEngine;
-using BattleRoyalRhythm.Input;
-using BattleRoyalRhythm.UI;
+using CindyBrock.Input;
+using CindyBrock.UI;
 
-namespace BattleRoyalRhythm.Audio
+namespace CindyBrock.Audio
 {
     [CreateAssetMenu(fileName = "NewMusicSheet", menuName = "Music Sheet")]
     public sealed class BossActionSheet : ScriptableObject

@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using BattleRoyalRhythm.GridActors.Player;
-using BattleRoyalRhythm.Input;
-using BattleRoyalRhythm.Audio;
+using CindyBrock.GridActors.Player;
+using CindyBrock.Input;
+using CindyBrock.Audio;
 using Tools;
 
-namespace BattleRoyalRhythm.UI
+namespace CindyBrock.UI
 {
 
     /// <summary>

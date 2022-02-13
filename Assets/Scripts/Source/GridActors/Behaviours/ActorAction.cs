@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors.Behaviours
+namespace CindyBrock.GridActors.Behaviours
 {
     #region Action Context Interface for State Machines / BTrees
     /// <summary>

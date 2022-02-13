@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEditor;
-using BattleRoyalRhythm.Audio;
+using CindyBrock.Audio;
 
-namespace BattleRoyalRhythm.UnityEditor.Inspectors
+namespace CindyBrock.UnityEditor.Inspectors
 {
     /// <summary>
     /// Custom inspector for beat services, provides

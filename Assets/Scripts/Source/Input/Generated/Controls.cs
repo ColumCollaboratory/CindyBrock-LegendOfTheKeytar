@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace BattleRoyalRhythm.Input.Generated
+namespace CindyBrock.Input.Generated
 {
     public class @Controls : IInputActionCollection, IDisposable
     {

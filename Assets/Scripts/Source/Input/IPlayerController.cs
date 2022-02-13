@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.Input
+namespace CindyBrock.Input
 {
     /// <summary>
     /// Describes the player action taken.

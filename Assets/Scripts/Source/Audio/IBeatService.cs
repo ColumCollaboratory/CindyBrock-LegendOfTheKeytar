@@ -1,4 +1,4 @@
-﻿namespace BattleRoyalRhythm.Audio
+﻿namespace CindyBrock.Audio
 {
     #region Beat Service Handlers
     /// <summary>

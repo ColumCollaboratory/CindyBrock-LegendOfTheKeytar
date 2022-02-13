@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace BattleRoyalRhythm.Audio
+namespace CindyBrock.Audio
 {
     /// <summary>
     /// Implements the beat service using the

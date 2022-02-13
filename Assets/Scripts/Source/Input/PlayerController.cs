@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using BattleRoyalRhythm.Input.Generated;
+using CindyBrock.Input.Generated;
 
-namespace BattleRoyalRhythm.Input
+namespace CindyBrock.Input
 {
     /// <summary>
     /// Implements the player controller by wrapping the Unity Input System package.

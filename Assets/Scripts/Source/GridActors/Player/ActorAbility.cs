@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using BattleRoyalRhythm.Audio;
+using CindyBrock.Audio;
 
-namespace BattleRoyalRhythm.GridActors.Player
+namespace CindyBrock.GridActors.Player
 {
     /// <summary>
     /// Base class for all abilities that can be used by

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace BattleRoyalRhythm.Audio
+namespace CindyBrock.Audio
 {
     /// <summary>
     /// Attribute that marks an integer field as

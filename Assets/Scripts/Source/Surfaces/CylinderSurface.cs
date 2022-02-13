@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BattleRoyalRhythm.Surfaces
+namespace CindyBrock.Surfaces
 {
     /// <summary>
     /// A surface that wraps around a cylinder.

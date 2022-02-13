@@ -7,7 +7,7 @@ using UnityEditor.SceneManagement;
 // NOTE this class would become obsolete if Unity comes to
 // support multi-dim array serialization.
 // TODO this should be part of a helper library.
-namespace BattleRoyalRhythm.Collections
+namespace CindyBrock.Collections
 {
     /// <summary>
     /// Handles serialiazation and deserialization for two-dimensionsal

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace BattleRoyalRhythm.UI
+namespace CindyBrock.UI
 {
     #region Binding Delegates
     /// <summary>

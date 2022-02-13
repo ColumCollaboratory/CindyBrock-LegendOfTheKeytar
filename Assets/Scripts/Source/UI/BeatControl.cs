@@ -1,11 +1,11 @@
-using BattleRoyalRhythm.Audio;
-using BattleRoyalRhythm.GridActors.Player;
+using CindyBrock.Audio;
+using CindyBrock.GridActors.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BattleRoyalRhythm.UI
+namespace CindyBrock.UI
 {
 
     public class BeatControl : MonoBehaviour

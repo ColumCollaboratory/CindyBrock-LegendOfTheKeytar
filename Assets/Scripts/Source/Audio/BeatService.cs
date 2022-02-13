@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BattleRoyalRhythm.Audio
+namespace CindyBrock.Audio
 {
     // NOTE this class exists so a common debugging
     // inspector can be shared between implementations.

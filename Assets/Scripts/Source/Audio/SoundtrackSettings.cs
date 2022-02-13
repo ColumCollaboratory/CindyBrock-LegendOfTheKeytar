@@ -8,7 +8,7 @@ using UnityEditor;
 using System.IO;
 using UnityEngine.UIElements;
 
-namespace BattleRoyalRhythm.Audio
+namespace CindyBrock.Audio
 {
     public sealed class SoundtrackSettings : ScriptableObject
     {

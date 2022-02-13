@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.Surfaces
+namespace CindyBrock.Surfaces
 {
     /// <summary>
     /// Defines the parameters for stitching a traversal seam

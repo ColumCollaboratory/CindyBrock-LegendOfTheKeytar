@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using static UnityEditor.EditorGUILayout;
-using BattleRoyalRhythm.GridActors;
+using CindyBrock.GridActors;
 
-namespace BattleRoyalRhythm.UnityEditor.Inspectors
+namespace CindyBrock.UnityEditor.Inspectors
 {
     /// <summary>
     /// The base custom inspector for all grid actors,

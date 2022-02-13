@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using BattleRoyalRhythm.Audio;
+using CindyBrock.Audio;
 
-namespace BattleRoyalRhythm.GridActors
+namespace CindyBrock.GridActors
 {
     /// <summary>
     /// An actor that ticks and explodes after a set number

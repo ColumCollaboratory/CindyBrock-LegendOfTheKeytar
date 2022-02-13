@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace BattleRoyalRhythm.GridActors.Behaviours
+namespace CindyBrock.GridActors.Behaviours
 {
     public sealed class DescentAction : ActorAction
     {

@@ -3,10 +3,10 @@ using UnityEditor;
 using static UnityEditor.EditorApplication;
 using static UnityEditor.EditorGUI;
 using static UnityEditor.EditorGUILayout;
-using BattleRoyalRhythm.GridActors;
-using BattleRoyalRhythm.Surfaces;
+using CindyBrock.GridActors;
+using CindyBrock.Surfaces;
 
-namespace BattleRoyalRhythm.UnityEditor.Inspectors
+namespace CindyBrock.UnityEditor.Inspectors
 {
     /// <summary>
     /// Custom inspector for the grid world. Stores

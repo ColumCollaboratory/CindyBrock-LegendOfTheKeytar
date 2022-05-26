@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{62C11712-AFD8-4A1D-8D21-81938DD00FA5}" SchemaVersion="97">
+<WwiseDocument Type="WorkUnit" ID="{62C11712-AFD8-4A1D-8D21-81938DD00FA5}" SchemaVersion="103">
 	<AudioObjects>
 		<WorkUnit Name="Default Work Unit" ID="{62C11712-AFD8-4A1D-8D21-81938DD00FA5}" PersistMode="Standalone">
 			<ChildrenList>
@@ -23,6 +23,7 @@
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
+							<ObjectLists/>
 							<ActiveSourceList>
 								<ActiveSource Name="Correct Beat" ID="{C6EF6B0E-33D1-4EA5-B354-1BC0FC7CEDC6}" Platform="Linked"/>
 							</ActiveSourceList>
@@ -45,6 +46,7 @@
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
+							<ObjectLists/>
 							<ActiveSourceList>
 								<ActiveSource Name="Close Beat" ID="{7569DD88-0F0D-416C-BA53-BC2DFE8D4FC3}" Platform="Linked"/>
 							</ActiveSourceList>
@@ -67,6 +69,7 @@
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
+							<ObjectLists/>
 							<ActiveSourceList>
 								<ActiveSource Name="Wront Beat" ID="{464CA88B-E399-4ABC-8845-249A5135126B}" Platform="Linked"/>
 							</ActiveSourceList>
@@ -93,6 +96,7 @@
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
+							<ObjectLists/>
 							<ActiveSourceList>
 								<ActiveSource Name="Bomb Tick Chiptune" ID="{EDBCADD0-4887-47B7-8832-1BDBD0345841}" Platform="Linked"/>
 							</ActiveSourceList>
@@ -115,6 +119,7 @@
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
+							<ObjectLists/>
 							<ActiveSourceList>
 								<ActiveSource Name="Bomb Explosion Chiptune" ID="{D85B4B44-AC89-4719-AE19-4CBC38459322}" Platform="Linked"/>
 							</ActiveSourceList>
@@ -137,6 +142,7 @@
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
+							<ObjectLists/>
 							<ActiveSourceList>
 								<ActiveSource Name="Tether - Metal" ID="{BBA55E53-74E7-464B-8465-9DA0B8480E83}" Platform="Linked"/>
 							</ActiveSourceList>
@@ -159,6 +165,7 @@
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
+							<ObjectLists/>
 							<ActiveSourceList>
 								<ActiveSource Name="Dash - Lofi" ID="{0BE2A2AC-8A25-40E8-88A9-E4BEF7D2663A}" Platform="Linked"/>
 							</ActiveSourceList>
@@ -181,6 +188,7 @@
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
+							<ObjectLists/>
 							<ActiveSourceList>
 								<ActiveSource Name="Repulsor - Folk" ID="{009ECCE8-BAC7-41FE-8A57-76AFF0AA28CC}" Platform="Linked"/>
 							</ActiveSourceList>
@@ -207,6 +215,7 @@
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
+							<ObjectLists/>
 							<ActiveSourceList>
 								<ActiveSource Name="Bomb Tick Dubstep" ID="{FBCC432D-BBC3-4D0E-B120-30054D174740}" Platform="Linked"/>
 							</ActiveSourceList>
@@ -229,6 +238,7 @@
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
+							<ObjectLists/>
 							<ActiveSourceList>
 								<ActiveSource Name="Bomb Explosion Dubstep" ID="{2D40EF66-1FDA-4AA2-83CB-A40038020640}" Platform="Linked"/>
 							</ActiveSourceList>
@@ -251,6 +261,7 @@
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
+							<ObjectLists/>
 							<ActiveSourceList>
 								<ActiveSource Name="Dash - Cartoon" ID="{5F22039A-76B3-4DAC-A696-DB013A9B1A3E}" Platform="Linked"/>
 							</ActiveSourceList>
@@ -273,6 +284,7 @@
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
+							<ObjectLists/>
 							<ActiveSourceList>
 								<ActiveSource Name="Repulsor - Synthwave" ID="{0A212A0E-8D50-4A8D-BD35-5238CF41D773}" Platform="Linked"/>
 							</ActiveSourceList>
@@ -295,6 +307,7 @@
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
+							<ObjectLists/>
 							<ActiveSourceList>
 								<ActiveSource Name="Tether Classical" ID="{A2DEB1A0-9420-4D29-903B-2B51F9C6AF10}" Platform="Linked"/>
 							</ActiveSourceList>

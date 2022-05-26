@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fb1462d387344f4d8f6ed0a0f51dafc, type: 3}
+  m_Script: {fileID: 11500000, guid: 61a2b29c7a354094a9746b493353f2be, type: 3}
   m_Name: Mac
   m_EditorClassIdentifier: 
   IgnorePropertyNameList: []
@@ -31,14 +31,16 @@ MonoBehaviour:
   - UserSettings.m_SampleRate
   - UserSettings.m_NumberOfRefillsInVoice
   - UserSettings.m_SpatialAudioSettings.m_MaxSoundPropagationDepth
-  - UserSettings.m_SpatialAudioSettings.m_DiffractionFlags
   - UserSettings.m_SpatialAudioSettings.m_MovementThreshold
   - UserSettings.m_SpatialAudioSettings.m_NumberOfPrimaryRays
   - UserSettings.m_SpatialAudioSettings.m_MaxReflectionOrder
   - UserSettings.m_SpatialAudioSettings.m_MaxPathLength
+  - UserSettings.m_SpatialAudioSettings.m_CPULimitPercentage
   - UserSettings.m_SpatialAudioSettings.m_EnableDiffractionOnReflections
-  - UserSettings.m_SpatialAudioSettings.m_EnableDirectPathDiffraction
-  - UserSettings.m_SpatialAudioSettings.m_EnableTransmission
+  - UserSettings.m_SpatialAudioSettings.m_EnableGeometricDiffractionAndTransmission
+  - UserSettings.m_SpatialAudioSettings.m_CalcEmitterVirtualPosition
+  - UserSettings.m_SpatialAudioSettings.m_UseObstruction
+  - UserSettings.m_SpatialAudioSettings.m_UseOcclusion
   - CommsSettings.m_PoolSize
   - CommsSettings.m_DiscoveryBroadcastPort
   - CommsSettings.m_CommandPort
@@ -60,6 +62,8 @@ MonoBehaviour:
   - AdvancedSettings.m_SoundBankPersistentDataPath
   - AdvancedSettings.m_DebugOutOfRangeCheckEnabled
   - AdvancedSettings.m_DebugOutOfRangeLimit
+  - AdvancedSettings.m_MemoryAllocationSizeLimit
+  - AdvancedSettings.m_MemoryDebugLevel
   UserSettings:
     m_BasePath: Audio\GeneratedSoundBanks
     m_StartupLanguage: English(US)
@@ -80,14 +84,16 @@ MonoBehaviour:
     m_NumberOfRefillsInVoice: 4
     m_SpatialAudioSettings:
       m_MaxSoundPropagationDepth: 8
-      m_DiffractionFlags: -1
       m_MovementThreshold: 1
       m_NumberOfPrimaryRays: 100
       m_MaxReflectionOrder: 1
       m_MaxPathLength: 10000
+      m_CPULimitPercentage: 0
       m_EnableDiffractionOnReflections: 1
-      m_EnableDirectPathDiffraction: 1
-      m_EnableTransmission: 1
+      m_EnableGeometricDiffractionAndTransmission: 1
+      m_CalcEmitterVirtualPosition: 1
+      m_UseObstruction: 1
+      m_UseOcclusion: 1
   AdvancedSettings:
     m_IOMemorySize: 2097152
     m_TargetAutoStreamBufferLengthMs: 380
@@ -95,16 +101,15 @@ MonoBehaviour:
     m_MaximumPinnedBytesInCache: 4294967295
     m_EnableGameSyncPreparation: 0
     m_ContinuousPlaybackLookAhead: 1
-    m_MonitorQueuePoolSize: 65536
+    m_MonitorQueuePoolSize: 1048576
     m_MaximumHardwareTimeoutMs: 1000
     m_DebugOutOfRangeCheckEnabled: 0
     m_DebugOutOfRangeLimit: 16
-    m_SpatialAudioSettings:
-      m_DiffractionShadowAttenuationFactor: 1
-      m_DiffractionShadowDegrees: 30
     m_RenderDuringFocusLoss: 0
     m_SoundBankPersistentDataPath: 
     m_UseAsyncOpen: 0
+    m_MemoryAllocationSizeLimit: 0
+    m_MemoryDebugLevel: 0
   CommsSettings:
     m_PoolSize: 262144
     m_DiscoveryBroadcastPort: 24024
